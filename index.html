@@ -210,9 +210,52 @@
     padding:16px 4px 6px;
     font-size:0.86rem;
     color:var(--ink-faint);
-    display:flex;justify-content:space-between;align-items:baseline;
+    display:flex;flex-direction:column;gap:3px;
   }
-  .card figcaption b{color:var(--ink);font-weight:500;letter-spacing:0.01em;}
+  .card figcaption b{color:var(--ink);font-weight:500;letter-spacing:0.01em;line-height:1.3;}
+  .card figcaption span{line-height:1.3;}
+
+  /* Pourquoi nous choisir */
+  .why{background:var(--panel);}
+  .why-grid{
+    display:grid;grid-template-columns:repeat(5, 1fr);gap:0;
+    margin-top:40px;
+  }
+  .why-item{
+    padding:28px 18px;text-align:center;
+    border-left:1px solid var(--line);
+  }
+  .why-item:first-child{border-left:none;}
+  .why-item .ic{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.6rem;color:var(--gold);
+    display:block;margin-bottom:14px;
+  }
+  .why-item b{
+    display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.05rem;color:var(--ink);margin-bottom:6px;
+  }
+  .why-item span{font-size:0.8rem;color:var(--ink-faint);line-height:1.5;}
+
+  /* Avis clients */
+  .reviews-grid{
+    display:grid;grid-template-columns:repeat(3, 1fr);gap:32px;
+    margin-top:40px;
+  }
+  .review-card{
+    background:var(--panel);padding:32px 28px;border:1px solid var(--line);
+  }
+  .review-stars{color:var(--gold-soft);font-size:0.9rem;letter-spacing:2px;margin-bottom:16px;}
+  .review-quote{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--ink);
+    line-height:1.5;margin:0 0 18px;
+  }
+  .review-author{font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink-faint);}
+
+  @media(max-width:760px){
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .why-item{border-left:none;border-top:1px solid var(--line);}
+    .why-item:nth-child(1),.why-item:nth-child(2){border-top:none;}
+    .reviews-grid{grid-template-columns:1fr;}
+  }
 
   /* Sur mesure CTA */
   .mesure{
@@ -340,8 +383,8 @@
       <a href="#contact">Contact</a>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-outline" href="tel:+243836002274">Appeler</a>
-      <a class="btn btn-primary" href="https://wa.me/243836002274" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn-outline" href="tel:+243964459228">Appeler</a>
+      <a class="btn btn-primary" href="https://wa.me/243964459228" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </div>
 </header>
@@ -354,7 +397,7 @@
     <p>Artisan indépendant, je fabrique et je vends des meubles en bois massif : lits, tables, portes, rangements, pensés pour votre intérieur à Kinshasa.</p>
     <div class="hero-ctas">
       <a class="btn btn-brass" href="#catalogue">Voir le catalogue</a>
-      <a class="btn btn-outline" style="border-color:rgba(251,243,228,0.5);color:#FBF3E4;" href="https://wa.me/243836002274" target="_blank" rel="noopener">Discuter sur WhatsApp</a>
+      <a class="btn btn-outline" style="border-color:rgba(251,243,228,0.5);color:#FBF3E4;" href="https://wa.me/243964459228" target="_blank" rel="noopener">Discuter sur WhatsApp</a>
     </div>
   </div>
 </section>
@@ -506,13 +549,79 @@
   </div>
 </section>
 
+<section class="why">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="rule"></span>Pourquoi me choisir</div>
+        <h2>L'exigence d'un artisan, du premier croquis à la livraison.</h2>
+      </div>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <span class="ic">✦</span>
+        <b>Fabrication artisanale</b>
+        <span>Chaque pièce façonnée à la main, sans usine ni série.</span>
+      </div>
+      <div class="why-item">
+        <span class="ic">✦</span>
+        <b>Créations sur mesure</b>
+        <span>Dimensions, bois et finitions adaptés à votre intérieur.</span>
+      </div>
+      <div class="why-item">
+        <span class="ic">✦</span>
+        <b>Pièces uniques</b>
+        <span>Aucune production en série, chaque meuble a son identité.</span>
+      </div>
+      <div class="why-item">
+        <span class="ic">✦</span>
+        <b>Bois de qualité</b>
+        <span>Bois massif et contreplaqué sélectionnés avec soin.</span>
+      </div>
+      <div class="why-item">
+        <span class="ic">✦</span>
+        <b>Livraison possible</b>
+        <span>Livraison organisée à Kinshasa selon la distance.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow"><span class="rule"></span>Avis</div>
+        <h2>Ce que mes clients pensent de mon travail.</h2>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-quote">« Travail magnifique et très soigné. Je suis vraiment satisfait de ma commande ! »</p>
+        <div class="review-author">— Jules</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-quote">« Très belle finition et fabrication de qualité. Je recommande sans hésiter. »</p>
+        <div class="review-author">— Rehum</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-quote">« Création réalisée selon mes demandes. Le résultat est encore mieux que ce que j'imaginais ! »</p>
+        <div class="review-author">— Tshule Munongo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="mesure" id="surmesure">
   <div class="wrap mesure-inner">
     <div>
       <div class="eyebrow"><span class="rule" style="background:var(--brass-light);"></span>Fabrication sur mesure</div>
       <h2>Vous avez un espace précis en tête ? On le construit ensemble.</h2>
       <p>Donnez-moi vos dimensions, le bois que vous préférez et votre budget : je vous propose un modèle, puis je fabrique la pièce à la main, du panneau brut à la finition vernie.</p>
-      <a class="btn btn-brass" href="https://wa.me/243836002274?text=Bonjour%2C%20je%20souhaite%20une%20pi%C3%A8ce%20sur%20mesure" target="_blank" rel="noopener">Décrire mon projet sur WhatsApp</a>
+      <a class="btn btn-brass" href="https://wa.me/243964459228?text=Bonjour%2C%20je%20souhaite%20une%20pi%C3%A8ce%20sur%20mesure" target="_blank" rel="noopener">Décrire mon projet sur WhatsApp</a>
     </div>
     <div class="steps">
       <div class="step">
@@ -549,18 +658,22 @@
         <h3>Coordonnées directes</h3>
         <p>Le plus rapide reste WhatsApp. Envoyez une photo de votre pièce ou un croquis, ça aide beaucoup.</p>
         <div class="contact-links">
-          <a class="contact-link" href="https://wa.me/243836002274" target="_blank" rel="noopener">
+          <a class="contact-link" href="https://wa.me/243964459228" target="_blank" rel="noopener">
             <span class="ic">◐</span>
-            <span>WhatsApp<small>+243 836 002 274</small></span>
+            <span>WhatsApp<small>+243 964 459 228</small></span>
           </a>
-          <a class="contact-link" href="tel:+243836002274">
+          <a class="contact-link" href="tel:+243964459228">
             <span class="ic">☎</span>
-            <span>Appel direct<small>+243 836 002 274</small></span>
+            <span>Appel direct<small>+243 964 459 228</small></span>
           </a>
           <a class="contact-link" href="#contact">
             <span class="ic">✎</span>
             <span>Formulaire<small>Ci-contre</small></span>
           </a>
+        </div>
+        <div style="margin-top:28px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;">
+          <p style="margin:0;font-size:0.92rem;">🚚 Livraison possible à Kinshasa, moyennant des frais selon la distance.</p>
+          <p style="margin:0;font-size:0.92rem;">💰 <strong style="color:var(--ink);font-weight:500;">Prix sur demande</strong> — Chaque création étant réalisée sur mesure, le prix varie selon les dimensions, le modèle et les finitions. Contactez-nous pour recevoir votre devis personnalisé.</p>
         </div>
       </div>
       <div class="contact-card">
@@ -609,8 +722,8 @@
         </div>
         <div>
           <b>Contact</b>
-          <a href="https://wa.me/243836002274" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="tel:+243836002274">+243 836 002 274</a>
+          <a href="https://wa.me/243964459228" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="tel:+243964459228">+243 964 459 228</a>
         </div>
       </div>
     </div>
@@ -621,7 +734,7 @@
   </div>
 </footer>
 
-<a class="float-wa" href="https://wa.me/243836002274" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">◐</a>
+<a class="float-wa" href="https://wa.me/243964459228" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">◐</a>
 
 <script>
   document.getElementById('inquiryForm').addEventListener('submit', function(e){
@@ -630,7 +743,7 @@
     var type = document.getElementById('type').value;
     var msg = document.getElementById('msg').value;
     var text = "Bonjour, je suis " + name + ". Je suis intéressé(e) par : " + type + ". " + msg;
-    var url = "https://wa.me/243836002274?text=" + encodeURIComponent(text);
+    var url = "https://wa.me/243964459228?text=" + encodeURIComponent(text);
     window.open(url, '_blank');
   });
 
