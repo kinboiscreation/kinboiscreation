@@ -11,11 +11,20 @@
     /* Palette « Impeccable » — noir profond, blanc cassé, bois, cuivre & or fin */
     --ivoire: #F7F4EE;
     --pierre: #EDE7DA;
-    --sable: #D9C6A0;
     --bois: #33241A;
     --argile: #B87333;
     --ebene: #15110C;
     --or-fin: #C9A961;
+
+    /* Dégradé Choctone — de l'entrée (About) jusqu'au Contact, avant le footer */
+    --choc-1: #EADFC9;
+    --choc-2: #E3CBA0;
+    --choc-3: #D9B27B;
+    --choc-4: #84532F;
+    --choc-5: #78492B;
+    --choc-6: #5E3821;
+    --copper-dark: #5C3115;
+    --gold-light: #F5D9A8;
 
     /* Rôles — mode clair (surface par défaut, majorité du site) */
     --bg: var(--ivoire);
@@ -115,7 +124,7 @@
   .marquee{
     position:relative;overflow:hidden;
     border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-    background:var(--panel-solid);
+    background:var(--choc-1);
     padding:14px 0;
   }
   .marquee-track{
@@ -338,7 +347,13 @@
   .section-head p{max-width:340px;color:var(--ink-faint);font-size:0.92rem;margin:0;font-weight:300;}
 
   /* About */
-  .about{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .about{
+    background:var(--choc-1);
+    color:var(--ink);
+    --brass: var(--copper-dark);
+    --brass-soft: var(--copper-dark);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
   .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:center;}
   .about-photo{position:relative;aspect-ratio:4/5;}
   .about-copy p{color:var(--ink-soft);font-size:1rem;font-weight:300;margin:0 0 20px;}
@@ -349,7 +364,7 @@
 
   /* Catalogue — galerie éditoriale, fond clair */
   #catalogue{
-    --lt-bg:var(--pierre); --lt-panel:var(--ivoire); --lt-ink:var(--bois);
+    --lt-bg:var(--choc-2); --lt-panel:var(--ivoire); --lt-ink:var(--bois);
     --lt-ink-faint:var(--ink-faint); --lt-line:var(--line);
     background:var(--lt-bg);
     color:var(--lt-ink);
@@ -431,7 +446,12 @@
   .card:hover .panel-frame img{transform:scale(1.015);}
 
   /* Pourquoi me choisir */
-  .why{background:var(--bg-2);}
+  .why{
+    background:var(--choc-3);
+    color:var(--ink);
+    --brass: var(--copper-dark);
+    --brass-soft: var(--copper-dark);
+  }
   .why-grid{
     display:grid;grid-template-columns:repeat(6, 1fr);gap:0;
     margin-top:40px;
@@ -458,6 +478,17 @@
   .why-item span{font-size:0.8rem;color:var(--ink-faint);line-height:1.55;}
 
   /* Avis clients — composition éditoriale, sans cartes ni guillemets */
+  .reviews{
+    background:var(--choc-4);
+    color:var(--ink);
+    --ink: var(--ivoire);
+    --ink-soft: rgba(247,244,238,0.86);
+    --ink-faint: rgba(247,244,238,0.64);
+    --line: rgba(247,244,238,0.14);
+    --line-strong: rgba(247,244,238,0.24);
+    --brass: var(--gold-light);
+    --brass-soft: var(--gold-light);
+  }
   .reviews-editorial{
     display:grid;
     grid-template-columns:1.35fr 1fr;
@@ -512,8 +543,13 @@
 
   /* Sur mesure CTA — surface sable, chaleureuse */
   .mesure{
-    --bg-2: var(--sable);
+    --bg-2: var(--choc-5);
     background:var(--bg-2);
+    --ink: var(--ivoire);
+    --ink-soft: rgba(247,244,238,0.86);
+    --ink-faint: rgba(247,244,238,0.64);
+    --brass: var(--gold-light);
+    --brass-soft: var(--gold-light);
     color:var(--ink);
     position:relative;
     overflow:hidden;
@@ -540,7 +576,20 @@
   .step-txt span{color:var(--ink-faint);font-size:0.86rem;font-weight:300;}
 
   /* Contact */
-  .contact{background:var(--bg);}
+  .contact{
+    background:var(--choc-6);
+    color:var(--ink);
+    --ink: var(--ivoire);
+    --ink-soft: rgba(247,244,238,0.86);
+    --ink-faint: rgba(247,244,238,0.64);
+    --line: rgba(247,244,238,0.14);
+    --line-strong: rgba(247,244,238,0.24);
+    --brass: var(--gold-light);
+    --brass-soft: var(--gold-light);
+    --brass-deep: var(--gold-light);
+    --bg-2: rgba(247,244,238,0.08);
+    --panel: rgba(247,244,238,0.06);
+  }
   .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;}
   .contact-card{
     background:var(--panel);
