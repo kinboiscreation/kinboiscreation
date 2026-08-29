@@ -771,6 +771,110 @@
     .carnet-page h3{font-size:1.15rem;}
   }
 
+  /* ====================================================================
+     Transitions de section — animations liées au scroll, natives (2026)
+     Chaque frontière a sa propre signature : la teinte de la section
+     précédente se referme, se dissout ou se déchire pour révéler la
+     suivante, synchronisé avec la position de scroll, sans JavaScript.
+     Dégradation silencieuse si le navigateur ne supporte pas encore
+     animation-timeline: view() — les sections restent alors telles
+     quelles, sans effet, rien n'est jamais masqué ni cassé. Neutralisé
+     par la règle "prefers-reduced-motion" globale ci-dessous.
+     ==================================================================== */
+  @supports (animation-timeline: view()) {
+
+    @keyframes stIrisReveal {
+      from { clip-path: circle(150% at 50% 0%); }
+      to   { clip-path: circle(0% at 50% 0%); }
+    }
+    @keyframes stWaveReveal {
+      from { clip-path: polygon(0% 0%,100% 0%,100% 100%,90% 60%,80% 100%,70% 55%,60% 100%,50% 50%,40% 100%,30% 55%,20% 100%,10% 60%,0% 100%); }
+      to   { clip-path: polygon(0% 0%,100% 0%,100% 0%,90% 0%,80% 0%,70% 0%,60% 0%,50% 0%,40% 0%,30% 0%,20% 0%,10% 0%,0% 0%); }
+    }
+    @keyframes stShardsReveal {
+      from { clip-path: polygon(0% 0%,100% 0%,100% 100%,87.5% 30%,75% 90%,62.5% 25%,50% 90%,37.5% 30%,25% 90%,12.5% 25%,0% 90%); }
+      to   { clip-path: polygon(0% 0%,100% 0%,100% 0%,87.5% 0%,75% 0%,62.5% 0%,50% 0%,37.5% 0%,25% 0%,12.5% 0%,0% 0%); }
+    }
+    @keyframes stGrainReveal {
+      from { opacity:1; }
+      to   { opacity:0; }
+    }
+    @keyframes stPeelReveal {
+      from { transform:rotateX(0deg); opacity:1; box-shadow:0 26px 30px -14px rgba(21,17,12,0.4); }
+      to   { transform:rotateX(90deg); opacity:0; box-shadow:0 0 0 0 rgba(21,17,12,0); }
+    }
+
+    /* Hero -> About : ouverture en diaphragme */
+    .about::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:180px;z-index:5;pointer-events:none;
+      background:var(--ebene);
+      clip-path: circle(0% at 50% 0%);
+      animation: stIrisReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* About -> Catalogue : bord liquide qui se rétracte */
+    #catalogue::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-1);
+      clip-path: polygon(0% 0%,100% 0%,100% 0%,90% 0%,80% 0%,70% 0%,60% 0%,50% 0%,40% 0%,30% 0%,20% 0%,10% 0%,0% 0%);
+      animation: stWaveReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Catalogue -> Pourquoi me choisir : facettes qui se résorbent */
+    .why::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-2);
+      clip-path: polygon(0% 0%,100% 0%,100% 0%,87.5% 0%,75% 0%,62.5% 0%,50% 0%,37.5% 0%,25% 0%,12.5% 0%,0% 0%);
+      animation: stShardsReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Pourquoi me choisir -> Avis : dissolution en grain */
+    .reviews::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+        var(--choc-3);
+      opacity:0;
+      animation: stGrainReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Avis -> Sur mesure : pan qui se soulève en 3D */
+    .mesure{ perspective:1000px; }
+    .mesure::after{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-4);
+      transform-origin:top center;
+      transform:rotateX(90deg); opacity:0;
+      animation: stPeelReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Sur mesure -> Contact : second pan qui se soulève */
+    .contact{ perspective:1000px; }
+    .contact::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-5);
+      transform-origin:top center;
+      transform:rotateX(90deg); opacity:0;
+      animation: stPeelReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Contact -> Footer : fermeture en diaphragme, symétrique du hero */
+    footer::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-6);
+      clip-path: circle(0% at 50% 0%);
+      animation: stIrisReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
     .reveal{opacity:1 !important;transform:none !important;}
