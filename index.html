@@ -23,8 +23,8 @@
     --panel: rgba(51,36,26,0.035);
     --panel-solid: var(--pierre);
     --ink: var(--bois);
-    --ink-soft: rgba(51,36,26,0.75);
-    --ink-faint: rgba(51,36,26,0.52);
+    --ink-soft: rgba(51,36,26,0.84);
+    --ink-faint: rgba(51,36,26,0.64);
     --brass: var(--argile);
     --brass-soft: var(--argile);
     --brass-deep: var(--bois);
@@ -35,8 +35,8 @@
     /* Rôles — mode sombre (hero, footer : contrastes ponctuels "ébène") */
     --dk-bg: var(--ebene);
     --dk-ink: var(--ivoire);
-    --dk-ink-soft: rgba(247,244,238,0.75);
-    --dk-ink-faint: rgba(247,244,238,0.46);
+    --dk-ink-soft: rgba(247,244,238,0.86);
+    --dk-ink-faint: rgba(247,244,238,0.64);
     --dk-line: rgba(247,244,238,0.12);
     --dk-line-strong: rgba(247,244,238,0.20);
   }
@@ -255,7 +255,7 @@
   }
   .hero img{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    opacity:0.38;filter:saturate(0.82) contrast(1.08);
+    opacity:0.26;filter:saturate(0.75) contrast(1.08);
   }
   .hero::before{
     content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
@@ -265,7 +265,7 @@
   .hero::after{
     content:"";
     position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(21,17,12,0.18) 0%, rgba(21,17,12,0.5) 55%, rgba(21,17,12,0.95) 100%);
+    background:linear-gradient(180deg, rgba(21,17,12,0.42) 0%, rgba(21,17,12,0.7) 45%, rgba(21,17,12,0.97) 100%);
   }
   .hero-content{
     position:relative;z-index:2;
@@ -280,17 +280,22 @@
   }
   .eyebrow .rule{width:28px;height:1px;background:var(--brass);display:inline-block;opacity:0.9;}
   .hero h1{
-    color:var(--ink);
+    color:#FFFFFF;
     font-size:clamp(3rem, 7.6vw, 6.8rem);
     line-height:0.98;
     max-width:900px;
     margin:0 0 34px;
-    font-weight:400;
+    font-weight:500;
     letter-spacing:-0.015em;
+    text-shadow:0 4px 28px rgba(21,17,12,0.55);
   }
   .hero h1 em{
     font-style:italic;font-weight:500;
-    color:var(--brass-soft);
+    color:#FFFFFF;
+    text-decoration:underline;
+    text-decoration-color:rgba(184,115,51,0.7);
+    text-decoration-thickness:3px;
+    text-underline-offset:8px;
   }
   .hero p{
     color:var(--ink-faint);
@@ -319,14 +324,14 @@
     display:flex;justify-content:space-between;align-items:flex-end;
     gap:24px;margin-bottom:64px;flex-wrap:wrap;
     position:relative;
-    padding-bottom:40px;
+    padding-bottom:34px;
   }
-  /* Liseré tissé — clin d'œil discret au raphia Kuba/Shoowa, dans la palette du site */
+  /* Liseré fin, parfaitement droit — cuivre vers or, discret */
   .section-head::after{
     content:"";
-    position:absolute;left:0;right:0;bottom:0;height:7px;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cpath d='M0 11 L10 3 L20 11 L30 3 L40 11' fill='none' stroke='%23B87333' stroke-width='1.1' opacity='0.6'/%3E%3Cpath d='M0 3 L10 11 L20 3 L30 11 L40 3' fill='none' stroke='%23C9A961' stroke-width='1.1' opacity='0.4'/%3E%3C/svg%3E");
-    background-repeat:repeat-x;background-size:40px 7px;background-position:left center;
+    position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:linear-gradient(90deg, transparent 0%, var(--brass) 22%, var(--gold) 50%, var(--brass) 78%, transparent 100%);
+    opacity:0.6;
   }
   .section-head .eyebrow{color:var(--brass);}
   .section-head h2{font-size:clamp(1.9rem,3vw,2.8rem);margin:0;max-width:640px;font-weight:400;}
@@ -653,11 +658,14 @@
     border-top:none;
     position:relative;
   }
+  /* Fondu doux entre le contenu clair et le pied de page sombre, avec un fin liseré droit en clôture */
   footer::before{
     content:"";
-    position:absolute;top:0;left:0;right:0;height:7px;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cpath d='M0 11 L10 3 L20 11 L30 3 L40 11' fill='none' stroke='%23B87333' stroke-width='1.1' opacity='0.65'/%3E%3Cpath d='M0 3 L10 11 L20 3 L30 11 L40 3' fill='none' stroke='%23F7F4EE' stroke-width='1.1' opacity='0.16'/%3E%3C/svg%3E");
-    background-repeat:repeat-x;background-size:40px 7px;background-position:left center;
+    position:absolute;top:0;left:0;right:0;height:48px;
+    background:
+      linear-gradient(180deg, transparent 44px, rgba(184,115,51,0.4) 46px, transparent 48px),
+      linear-gradient(180deg, var(--ivoire) 0%, var(--ebene) 100%);
+    pointer-events:none;
   }
   .footer-grid{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
   .footer-logo{font-family:'Cormorant Garamond',serif;color:var(--ink);font-size:1.25rem;font-weight:500;}
@@ -667,7 +675,7 @@
   .footer-links a{display:block;color:var(--ink-faint);text-decoration:none;font-size:0.88rem;font-weight:300;margin-bottom:10px;}
   .footer-bottom{
     border-top:1px solid var(--dk-line);margin-top:48px;padding-top:22px;
-    font-size:0.76rem;font-weight:300;color:rgba(247,244,238,0.38);
+    font-size:0.76rem;font-weight:300;color:rgba(247,244,238,0.58);
     display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
   }
 
@@ -1020,9 +1028,9 @@
             <span class="ic">☎</span>
             <span>Appel direct<small>+243 964 459 228</small></span>
           </a>
-          <a class="contact-link" href="#contact">
+          <a class="contact-link" href="#carnet">
             <span class="ic">✎</span>
-            <span>Formulaire<small>Ci-contre</small></span>
+            <span>Formulaire du carnet pour votre projet<small>Ci-contre</small></span>
           </a>
         </div>
         <div style="margin-top:28px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;">
