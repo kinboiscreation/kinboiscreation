@@ -158,6 +158,13 @@
     border:1px solid var(--line);
     --lx:50%;--ly:40%;
   }
+  /* Fin liseré intérieur qui se révèle au survol, comme un cadre de galerie */
+  .panel-frame::before{
+    content:"";position:absolute;inset:8px;z-index:2;pointer-events:none;
+    border:1px solid rgba(247,241,228,0.55);
+    opacity:0;transition:opacity .6s ease;
+  }
+  .card:hover .panel-frame::before{opacity:0.7;}
   .panel-frame::after{
     content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
     background:radial-gradient(260px circle at var(--lx) var(--ly), rgba(247,241,228,0.16), transparent 68%);
@@ -311,8 +318,15 @@
   .section-head{
     display:flex;justify-content:space-between;align-items:flex-end;
     gap:24px;margin-bottom:64px;flex-wrap:wrap;
-    border-bottom:1px solid var(--line);
-    padding-bottom:34px;
+    position:relative;
+    padding-bottom:40px;
+  }
+  /* Liseré tissé — clin d'œil discret au raphia Kuba/Shoowa, dans la palette du site */
+  .section-head::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:0;height:7px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cpath d='M0 11 L10 3 L20 11 L30 3 L40 11' fill='none' stroke='%23B65E39' stroke-width='1.1' opacity='0.6'/%3E%3Cpath d='M0 3 L10 11 L20 3 L30 11 L40 3' fill='none' stroke='%2326362F' stroke-width='1.1' opacity='0.4'/%3E%3C/svg%3E");
+    background-repeat:repeat-x;background-size:40px 7px;background-position:left center;
   }
   .section-head .eyebrow{color:var(--brass);}
   .section-head h2{font-size:clamp(1.9rem,3vw,2.8rem);margin:0;max-width:640px;font-weight:400;}
@@ -336,7 +350,6 @@
     color:var(--lt-ink);
   }
   #catalogue .eyebrow{color:var(--brass-deep);}
-  #catalogue .section-head{border-bottom:1px solid var(--lt-line);}
   #catalogue .section-head h2{color:var(--lt-ink);}
   #catalogue .section-head p{color:var(--lt-ink-faint);}
 
@@ -395,7 +408,12 @@
     font-family:'Space Grotesk',sans-serif;font-size:0.66rem;letter-spacing:0.14em;
     color:var(--brass-deep);opacity:0.7;margin-bottom:2px;
   }
-  .card figcaption b{color:var(--lt-ink);font-weight:500;letter-spacing:0.01em;line-height:1.3;font-size:1rem;}
+  .card figcaption b{color:var(--lt-ink);font-weight:500;letter-spacing:0.01em;line-height:1.3;font-size:1rem;position:relative;display:inline-block;}
+  .card figcaption b::after{
+    content:"";position:absolute;left:0;bottom:-3px;height:1px;width:0;background:var(--brass-deep);
+    transition:width .5s cubic-bezier(.16,.8,.24,1);
+  }
+  .card:hover figcaption b::after{width:100%;}
   .card:nth-child(3n+1) figcaption b{font-size:1.2rem;font-family:'Cormorant Garamond',serif;font-weight:500;}
   .card figcaption span:not(.piece-num){line-height:1.3;text-transform:uppercase;letter-spacing:0.06em;font-size:0.72rem;}
 
@@ -410,7 +428,7 @@
   /* Pourquoi me choisir */
   .why{background:var(--bg-2);}
   .why-grid{
-    display:grid;grid-template-columns:repeat(5, 1fr);gap:0;
+    display:grid;grid-template-columns:repeat(6, 1fr);gap:0;
     margin-top:40px;
   }
   .why-item{
@@ -632,7 +650,14 @@
     --line: var(--dk-line);
     background:var(--dk-bg);color:var(--ink-faint);
     padding:56px 0 32px;
-    border-top:1px solid var(--line);
+    border-top:none;
+    position:relative;
+  }
+  footer::before{
+    content:"";
+    position:absolute;top:0;left:0;right:0;height:7px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='14' viewBox='0 0 40 14'%3E%3Cpath d='M0 11 L10 3 L20 11 L30 3 L40 11' fill='none' stroke='%23B65E39' stroke-width='1.1' opacity='0.65'/%3E%3Cpath d='M0 3 L10 11 L20 3 L30 11 L40 3' fill='none' stroke='%23F7F1E4' stroke-width='1.1' opacity='0.16'/%3E%3C/svg%3E");
+    background-repeat:repeat-x;background-size:40px 7px;background-position:left center;
   }
   .footer-grid{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
   .footer-logo{font-family:'Cormorant Garamond',serif;color:var(--ink);font-size:1.25rem;font-weight:500;}
@@ -710,7 +735,7 @@
   <div class="hero-content">
     <div class="eyebrow"><span class="rule"></span>Kinshasa</div>
     <h1 id="kineticH1">D'une bûche<br>à <em>une pièce qui reste</em>.</h1>
-    <p>Je fabrique seul, à Kinshasa, des meubles en bois massif pensés pour durer : lits, tables, portes, rangements.</p>
+    <p>Je fabrique seul, à Kinshasa, des meubles en bois massif pensés pour durer : lits, tables, portes, rangements, et agencement de bureaux et d'espaces commerciaux.</p>
     <div class="hero-ctas">
       <a class="btn btn-brass magnet" href="#catalogue">Voir le catalogue</a>
       <a class="btn btn-outline magnet" href="https://wa.me/243964459228" target="_blank" rel="noopener">Discuter sur WhatsApp</a>
@@ -721,8 +746,8 @@
 
 <div class="marquee">
   <div class="marquee-track">
-    <span>Bois massif</span><span>Fabrication artisanale</span><span>Sur mesure</span><span>Fait main à Kinshasa</span><span>Pièces uniques</span>
-    <span>Bois massif</span><span>Fabrication artisanale</span><span>Sur mesure</span><span>Fait main à Kinshasa</span><span>Pièces uniques</span>
+    <span>Bois massif</span><span>Fabrication artisanale</span><span>Sur mesure</span><span>Fait main à Kinshasa</span><span>Héritage congolais</span><span>Pièces uniques</span>
+    <span>Bois massif</span><span>Fabrication artisanale</span><span>Sur mesure</span><span>Fait main à Kinshasa</span><span>Héritage congolais</span><span>Pièces uniques</span>
   </div>
 </div>
 
@@ -907,6 +932,11 @@
         <b>Livraison possible</b>
         <span>Livraison organisée à Kinshasa selon la distance.</span>
       </div>
+      <div class="why-item">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg></span>
+        <b>Agencement professionnel</b>
+        <span>Bureaux, comptoirs et espaces commerciaux sur mesure.</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1020,6 +1050,7 @@
                 <option>Meuble de salon</option>
                 <option>Porte</option>
                 <option>Cuisine</option>
+                <option>Agencement bureau / commerce</option>
                 <option>Autre</option>
               </select>
             </div>
@@ -1070,7 +1101,7 @@
     <div class="footer-grid">
       <div>
         <div class="footer-logo">Kin Bois Création Sur Mesure</div>
-        <p class="footer-note">Menuiserie et ébénisterie artisanales à Kinshasa. Fabrication et vente de meubles en bois massif, sur mesure ou déjà réalisés.</p>
+        <p class="footer-note">Menuiserie et ébénisterie artisanales à Kinshasa, fidèles au savoir-faire congolais. Fabrication et vente de meubles en bois massif, sur mesure ou déjà réalisés.</p>
       </div>
       <div class="footer-links">
         <div>
