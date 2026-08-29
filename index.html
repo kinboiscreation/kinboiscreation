@@ -17,14 +17,19 @@
     --or-fin: #C9A961;
 
     /* Dégradé Choctone — de l'entrée (About) jusqu'au Contact, avant le footer */
-    --choc-1: #EADFC9;
-    --choc-2: #E3CBA0;
-    --choc-3: #D9B27B;
+    --choc-1: #CE9A66;
+    --choc-2: #C2874C;
+    --choc-3: #B27A40;
     --choc-4: #84532F;
     --choc-5: #78492B;
     --choc-6: #5E3821;
-    --copper-dark: #5C3115;
+    --copper-dark: #2B170B;
     --gold-light: #F5D9A8;
+    --ink-on-choc: #1C130E;
+    --ink-on-choc-soft: #24170D;
+    --ink-on-choc-faint: #28190C;
+    --ink-on-dk-choc-soft: #F1E7D6;
+    --ink-on-dk-choc-faint: #E8D8BF;
 
     /* Rôles — mode clair (surface par défaut, majorité du site) */
     --bg: var(--ivoire);
@@ -125,6 +130,8 @@
     position:relative;overflow:hidden;
     border-top:1px solid var(--line);border-bottom:1px solid var(--line);
     background:var(--choc-1);
+    --ink-faint: var(--ink-on-choc-faint);
+    --brass: var(--copper-dark);
     padding:14px 0;
   }
   .marquee-track{
@@ -349,9 +356,12 @@
   /* About */
   .about{
     background:var(--choc-1);
-    color:var(--ink);
+    --ink: var(--ink-on-choc);
+    --ink-soft: var(--ink-on-choc-soft);
+    --ink-faint: var(--ink-on-choc-faint);
     --brass: var(--copper-dark);
     --brass-soft: var(--copper-dark);
+    color:var(--ink);
     border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   }
   .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:center;}
@@ -364,8 +374,8 @@
 
   /* Catalogue — galerie éditoriale, fond clair */
   #catalogue{
-    --lt-bg:var(--choc-2); --lt-panel:var(--ivoire); --lt-ink:var(--bois);
-    --lt-ink-faint:var(--ink-faint); --lt-line:var(--line);
+    --lt-bg:var(--choc-2); --lt-panel:var(--ivoire); --lt-ink:var(--ink-on-choc);
+    --lt-ink-faint:var(--ink-on-choc-faint); --lt-line:var(--line);
     background:var(--lt-bg);
     color:var(--lt-ink);
   }
@@ -448,9 +458,12 @@
   /* Pourquoi me choisir */
   .why{
     background:var(--choc-3);
-    color:var(--ink);
+    --ink: var(--ink-on-choc);
+    --ink-soft: var(--ink-on-choc-soft);
+    --ink-faint: var(--ink-on-choc-faint);
     --brass: var(--copper-dark);
     --brass-soft: var(--copper-dark);
+    color:var(--ink);
   }
   .why-grid{
     display:grid;grid-template-columns:repeat(6, 1fr);gap:0;
@@ -482,8 +495,8 @@
     background:var(--choc-4);
     color:var(--ink);
     --ink: var(--ivoire);
-    --ink-soft: rgba(247,244,238,0.86);
-    --ink-faint: rgba(247,244,238,0.64);
+    --ink-soft: var(--ink-on-dk-choc-soft);
+    --ink-faint: var(--ink-on-dk-choc-faint);
     --line: rgba(247,244,238,0.14);
     --line-strong: rgba(247,244,238,0.24);
     --brass: var(--gold-light);
@@ -546,8 +559,8 @@
     --bg-2: var(--choc-5);
     background:var(--bg-2);
     --ink: var(--ivoire);
-    --ink-soft: rgba(247,244,238,0.86);
-    --ink-faint: rgba(247,244,238,0.64);
+    --ink-soft: var(--ink-on-dk-choc-soft);
+    --ink-faint: var(--ink-on-dk-choc-faint);
     --brass: var(--gold-light);
     --brass-soft: var(--gold-light);
     color:var(--ink);
@@ -580,8 +593,8 @@
     background:var(--choc-6);
     color:var(--ink);
     --ink: var(--ivoire);
-    --ink-soft: rgba(247,244,238,0.86);
-    --ink-faint: rgba(247,244,238,0.64);
+    --ink-soft: var(--ink-on-dk-choc-soft);
+    --ink-faint: var(--ink-on-dk-choc-faint);
     --line: rgba(247,244,238,0.14);
     --line-strong: rgba(247,244,238,0.24);
     --brass: var(--gold-light);
