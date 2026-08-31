@@ -21,7 +21,7 @@ music: none
 - scene: Portrait de Jeantim dans son atelier, regard caméra
 - duration: 2.5s
 - transition_in: cut
-- status: outline
+- status: animated
 - asset_candidates: artisan-jeantim.webp
 - on_screen_text: "Je m'appelle Jeantim."
 - blueprint: compose
@@ -40,7 +40,7 @@ Scene 2 (0.6–2.5s): as the push settles, "Je m'appelle Jeantim." stacks in wor
 - scene: Lit en bois massif à tête sculptée, gros plan sur la finition
 - duration: 2.5s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: lit-tete-de-lit-sculptee-showroom.webp
 - on_screen_text: "Chaque pièce, faite à la main"
 - blueprint: compose
@@ -59,7 +59,7 @@ Scene 2 (0.8–2.5s): "Chaque pièce, faite à la main" reveals per-word in the 
 - scene: Buffet vitré, portes en verre, tiroirs
 - duration: 2.2s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp
 - on_screen_text: "Bois massif"
 - blueprint: compose
@@ -75,7 +75,7 @@ Scene 2 (0.4–2.2s): "Bois massif" pops in as a single beat (`spring-pop-entran
 - scene: Porte double en acajou verni, poignée métallique
 - duration: 2.2s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: porte-double-en-bois-acajou-avec-poignee-metallique.webp
 - on_screen_text: "Portes sur mesure"
 - blueprint: compose
@@ -93,7 +93,7 @@ Scene 2 (0.4–1.2s): "Portes sur mesure" reveals per-word in the left margin, `
 - scene: Cuisine équipée en bois massif, moulures et poignées dorées
 - duration: 2.2s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: cuisine-bois-moulures-dorees.webp
 - on_screen_text: "Cuisines & agencement"
 - blueprint: compose
@@ -109,7 +109,7 @@ Scene 2 (0.5–2.2s): "Cuisines & agencement" pops in (`spring-pop-entrance`) lo
 - scene: Canapé d'angle beige avec pouf orange
 - duration: 2.2s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: canape-d-angle-beige-avec-pouf-orange.webp
 - on_screen_text: "Et bien plus encore"
 - blueprint: compose
@@ -128,7 +128,7 @@ Scene 2 (0.4–1.4s): "Et bien plus encore" reveals per-word in the right margin
 - scene: Portes vernies en série, texte pleine largeur par-dessus
 - duration: 3s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: trois-portes-en-bois-verni-appuyees-contre-un-mur.webp
 - on_screen_text: "Meubles en bois massif,\nfaits main à Kinshasa,\nsur mesure."
 - blueprint: titlecard-reveal (Adapt)
@@ -149,7 +149,7 @@ Scene 3 (2.0–3.0s): fully resolved, held completely still — at most a barely
 - scene: Fond ivoire uni, logo/nom de marque, appel à l'action
 - duration: 4s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: (aucune photo — carte de titre sur fond de marque)
 - on_screen_text: "KIN BOIS CRÉATION\nDevis gratuit → WhatsApp\n+243 964 459 228"
 - blueprint: titlecard-reveal (Reproduce)

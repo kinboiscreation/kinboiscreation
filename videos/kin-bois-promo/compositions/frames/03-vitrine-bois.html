@@ -1,0 +1,179 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      background: transparent;
+    }
+
+    #root .vb03-scene {
+      position: absolute;
+      inset: 0;
+      overflow: hidden; /* required: camera phase scale dips below 1 */
+    }
+
+    #root .vb03-bg {
+      position: absolute;
+      inset: 0;
+      background: #f7f4ee; /* frame.md colors.bg-primary */
+    }
+
+    #root .vb03-camera {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 14cqh;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    #root .vb03-photo-wrap {
+      position: relative;
+      width: 70cqw;
+      aspect-ratio: 0.92;
+    }
+
+    #root .vb03-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 134%;
+      height: 134%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid #b87333; /* frame.md colors.line (cuivre) */
+      opacity: 0.28;
+      pointer-events: none;
+    }
+
+    #root .vb03-ring::before {
+      content: "";
+      position: absolute;
+      inset: 13%;
+      border-radius: 50%;
+      border: 1px dashed #b87333;
+      opacity: 0.55;
+    }
+
+    #root .vb03-photo-frame {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border: 1px solid #b87333;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    #root .vb03-photo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #root .vb03-label-wrap {
+      margin-top: 8cqh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #root .vb03-hr {
+      width: 8cqw;
+      height: 1px;
+      background: #b87333;
+      opacity: 0.6;
+      margin-bottom: 2.2cqh;
+    }
+
+    #root .vb03-label {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 5cqw;
+      letter-spacing: 0.4cqw;
+      text-transform: uppercase;
+      color: #b87333; /* cuivre — packet's "cuivre label role" */
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+  </style>
+
+  <div id="root" data-composition-id="03-vitrine-bois" data-duration="2.7" data-width="1080" data-height="1920">
+    <div class="vb03-scene">
+      <div class="vb03-bg clip" data-start="0" data-duration="2.7" data-track-index="0"></div>
+
+      <div class="vb03-camera" id="vb03-camera">
+        <div class="vb03-photo-wrap clip" data-start="0" data-duration="2.7" data-track-index="1">
+          <div class="vb03-ring" aria-hidden="true"></div>
+          <div class="vb03-photo-frame">
+            <img
+              class="vb03-photo"
+              src="assets/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp"
+              alt=""
+            />
+          </div>
+        </div>
+
+        <div class="vb03-label-wrap clip" data-start="0.4" data-duration="2.3" data-track-index="2">
+          <div class="vb03-hr"></div>
+          <div class="vb03-label" id="vb03-label">Bois massif</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["03-vitrine-bois"] = tl;
+
+      var camera = document.getElementById("vb03-camera");
+      var TOTAL_DURATION = 2.2;
+
+      // Multi-phase camera: brisk pull-back -> settle -> continued push,
+      // quicker than the earlier showcase frames (Scene 1: 0.0-0.4s).
+      var phase = { scale: 0.9 }; // Phase 1 — initial value, no tween
+      tl.to(phase, { scale: 1.0, duration: 0.35, ease: "power2.out" }, 0.02); // Phase 2 — fast settle
+      tl.to(phase, { scale: 1.12, duration: 1.6, ease: "power2.inOut" }, 0.4); // Phase 3 — push continues under the held label
+
+      // Continuous sine drift, one writer of camera.style.transform.
+      var drift = { p: 0 };
+      tl.to(
+        drift,
+        {
+          p: Math.PI * 2 * 1,
+          duration: TOTAL_DURATION,
+          ease: "none",
+          onUpdate: function () {
+            var dx = Math.sin(drift.p) * 4;
+            var dy = Math.sin(drift.p * 1.3) * 2;
+            camera.style.transform = "scale(" + phase.scale + ") translate(" + dx + "px, " + dy + "px)";
+          },
+        },
+        0,
+      );
+
+      // Scene 2 (0.4-2.2s): "Bois massif" — subtle spring-pop, long-tail settle, no overshoot.
+      tl.fromTo(
+        "#vb03-label",
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" },
+        0.4,
+      );
+    })();
+  </script>
+</template>

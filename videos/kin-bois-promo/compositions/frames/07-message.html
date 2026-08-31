@@ -1,0 +1,184 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("assets/fonts/cormorant-garamond-latin-400-normal.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* Root: style by #root, never a class — see hyperframes-core sub-composition contract. */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+      container-name: msg-frame;
+    }
+
+    /* Full-bleed backdrop photo — a dedicated class="clip" layer, never painted on #root. */
+    .msg-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .msg-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* Ink scrim over the photo — Scene 1 dims the backdrop to ~50% so the text can carry the beat. */
+    .msg-scrim {
+      position: absolute;
+      inset: 0;
+      background: #15110c; /* text-primary / ink, from frame.md */
+      opacity: 0;
+    }
+
+    /* The three-line thesis statement + cuivre underline. */
+    .msg-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 7cqw; /* frame.md pad-x */
+      gap: 1.6cqh;
+      transform: translateY(-3cqh); /* static offset only — never GSAP-animated on this element */
+    }
+
+    .msg-line {
+      opacity: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 400;
+      font-size: 5.4cqw;
+      line-height: 1.18;
+      color: #f7f4ee; /* bg-primary / ivoire, used here as ink-on-dark per the frame packet */
+      text-align: center;
+      letter-spacing: 0.2px;
+      max-width: 92cqw;
+    }
+
+    .msg-underline {
+      opacity: 0;
+      width: 14cqw;
+      height: 2px;
+      background: #b87333; /* line / cuivre, from frame.md */
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="07-message"
+    data-duration="3.5"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div class="msg-bg clip" data-start="0" data-duration="3.5" data-track-index="0">
+      <img
+        class="msg-bg-img"
+        src="assets/trois-portes-en-bois-verni-appuyees-contre-un-mur.webp"
+        alt=""
+      />
+    </div>
+
+    <div class="msg-scrim clip" data-start="0" data-duration="3.5" data-track-index="1"></div>
+
+    <div class="msg-content clip" data-start="0" data-duration="3.5" data-track-index="2">
+      <div class="msg-line" id="msg-line-0">Meubles en bois massif,</div>
+      <div class="msg-line" id="msg-line-1">faits main à Kinshasa,</div>
+      <div class="msg-line" id="msg-line-2">sur mesure.</div>
+      <div class="msg-underline" id="msg-underline"></div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    // Scene 1 (0.0–0.5s): the backdrop photo is already present; the ink scrim settles it to
+    // ~50% dim. No camera motion — the frame is deliberately quiet so the text can carry the beat.
+    tl.fromTo(
+      "#root .msg-scrim",
+      { opacity: 0 },
+      { opacity: 0.5, duration: 0.5, ease: "power1.out" },
+      0,
+    );
+
+    // Scene 2 (0.5–2.0s): the three lines land one per beat and STAY (dynamic-content-sequencing,
+    // adapted — entries accumulate rather than swapping a single slot). The stagger between
+    // reveals is content-length aware, computed once and scaled to fit the fixed 1.5s scene
+    // budget (duration is fixed upstream — this never stretches it).
+    const LINES = ["Meubles en bois massif,", "faits main à Kinshasa,", "sur mesure."];
+    const SCENE2_START = 0.5;
+    const SCENE2_BUDGET = 1.5;
+    const BASE_WEIGHT = 0.28;
+    const PER_CHAR_WEIGHT = 0.016;
+    const ENTRANCE_DUR = 0.4;
+
+    const rawWeights = LINES.map((l) => BASE_WEIGHT + l.length * PER_CHAR_WEIGHT);
+    const rawTotal = rawWeights.reduce((a, b) => a + b, 0);
+    const scale = SCENE2_BUDGET / rawTotal;
+
+    let cursor = 0;
+    const STARTS = rawWeights.map((w) => {
+      const start = SCENE2_START + cursor;
+      cursor += w * scale;
+      return start;
+    });
+
+    LINES.forEach((_, i) => {
+      tl.fromTo(
+        `#msg-line-${i}`,
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, duration: ENTRANCE_DUR, ease: "power2.out" },
+        STARTS[i],
+      );
+    });
+
+    // The cuivre underline lands just after the third line settles.
+    const lastLineSettled = STARTS[2] + ENTRANCE_DUR;
+    const underlineStart = lastLineSettled + 0.07;
+    const UNDERLINE_ENTRANCE_DUR = 0.28;
+    tl.fromTo(
+      "#msg-underline",
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: UNDERLINE_ENTRANCE_DUR, ease: "power2.out" },
+      underlineStart,
+    );
+
+    // Scene 3 (2.0–3.0s): fully resolved, held completely still — the only live element is a
+    // barely-visible jitter on the cuivre underline (sine-wave-loop, low amplitude, onUpdate
+    // form). Idle begins at phase 0 (sin(0)=0) so there is no jump off the entrance's resting y.
+    const TOTAL_DURATION = 3;
+    const idleStart = underlineStart + UNDERLINE_ENTRANCE_DUR + 0.05;
+    const idleDur = Math.max(0.2, TOTAL_DURATION - idleStart);
+    const Y_AMP_PX = 2;
+    const CYCLES = 0.4;
+    const phase = { p: 0 };
+    tl.to(
+      phase,
+      {
+        p: Math.PI * 2 * CYCLES,
+        duration: idleDur,
+        ease: "none",
+        onUpdate: () => {
+          const underline = document.getElementById("msg-underline");
+          if (underline) {
+            underline.style.transform = `translateY(${Math.sin(phase.p) * Y_AMP_PX}px)`;
+          }
+        },
+      },
+      idleStart,
+    );
+
+    window.__timelines["07-message"] = tl;
+  </script>
+</template>

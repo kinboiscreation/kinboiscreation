@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
     <style>
       * {
         margin: 0;
@@ -12,19 +12,23 @@
       }
       html,
       body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
+        width: 1080px;
+        height: 1920px;
         overflow: hidden;
         background: #000;
       }
-      body {
-        font-family: "Inter", sans-serif;
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #F7F4EE;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
       }
     </style>
   </head>
@@ -33,27 +37,113 @@
       id="root"
       data-composition-id="main"
       data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
+      data-duration="20.8"
+      data-width="1080"
+      data-height="1920"
     >
-      
-      
+      <div
+        id="el-01-hook"
+        class="scene"
+        data-composition-id="01-hook"
+        data-composition-src="compositions/frames/01-hook.html"
+        data-start="0"
+        data-duration="3"
+        data-track-index="0"
+      ></div>
 
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+      <div
+        id="el-02-geste"
+        class="scene"
+        data-composition-id="02-geste"
+        data-composition-src="compositions/frames/02-geste.html"
+        data-start="2.5"
+        data-duration="3"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-03-vitrine-bois"
+        class="scene"
+        data-composition-id="03-vitrine-bois"
+        data-composition-src="compositions/frames/03-vitrine-bois.html"
+        data-start="5"
+        data-duration="2.7"
+        data-track-index="0"
+      ></div>
+
+      <div
+        id="el-04-vitrine-portes"
+        class="scene"
+        data-composition-id="04-vitrine-portes"
+        data-composition-src="compositions/frames/04-vitrine-portes.html"
+        data-start="7.2"
+        data-duration="2.7"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-05-vitrine-agencement"
+        class="scene"
+        data-composition-id="05-vitrine-agencement"
+        data-composition-src="compositions/frames/05-vitrine-agencement.html"
+        data-start="9.4"
+        data-duration="2.7"
+        data-track-index="0"
+      ></div>
+
+      <div
+        id="el-06-vitrine-variete"
+        class="scene"
+        data-composition-id="06-vitrine-variete"
+        data-composition-src="compositions/frames/06-vitrine-variete.html"
+        data-start="11.600000000000001"
+        data-duration="2.7"
+        data-track-index="1"
+      ></div>
+
+      <div
+        id="el-07-message"
+        class="scene"
+        data-composition-id="07-message"
+        data-composition-src="compositions/frames/07-message.html"
+        data-start="13.8"
+        data-duration="3.5"
+        data-track-index="0"
+      ></div>
+
+      <div
+        id="el-08-cta"
+        class="scene"
+        data-composition-id="08-cta"
+        data-composition-src="compositions/frames/08-cta.html"
+        data-start="16.8"
+        data-duration="4"
+        data-track-index="1"
+      ></div>
+
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-hook", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 2.5);
+        tl.fromTo("#el-02-geste", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 2.5);
+        tl.to("#el-02-geste", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 5);
+        tl.fromTo("#el-03-vitrine-bois", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 5);
+        tl.to("#el-03-vitrine-bois", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 7.2);
+        tl.fromTo("#el-04-vitrine-portes", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 7.2);
+        tl.to("#el-04-vitrine-portes", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 9.4);
+        tl.fromTo("#el-05-vitrine-agencement", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 9.4);
+        tl.to("#el-05-vitrine-agencement", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 11.6);
+        tl.fromTo("#el-06-vitrine-variete", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 11.6);
+        tl.to("#el-06-vitrine-variete", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 13.8);
+        tl.fromTo("#el-07-message", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 13.8);
+        tl.to("#el-07-message", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 16.8);
+        tl.fromTo("#el-08-cta", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 16.8);
+        tl.to({}, { duration: 20.8 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
     </script>
   </body>
 </html>
