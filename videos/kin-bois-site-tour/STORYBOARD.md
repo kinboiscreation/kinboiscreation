@@ -22,7 +22,7 @@ music: none
 - scene: Le monogramme KB (nouveau logo, sculpté dans le bois) sur fond ivoire
 - duration: 3.5s
 - transition_in: cut
-- status: outline
+- status: animated
 - asset_candidates: logo-kb.jpg
 - on_screen_text: "KIN BOIS CRÉATION"
 - blueprint: titlecard-reveal (Adapt)
@@ -43,7 +43,7 @@ Scene 4 (2.4–3.5s): fully resolved, held — only the glow's low-amplitude jit
 - scene: Capture réelle de la page d'accueil du site (fond ébène, titre du hero)
 - duration: 4.5s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: capture/screenshots/scroll-000.png
 - on_screen_text: (aucun texte ajouté — le titre du hero fait déjà le texte : "D'une bûche à une pièce qui reste.")
 - blueprint: compose
@@ -63,7 +63,7 @@ Scene 3 (1.0–4.5s): slow, barely-perceptible vertical drift within the screens
 - scene: Capture réelle de la section "L'artisan" (photo de Jeantim + chiffres)
 - duration: 3s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: capture/screenshots/scroll-007.png
 - on_screen_text: "L'artisan"
 - blueprint: compose
@@ -79,7 +79,7 @@ Scene 2 (0.4–3.0s): "L'artisan" pops in as a single beat (`spring-pop-entrance
 - scene: Capture réelle de la grille catalogue (lits, chevets)
 - duration: 3.5s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: capture/screenshots/scroll-018.png
 - on_screen_text: "Le catalogue"
 - blueprint: compose
@@ -97,7 +97,7 @@ Scene 2 (0.4–1.2s): "Le catalogue" reveals per-word in the left margin (`dynam
 - scene: Capture réelle de la section cuisine / agencement sur mesure
 - duration: 3.5s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: capture/screenshots/scroll-070.png
 - on_screen_text: "Sur mesure, pour chaque pièce"
 - blueprint: compose
@@ -116,7 +116,7 @@ Scene 2 (0.4–1.4s): "Sur mesure, pour chaque pièce" reveals per-word in the r
 - scene: Capture réelle de la section "Pourquoi me choisir" (icônes + texte)
 - duration: 4s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: capture/screenshots/scroll-084.png
 - on_screen_text: "Pourquoi me choisir"
 - blueprint: compose
@@ -132,7 +132,7 @@ Scene 2 (0.5–4.0s): "Pourquoi me choisir" pops in (`spring-pop-entrance`) lowe
 - scene: Capture réelle de la section avis (fond ébène foncé, témoignage client)
 - duration: 4s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: capture/screenshots/scroll-091.png
 - on_screen_text: "Travail magnifique et très soigné. Je suis vraiment satisfait de ma commande !" — Jules
 - blueprint: compose
@@ -152,7 +152,7 @@ Scene 3 (2.0–4.0s): fully resolved, held — at most a barely-visible jitter o
 - scene: Fond ivoire uni, logo, appel à l'action vers le site et WhatsApp
 - duration: 5s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - asset_candidates: logo-kb.jpg
 - on_screen_text: "KIN BOIS CRÉATION\nDécouvrez le site en bio\nDevis gratuit → WhatsApp\n+243 836 002 274"
 - blueprint: titlecard-reveal (Reproduce)

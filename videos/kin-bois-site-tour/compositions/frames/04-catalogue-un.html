@@ -1,0 +1,158 @@
+<template>
+<div id="root" data-composition-id="04-catalogue-un" data-duration="4" data-width="1080" data-height="1920">
+  <style>
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("capture/assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Cormorant Garamond", "Times New Roman", serif;
+    }
+
+    .clip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* full-bleed ivoire ground */
+    .fc04-bg {
+      background-color: #F7F4EE;
+    }
+
+    /* right ~62% screenshot panel, bled to top + right edges,
+       held above the 83% caption keep-out line */
+    .fc04-panel-wrap {
+      pointer-events: none;
+    }
+    .fc04-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 670px;
+      height: 1594px;
+      overflow: hidden;
+      border-left: 1.5px solid #B87333;
+      border-bottom: 1.5px solid #B87333;
+      background-color: #EFD9C4;
+      opacity: 0;
+    }
+    .fc04-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 35% 58%;
+      display: block;
+    }
+
+    /* left ivoire margin holding the label */
+    .fc04-label-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 410px;
+      height: 1594px;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0 60px;
+    }
+    .fc04-title {
+      margin: 0;
+      font-family: "Cormorant Garamond", "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 66px;
+      line-height: 1.15;
+      color: #1C130E;
+    }
+    .fc04-word {
+      display: inline-block;
+      opacity: 0;
+    }
+    .fc04-word + .fc04-word {
+      margin-left: 0.26em;
+    }
+  </style>
+
+  <div class="clip fc04-bg" data-start="0" data-duration="4" data-track-index="0"></div>
+
+  <div class="clip fc04-panel-wrap" data-start="0" data-duration="4" data-track-index="1">
+    <div class="fc04-panel">
+      <img class="fc04-img" src="assets/scroll-018.png" alt="" />
+    </div>
+  </div>
+
+  <div class="clip fc04-label-wrap" data-start="0" data-duration="4" data-track-index="2">
+    <h3 class="fc04-title">
+      <span class="fc04-word" data-word="0">Le</span><span class="fc04-word" data-word="1">catalogue</span>
+    </h3>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["04-catalogue-un"] = tl;
+
+      var root = document.querySelector('[data-composition-id="04-catalogue-un"]');
+      var panelEl = root.querySelector(".fc04-panel");
+      var imgEl = root.querySelector(".fc04-img");
+      var wordEls = root.querySelectorAll(".fc04-word");
+
+      // Scene 1 (0.0-0.4s): panel enters, right 62%, left stays clear.
+      tl.fromTo(panelEl, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0);
+
+      // Slow drift under the whole shot — continues through Scene 2 and the hold.
+      tl.fromTo(
+        imgEl,
+        { scale: 1.0, yPercent: 0, transformOrigin: "50% 40%" },
+        { scale: 1.14, yPercent: -3, duration: 3.5, ease: "none" },
+        0
+      );
+
+      // Scene 2 (0.4-1.2s): "Le catalogue" reveals per-word — start offsets
+      // computed from each word's length (dynamic-content-sequencing spirit),
+      // never hardcoded per-word.
+      var SCENE2_START = 0.4;
+      var BASE_GAP = 0.12;
+      var SEC_PER_CHAR = 0.045;
+      var WORD_DURATION = 0.42;
+
+      var words = [];
+      wordEls.forEach(function (el) {
+        words.push({ el: el, text: el.textContent || "" });
+      });
+
+      var cursor = 0;
+      var wordStarts = words.map(function (w) {
+        var start = cursor;
+        var gap = BASE_GAP + w.text.length * SEC_PER_CHAR;
+        cursor += gap;
+        return start;
+      });
+
+      words.forEach(function (w, i) {
+        var start = SCENE2_START + wordStarts[i];
+        tl.fromTo(
+          w.el,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: WORD_DURATION, ease: "power2.out" },
+          start
+        );
+      });
+    })();
+  </script>
+</div>
+</template>
