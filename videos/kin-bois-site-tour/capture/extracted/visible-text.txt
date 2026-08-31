@@ -1,0 +1,220 @@
+[div] Kin Bois Création
+[span] Sur Mesure · Kinshasa
+[a] L'artisan
+[a] Catalogue
+[a] Pourquoi me choisir
+[a] Sur mesure
+[a] Appeler
+[a] WhatsApp
+[div] Kinshasa
+[span] D'une
+[span] bûche
+[em] une pièce qui reste
+[p] Je fabrique seul, à Kinshasa, des meubles en bois massif pensés pour durer : lits, tables, portes, rangements, et agencement de bureaux et d'espaces commerciaux.
+[a] Voir le catalogue
+[a] Discuter sur WhatsApp
+[div] La matière
+[span] Bois massif
+[span] Fabrication artisanale
+[span] Sur mesure
+[span] Fait main à Kinshasa
+[span] Héritage congolais
+[span] Pièces uniques
+[span] Bois massif
+[span] Fabrication artisanale
+[span] Sur mesure
+[span] Fait main à Kinshasa
+[span] Héritage congolais
+[span] Pièces uniques
+[div] L'artisan
+[h2] Chaque pièce sort de mes mains, pas d'une usine.
+[p] Je m'appelle Jeantim. Je travaille seul, du choix du bois jusqu'à la dernière couche de vernis. Ce format me permet de rester exigeant sur chaque assemblage, chaque panneau, chaque finition, et de vous proposer un prix juste, sans intermédiaire.
+[p] Basé à Kinshasa, je livre des meubles déjà réalisés ou je construis sur mesure, selon vos dimensions et votre budget.
+[b] 100%
+[span] Bois massif & contreplaqué de qualité
+[span] Artisan, du dessin à la livraison
+[b] Kin
+[span] Fabrication & livraison locales
+[div] Catalogue
+[h2] Des pièces déjà réalisées, disponibles ou reproductibles sur mesure.
+[p] Chaque modèle peut être ajusté en taille, en essence de bois ou en finition selon vos envies.
+[h3] Chambre : lits & chevets
+[b] Lit complet + chevets
+[span] Bois massif
+[b] Lit tête sculptée
+[span] Finition dorée
+[b] Lit brut + chevets
+[span] Prêt à finir
+[b] Lit sommier à lattes
+[span] Sur mesure
+[b] Table de chevet
+[span] Tiroir + étagère
+[b] Lit et chevets assortis
+[span] Bois massif
+[b] Lit tête arrondie
+[span] Avec chevets
+[b] Lit chambre complète
+[span] Finition vernie
+[b] Lit brut
+[span] Prêt à finir
+[b] Chevet chêne
+[span] Tiroir + étagères
+[b] Armoire penderie
+[span] Étagères intérieures
+[h3] Salon & séjour
+[b] Meuble TV mural
+[span] Avec rangements
+[b] Buffet vitré
+[span] Salle à manger
+[b] Canapé d'angle
+[span] Tissu + pouf assorti
+[b] Banc coffre
+[span] Rangement intégré
+[b] Buffet vitré
+[span] Deuxième modèle
+[b] Canapé d'angle
+[span] Autre finition
+[b] Meuble TV d'appoint
+[span] Format compact
+[b] Meuble TV mural
+[span] Style contemporain
+[b] Coffre double
+[span] Deux compartiments
+[b] Buffet à tiroirs
+[span] Bois verni
+[b] Meuble d'entrée
+[span] Avec portemanteau
+[b] Caisson vitré
+[span] Portes en verre
+[h3] Tables & salle à manger
+[b] Table 4 chaises
+[span] Plateau bicolore
+[b] Table ronde
+[span] 4 chaises assorties
+[b] Table basse
+[span] Double plateau
+[b] Table d'appoint
+[span] Pied tripode
+[b] Table basse galbée
+[span] Bois brut, à finir
+[b] Guéridon laqué
+[span] Finition blanche
+[b] Table ronde bicolore
+[span] Pied tripode
+[b] Guéridon laqué
+[span] Modèle compact
+[b] Table d'appoint galbée
+[span] Bois brut
+[b] Table ronde 4 chaises
+[span] Ensemble complet
+[b] Table basse carrée
+[span] Bois foncé
+[b] Table à manger
+[span] Assises noires
+[b] Bureau enfant
+[span] Bureau + chaise
+[h3] Portes sur mesure
+[b] Porte double
+[span] Acajou verni
+[b] Porte 2 panneaux
+[span] Bois clair
+[b] Porte 3 panneaux
+[span] Brute, à finir
+[b] Série de portes
+[span] Vernies, prêtes à poser
+[b] Porte 3 panneaux
+[span] Cadre bleu
+[b] Porte posée
+[span] Poignée noire
+[b] Porte double acajou
+[span] Finition foncée
+[b] Lot de portes
+[span] Prêtes à poser
+[h3] Cuisine
+[b] Meuble sous évier
+[span] Bois + inox
+[b] Cuisine sur mesure
+[span] Moulures dorées
+[div] Pourquoi me choisir
+[h2] L'exigence d'un artisan, du premier croquis à la livraison.
+[b] Fabrication artisanale
+[span] Chaque pièce façonnée à la main, sans usine ni série.
+[b] Créations sur mesure
+[span] Dimensions, bois et finitions adaptés à votre intérieur.
+[b] Pièces uniques
+[span] Aucune production en série, chaque meuble a son identité.
+[b] Bois de qualité
+[span] Bois massif et contreplaqué sélectionnés avec soin.
+[b] Livraison possible
+[span] Livraison organisée à Kinshasa selon la distance.
+[b] Agencement professionnel
+[span] Bureaux, comptoirs et espaces commerciaux sur mesure.
+[div] Avis
+[h2] Ce que mes clients pensent de mon travail.
+[p] Travail magnifique et très soigné. Je suis vraiment satisfait de ma commande !
+[div] Jules
+[span] Client
+[p] Très belle finition et fabrication de qualité. Je recommande sans hésiter.
+[div] Rehum
+[span] Client
+[p] Création réalisée selon mes demandes. Le résultat est encore mieux que ce que j'imaginais !
+[div] Tshule Munongo
+[span] Client
+[div] Fabrication sur mesure
+[h2] Vous avez un espace précis en tête ? On le façonne ensemble.
+[p] Donnez-moi vos dimensions, le bois que vous préférez et votre budget : je vous propose un modèle, puis je fabrique la pièce à la main, du panneau brut à la finition vernie.
+[a] Décrire mon projet sur WhatsApp
+[b] Vous décrivez votre besoin
+[span] Dimensions, pièce de la maison, style souhaité.
+[b] Je propose un modèle et un prix
+[span] Choix du bois et de la finition inclus.
+[b] Fabrication à la main
+[span] Suivi possible en cours de réalisation.
+[b] Livraison à Kinshasa
+[span] Remise en main propre et vérification finale.
+[div] Le carnet
+[h2] De l'idée à la pièce : composons-la ensemble.
+[p] Réponse rapide par WhatsApp, ou laissez vos coordonnées ci-contre.
+[h3] Coordonnées directes
+[p] Le plus rapide reste WhatsApp. Envoyez une photo de votre pièce ou un croquis, ça aide beaucoup.
+[span] WhatsApp
+[small] +243 836 002 274
+[span] Appel direct
+[small] +243 836 002 274
+[span] Formulaire du carnet pour votre projet
+[small] Ci-contre
+[p] 🚚 Livraison possible à Kinshasa, moyennant des frais selon la distance.
+[strong] Prix sur demande
+[p] . Chaque création étant réalisée sur mesure, le prix varie selon les dimensions, le modèle et les finitions. Contactez-nous pour recevoir votre devis personnalisé.
+[h3] Un carnet pour votre projet
+[p] Six questions courtes, à votre rythme. À la fin, votre demande s'ouvre sur WhatsApp — rien n'est envoyé sans votre accord.
+[span] La pièce
+[span] 01 / 06
+[h3] Quel meuble imaginez-vous ?
+[option] Lit / chambre
+[option] Table / salle à manger
+[option] Meuble de salon
+[option] Porte
+[option] Cuisine
+[option] Agencement bureau / commerce
+[option] Autre
+[h3] Quelles dimensions envisagez-vous ?
+[h3] Quelle essence, finition ou tonalité vous inspire ?
+[h3] Avez-vous une photo ou une idée à partager ?
+[h3] Où souhaitez-vous recevoir votre création ?
+[p] 🚚 Livraison possible à Kinshasa, à la charge du client selon la distance.
+[h3] Comment pouvons-nous vous joindre ?
+[h3] Votre projet commence ici.
+[h3] Message prêt.
+[p] Votre demande vient de s'ouvrir sur WhatsApp — il ne reste qu'à l'envoyer pour que je puisse commencer à y réfléchir avec vous.
+[button] Suivant →
+[div] Kin Bois Création Sur Mesure
+[p] Menuiserie et ébénisterie artisanales à Kinshasa, fidèles au savoir-faire congolais. Fabrication et vente de meubles en bois massif, sur mesure ou déjà réalisés.
+[b] Explorer
+[a] Catalogue
+[a] L'artisan
+[a] Sur mesure
+[a] WhatsApp
+[a] +243 836 002 274
+[span] © Kin Bois Création Sur Mesure, Kinshasa RDC
+[span] Fait à la main, présenté avec soin.

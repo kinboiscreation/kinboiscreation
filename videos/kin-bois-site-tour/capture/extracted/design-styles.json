@@ -1,0 +1,319 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "Cormorant Garamond",
+      "fontSize": "108.8px",
+      "fontWeight": "500",
+      "lineHeight": "106.624px",
+      "letterSpacing": "-1.632px",
+      "color": "#FFFFFF",
+      "sampleText": "D'une bûcheà une pièce qui reste."
+    },
+    {
+      "role": "heading",
+      "fontFamily": "Cormorant Garamond",
+      "fontSize": "44.8px",
+      "fontWeight": "400",
+      "lineHeight": "76.16px",
+      "letterSpacing": "normal",
+      "color": "#1C130E",
+      "sampleText": "Des pièces déjà réalisées, disponibles ou reproductibles sur"
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "Cormorant Garamond",
+      "fontSize": "36.8px",
+      "fontWeight": "500",
+      "lineHeight": "62.56px",
+      "letterSpacing": "normal",
+      "color": "#1C130E",
+      "sampleText": "Chaque pièce sort de mes mains, pas d'une usine."
+    },
+    {
+      "role": "body",
+      "fontFamily": "Cormorant Garamond",
+      "fontSize": "27.2px",
+      "fontWeight": "400",
+      "lineHeight": "40.8px",
+      "letterSpacing": "normal",
+      "color": "#F7F4EE",
+      "sampleText": "Travail magnifique et très soigné. Je suis vraiment satisfai"
+    },
+    {
+      "role": "heading-3",
+      "fontFamily": "Cormorant Garamond",
+      "fontSize": "24px",
+      "fontWeight": "400",
+      "lineHeight": "40.8px",
+      "letterSpacing": "0.24px",
+      "color": "#1C130E",
+      "sampleText": "Chambre : lits & chevets"
+    },
+    {
+      "role": "label",
+      "fontFamily": "Cormorant Garamond",
+      "fontSize": "16.8px",
+      "fontWeight": "300",
+      "lineHeight": "28.56px",
+      "letterSpacing": "normal",
+      "color": "#E8D8BF",
+      "sampleText": "La pièce"
+    },
+    {
+      "role": "body-small",
+      "fontFamily": "Space Grotesk",
+      "fontSize": "13.76px",
+      "fontWeight": "300",
+      "lineHeight": "23.392px",
+      "letterSpacing": "normal",
+      "color": "#28190C",
+      "sampleText": "Lit complet + chevetsBois massif"
+    },
+    {
+      "role": "link",
+      "fontFamily": "Space Grotesk",
+      "fontSize": "12.8px",
+      "fontWeight": "400",
+      "lineHeight": "21.76px",
+      "letterSpacing": "0.384px",
+      "color": "#33241A",
+      "sampleText": "L'artisan"
+    }
+  ],
+  "spacing": {
+    "observed": [
+      1,
+      8,
+      10,
+      12,
+      13,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32
+    ],
+    "baseUnit": 4
+  },
+  "radius": [
+    "2px"
+  ],
+  "shadows": [
+    {
+      "value": "rgba(184, 115, 51, 0) 0px 0px 0px 0px",
+      "count": 1
+    }
+  ],
+  "buttons": [
+    {
+      "label": "Appeler\n      WhatsApp",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#33241A",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgba(51, 36, 26, 0.84)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "300",
+      "height": "49.2188px"
+    },
+    {
+      "label": "Appeler",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#33241A",
+      "padding": "13px 26px",
+      "borderRadius": "2px",
+      "border": "1px solid rgba(51, 36, 26, 0.22)",
+      "boxShadow": "none",
+      "fontSize": "12.48px",
+      "fontWeight": "500",
+      "height": "49.2188px"
+    },
+    {
+      "label": "WhatsApp",
+      "background": "#B87333",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#15110C",
+      "padding": "13px 26px",
+      "borderRadius": "2px",
+      "border": "1px solid rgba(0, 0, 0, 0)",
+      "boxShadow": "rgba(184, 115, 51, 0) 0px 0px 0px 0px",
+      "fontSize": "12.48px",
+      "fontWeight": "500",
+      "height": "49.2188px"
+    },
+    {
+      "label": "Voir le catalogue",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#F7F4EE",
+      "padding": "13px 26px",
+      "borderRadius": "2px",
+      "border": "1px solid rgb(184, 115, 51)",
+      "boxShadow": "none",
+      "fontSize": "12.48px",
+      "fontWeight": "500",
+      "height": "49.2188px"
+    },
+    {
+      "label": "Discuter sur WhatsApp",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#F7F4EE",
+      "padding": "13px 26px",
+      "borderRadius": "2px",
+      "border": "1px solid rgba(247, 244, 238, 0.2)",
+      "boxShadow": "none",
+      "fontSize": "12.48px",
+      "fontWeight": "500",
+      "height": "49.2188px"
+    },
+    {
+      "label": "Décrire mon projet sur WhatsApp",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#F7F4EE",
+      "padding": "13px 26px",
+      "borderRadius": "2px",
+      "border": "1px solid rgb(245, 217, 168)",
+      "boxShadow": "none",
+      "fontSize": "12.48px",
+      "fontWeight": "500",
+      "height": "49.2188px"
+    }
+  ],
+  "cards": [
+    {
+      "label": "card",
+      "background": "#EDE7DA",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1C130E",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "1px solid rgba(51, 36, 26, 0.14)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "300",
+      "height": "582.734px"
+    },
+    {
+      "label": "card",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1C130E",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(28, 19, 14)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "300",
+      "height": "920.062px"
+    },
+    {
+      "label": "card",
+      "background": "#F7F4EE",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#1C130E",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "1px solid rgba(51, 36, 26, 0.14)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "300",
+      "height": "386.094px"
+    }
+  ],
+  "nav": {
+    "label": "navigation",
+    "background": "#F7F4EE",
+    "backgroundImage": "",
+    "backdropFilter": "blur(16px) saturate(1.2)",
+    "color": "#33241A",
+    "padding": "0px",
+    "borderRadius": "0px",
+    "border": "",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "300",
+    "height": "90.2188px"
+  },
+  "chips": [
+    {
+      "label": "◐",
+      "background": "transparent",
+      "color": "#F5D9A8",
+      "padding": "0px",
+      "borderRadius": "50%",
+      "border": "1px solid rgb(245, 217, 168)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "34px"
+    }
+  ],
+  "statCells": [
+    {
+      "background": "transparent",
+      "borderRadius": "0px",
+      "border": "0px none rgb(28, 19, 14)",
+      "boxShadow": "none",
+      "numberFontSize": "33.6px",
+      "numberFontWeight": "500",
+      "numberColor": "#1C130E"
+    }
+  ],
+  "tabs": [],
+  "backgrounds": [
+    {
+      "value": "radial-gradient(260px at 50% 40%, rgba(247, 244, 238, 0.16), rgba(0, 0, 0, 0) 68%)",
+      "area": 5968186
+    },
+    {
+      "value": "radial-gradient(760px at 12% -8%, rgba(184, 115, 51, 0.05), rgba(0, 0, 0, 0) 60%), radial-gradient(620px at 108% 18%, rgba(184, 115, 51, 0.04), rgba(0, 0, 0, 0) 55%)",
+      "area": 2073600
+    },
+    {
+      "value": "radial-gradient(640px at 50% 40%, rgba(184, 115, 51, 0.13), rgba(0, 0, 0, 0) 62%)",
+      "area": 2073600
+    },
+    {
+      "value": "radial-gradient(circle, rgba(184, 115, 51, 0.12), rgba(0, 0, 0, 0) 65%)",
+      "area": 1399230
+    },
+    {
+      "value": "linear-gradient(rgba(21, 17, 12, 0.42) 0%, rgba(21, 17, 12, 0.7) 45%, rgba(21, 17, 12, 0.97) 100%)",
+      "area": 2073600
+    },
+    {
+      "value": "linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgb(184, 115, 51) 22%, rgb(201, 169, 97) 50%, rgb(184, 115, 51) 78%, rgba(0, 0, 0, 0) 100%)",
+      "area": 348175
+    }
+  ],
+  "glass": [
+    {
+      "backdropFilter": "blur(16px) saturate(1.2)",
+      "background": "rgba(247, 244, 238, 0.86)",
+      "border": "",
+      "borderRadius": "0px",
+      "boxShadow": "",
+      "area": 173220
+    }
+  ]
+}
