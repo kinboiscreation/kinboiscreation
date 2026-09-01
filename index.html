@@ -720,6 +720,15 @@
     font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:300;color:var(--ink);
     border-radius:2px;
   }
+  /* The dropdown's open option list is a native OS popup: it never
+     composites over the page background, so the translucent --bg-2
+     used above renders as plain white behind it. Without an opaque
+     background here the ivoire text (--ink) becomes invisible white-
+     on-white on desktop browsers, even though the closed select looks
+     fine. */
+  .carnet-page select option{
+    background:#15110C;color:#F7F4EE;
+  }
   .carnet-page textarea{min-height:84px;resize:vertical;}
   .carnet-page input:focus, .carnet-page textarea:focus, .carnet-page select:focus{
     outline:1px solid var(--brass);outline-offset:1px;
