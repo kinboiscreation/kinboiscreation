@@ -32,6 +32,7 @@
       height: 100%;
       top: 0;
       left: 0;
+      opacity: 1;
     }
 
     .scene {
@@ -167,7 +168,7 @@
     <div class="clip scene" id="scene-1-accueil"
          data-start="5000"
          data-duration="5000"
-         style="background-image: url('assets/360/01-accueil.jpg')">
+         style="background-image: url('./assets/360/01-accueil.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Accueil</div>
         <div class="scene-description">Bienvenue dans l'univers de Kin Bois Création</div>
@@ -178,7 +179,7 @@
     <div class="clip scene" id="scene-2-atelier"
          data-start="10000"
          data-duration="5000"
-         style="background-image: url('assets/360/02-atelier.jpg')">
+         style="background-image: url('./assets/360/02-atelier.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Atelier & Showroom</div>
         <div class="scene-description">Explorez l'espace principal de présentation</div>
@@ -189,7 +190,7 @@
     <div class="clip scene" id="scene-3-fabrication"
          data-start="15000"
          data-duration="5000"
-         style="background-image: url('assets/360/03-fabrication.jpg')">
+         style="background-image: url('./assets/360/03-fabrication.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Espace de Fabrication</div>
         <div class="scene-description">Où prend forme chaque création</div>
@@ -200,7 +201,7 @@
     <div class="clip scene" id="scene-4-materiaux"
          data-start="20000"
          data-duration="5000"
-         style="background-image: url('assets/360/04-materiaux.jpg')">
+         style="background-image: url('./assets/360/04-materiaux.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Matériaux & Bois</div>
         <div class="scene-description">Sélection des plus beaux bois</div>
@@ -211,7 +212,7 @@
     <div class="clip scene" id="scene-5-realisations"
          data-start="25000"
          data-duration="5000"
-         style="background-image: url('assets/360/05-realisations.jpg')">
+         style="background-image: url('./assets/360/05-realisations.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Réalisations</div>
         <div class="scene-description">Galerie de nos créations uniques</div>
@@ -222,7 +223,7 @@
     <div class="clip scene" id="scene-6-detail"
          data-start="30000"
          data-duration="10000"
-         style="background-image: url('assets/360/06-showcase.jpg')">
+         style="background-image: url('./assets/360/06-showcase.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Détail d'une Œuvre</div>
         <div class="scene-description">Finitions artisanales et savoir-faire</div>
@@ -233,7 +234,7 @@
     <div class="clip scene" id="scene-7-contact"
          data-start="40000"
          data-duration="15000"
-         style="background-image: url('assets/360/07-contact.jpg')">
+         style="background-image: url('./assets/360/07-contact.jpg')">
       <div class="scene-overlay">
         <div class="scene-title">Créons ensemble</div>
         <div class="scene-description">Parlons de votre projet de menuiserie artisanale</div>
@@ -255,20 +256,25 @@
     window.__timelines = window.__timelines || {};
     window.__timelines['demo-360'] = gsap.timeline({ paused: true });
 
-    // Timeline setup (if needed for animations)
+    // Timeline setup with correct timing from data attributes
     const tl = window.__timelines['demo-360'];
+    const clips = document.querySelectorAll('.clip');
 
-    // Fade in/out effects between scenes
-    document.querySelectorAll('.clip').forEach((clip, index) => {
-      const startTime = (index * 5000) / 1000; // Convert to seconds
+    clips.forEach((clip) => {
+      const startTime = parseFloat(clip.getAttribute('data-start')) / 1000;
+      const duration = parseFloat(clip.getAttribute('data-duration')) / 1000;
+
+      // Fade in at start
       tl.fromTo(clip,
         { opacity: 0 },
         { opacity: 1, duration: 0.5 },
         startTime
       );
+
+      // Fade out before next scene
       tl.to(clip,
         { opacity: 0, duration: 0.5 },
-        startTime + 4.5
+        startTime + duration - 0.5
       );
     });
   </script>
