@@ -1,0 +1,1737 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<style>
+  :root{
+    /* Palette « Impeccable » — noir profond, blanc cassé, bois, cuivre & or fin */
+    --ivoire: #F7F4EE;
+    --pierre: #EDE7DA;
+    --bois: #33241A;
+    --argile: #B87333;
+    --ebene: #15110C;
+    --or-fin: #C9A961;
+
+    /* Dégradé Choctone — de l'entrée (About) jusqu'au Contact, avant le footer */
+    --choc-1: #CE9A66;
+    --choc-2: #C2874C;
+    --choc-3: #B27A40;
+    --choc-4: #84532F;
+    --choc-5: #78492B;
+    --choc-6: #5E3821;
+    --copper-dark: #2B170B;
+    --gold-light: #F5D9A8;
+    --ink-on-choc: #1C130E;
+    --ink-on-choc-soft: #24170D;
+    --ink-on-choc-faint: #28190C;
+    --ink-on-dk-choc-soft: #F1E7D6;
+    --ink-on-dk-choc-faint: #E8D8BF;
+
+    /* Rôles — mode clair (surface par défaut, majorité du site) */
+    --bg: var(--ivoire);
+    --bg-2: var(--pierre);
+    --panel: rgba(51,36,26,0.035);
+    --panel-solid: var(--pierre);
+    --ink: var(--bois);
+    --ink-soft: rgba(51,36,26,0.84);
+    --ink-faint: rgba(51,36,26,0.64);
+    --brass: var(--argile);
+    --brass-soft: var(--argile);
+    --brass-deep: var(--bois);
+    --gold: var(--or-fin);
+    --line: rgba(51,36,26,0.14);
+    --line-strong: rgba(51,36,26,0.22);
+
+    /* Rôles — mode sombre (hero, footer : contrastes ponctuels "ébène") */
+    --dk-bg: var(--ebene);
+    --dk-ink: var(--ivoire);
+    --dk-ink-soft: rgba(247,244,238,0.86);
+    --dk-ink-faint: rgba(247,244,238,0.64);
+    --dk-line: rgba(247,244,238,0.12);
+    --dk-line-strong: rgba(247,244,238,0.20);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink-soft);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:300;
+    line-height:1.7;
+    font-size:16px;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    color:var(--ink);
+    letter-spacing:0;
+  }
+  a{color:inherit;}
+  img{display:block;max-width:100%;}
+
+  /* Ambient grain + glow layers */
+  .grain{
+    position:fixed;inset:0;z-index:2;pointer-events:none;
+    opacity:0.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .ambient{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(760px circle at 12% -8%, rgba(184,115,51,0.05), transparent 60%),
+      radial-gradient(620px circle at 108% 18%, rgba(184,115,51,0.04), transparent 55%);
+  }
+
+  /* Aurora mesh — lents blobs de couleur qui dérivent derrière le hero */
+  .aurora{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+  .aurora span{
+    position:absolute;border-radius:50%;filter:blur(120px);opacity:0.13;
+    mix-blend-mode:normal;
+  }
+  .aurora span:nth-child(1){width:38vw;height:38vw;background:radial-gradient(circle,#B87333,transparent 72%);top:-10%;left:-6%;animation:auroraDrift1 34s ease-in-out infinite;}
+  .aurora span:nth-child(2){width:30vw;height:30vw;background:radial-gradient(circle,#D9C6A0,transparent 72%);top:20%;right:-8%;animation:auroraDrift2 38s ease-in-out infinite;}
+  .aurora span:nth-child(3){width:26vw;height:26vw;background:radial-gradient(circle,#33241A,transparent 72%);bottom:-12%;left:30%;animation:auroraDrift3 42s ease-in-out infinite;}
+  @keyframes auroraDrift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(6vw,4vh) scale(1.15);}}
+  @keyframes auroraDrift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-5vw,6vh) scale(0.9);}}
+  @keyframes auroraDrift3{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(4vw,-5vh) scale(1.1);}}
+  @media(prefers-reduced-motion:reduce){.aurora span{animation:none;}}
+
+  /* Barre de progression de scroll */
+  .scroll-progress{
+    position:fixed;top:0;left:0;height:2px;width:0%;z-index:200;
+    background:var(--brass);
+    transition:width .08s linear;
+  }
+
+  /* Curseur personnalisé */
+  .cursor-dot,.cursor-ring{
+    position:fixed;top:0;left:0;z-index:999;pointer-events:none;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    transition:opacity .3s ease;
+  }
+  .cursor-dot{width:6px;height:6px;background:var(--brass-soft);}
+  .cursor-ring{
+    width:34px;height:34px;border:1px solid var(--brass-soft);opacity:0.55;
+    transition:width .25s ease, height .25s ease, opacity .25s ease, background .25s ease, transform .06s linear;
+  }
+  .cursor-ring.grow{width:60px;height:60px;background:rgba(184,115,51,0.12);opacity:0.9;}
+  body.has-cursor, body.has-cursor a, body.has-cursor button{cursor:none;}
+  @media(hover:none), (pointer:coarse){.cursor-dot,.cursor-ring{display:none;}}
+
+  /* Marquee défilant */
+  .marquee{
+    position:relative;overflow:hidden;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:var(--choc-1);
+    --ink-faint: var(--ink-on-choc-faint);
+    --brass: var(--copper-dark);
+    padding:14px 0;
+  }
+  .marquee-track{
+    display:flex;width:max-content;
+    animation:marqueeScroll 28s linear infinite;
+  }
+  .marquee-track span{
+    display:inline-flex;align-items:center;gap:14px;
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;
+    color:var(--ink-faint);padding:0 28px;white-space:nowrap;
+  }
+  .marquee-track span::after{content:"◆";font-size:0.6rem;color:var(--brass);margin-left:14px;font-style:normal;}
+  @keyframes marqueeScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+  .marquee:hover .marquee-track{animation-play-state:paused;}
+
+  /* Tilt 3D au survol */
+  .tilt{transform-style:preserve-3d;transition:transform .35s cubic-bezier(.16,.8,.24,1);will-change:transform;}
+
+  /* Texte cinétique du hero */
+  .kinetic-word{display:inline-block;overflow:hidden;vertical-align:top;}
+  .kinetic-word span{
+    display:inline-block;transform:translateY(115%);
+    animation:kineticUp .9s cubic-bezier(.16,.8,.24,1) forwards;
+    animation-delay:calc(var(--wi,0) * 70ms);
+  }
+  @keyframes kineticUp{to{transform:translateY(0);}}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
+
+  /* Reveal on scroll */
+  .reveal{opacity:0;transform:translateY(16px) scale(0.985);transition:opacity 1s cubic-bezier(.16,.8,.24,1), transform 1s cubic-bezier(.16,.8,.24,1);}
+  .reveal.in{opacity:1;transform:translateY(0) scale(1);}
+  .reveal-stagger.in .stat, .reveal-stagger.in .why-item, .reveal-stagger.in .review-entry{transition-delay:calc(var(--i, 0) * 90ms);}
+
+  /* Signature : lumière naturelle qui balaie la matière au passage du curseur */
+  .panel-frame{
+    position:relative;
+    background:var(--panel-solid);
+    overflow:hidden;
+    border:1px solid var(--line);
+    --lx:50%;--ly:40%;
+  }
+  /* Fin liseré intérieur qui se révèle au survol, comme un cadre de galerie */
+  .panel-frame::before{
+    content:"";position:absolute;inset:8px;z-index:2;pointer-events:none;
+    border:1px solid rgba(247,244,238,0.55);
+    opacity:0;transition:opacity .6s ease;
+  }
+  .card:hover .panel-frame::before{opacity:0.7;}
+  .panel-frame::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:radial-gradient(260px circle at var(--lx) var(--ly), rgba(247,244,238,0.16), transparent 68%);
+    mix-blend-mode:soft-light;
+    opacity:0;transition:opacity .6s ease;
+  }
+  .card:hover .panel-frame::after{opacity:1;}
+  .panel-frame img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.16,.8,.24,1), filter .8s ease;filter:saturate(0.92) brightness(0.94) contrast(1.02);}
+  .card:hover .panel-frame img{transform:scale(1.035);filter:saturate(1) brightness(1);}
+
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(247,244,238,0.86);
+    backdrop-filter:blur(16px) saturate(1.2);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 32px;
+    max-width:1180px;margin:0 auto;
+  }
+  .logo{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.3rem;
+    color:var(--ink);
+    letter-spacing:0.01em;
+    display:flex;flex-direction:column;line-height:1.2;
+  }
+  .logo span{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:400;
+    font-size:0.56rem;
+    letter-spacing:0.26em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-top:4px;
+  }
+  nav.links{display:flex;gap:38px;align-items:center;}
+  nav.links a{
+    font-size:0.8rem;font-weight:400;text-decoration:none;color:var(--ink-soft);
+    letter-spacing:0.03em;
+    position:relative;
+  }
+  nav.links a::after{
+    content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--brass);
+    transition:width .35s cubic-bezier(.16,.8,.24,1);
+  }
+  nav.links a:hover::after{width:100%;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 26px;
+    border-radius:2px;
+    font-weight:500;
+    font-size:0.78rem;
+    letter-spacing:0.07em;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    position:relative;
+    transition:opacity .25s ease, border-color .25s ease, background .25s ease, color .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary{background:var(--brass);color:var(--ebene);box-shadow:0 0 0 0 rgba(184,115,51,0);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px rgba(184,115,51,0.5);}
+  .btn-outline{border-color:var(--line-strong);color:var(--ink);background:transparent;}
+  .btn-outline:hover{border-color:var(--brass-soft);color:var(--brass-soft);}
+  .btn-brass{background:transparent;color:var(--ink);border-color:var(--brass);}
+  .btn-brass:hover{background:var(--brass);color:var(--ebene);border-color:var(--brass);transform:translateY(-2px);box-shadow:0 10px 30px -8px rgba(184,115,51,0.45);}
+
+  .nav-cta{display:flex;gap:12px;}
+  .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px;}
+  .menu-toggle span{display:block;width:22px;height:1px;background:var(--ink);margin:6px 0;}
+
+  /* Hero — zone de contraste sombre volontaire (ébène), scope local */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;align-items:flex-end;
+    overflow:hidden;
+    --ink: var(--dk-ink);
+    --ink-soft: var(--dk-ink-soft);
+    --ink-faint: var(--dk-ink-faint);
+    --line: var(--dk-line);
+    --line-strong: var(--dk-line-strong);
+    background:var(--dk-bg);
+    --mx:50%;--my:40%;
+  }
+  .hero img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0.26;filter:saturate(0.75) contrast(1.08);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(640px circle at var(--mx) var(--my), rgba(184,115,51,0.13), transparent 62%);
+    transition:background .1s linear;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(21,17,12,0.42) 0%, rgba(21,17,12,0.7) 45%, rgba(21,17,12,0.97) 100%);
+  }
+  .hero-content{
+    position:relative;z-index:2;
+    padding:80px 32px 128px;
+    max-width:1180px;margin:0 auto;width:100%;
+  }
+  .eyebrow{
+    font-size:0.72rem;letter-spacing:0.32em;text-transform:uppercase;
+    color:var(--brass-soft);font-weight:500;margin-bottom:30px;
+    display:flex;align-items:center;gap:14px;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  .eyebrow .rule{width:28px;height:1px;background:var(--brass);display:inline-block;opacity:0.9;}
+  .hero h1{
+    color:#FFFFFF;
+    font-size:clamp(3rem, 7.6vw, 6.8rem);
+    line-height:0.98;
+    max-width:900px;
+    margin:0 0 34px;
+    font-weight:500;
+    letter-spacing:-0.015em;
+    text-shadow:0 4px 28px rgba(21,17,12,0.55);
+  }
+  .hero h1 em{
+    font-style:italic;font-weight:500;
+    color:#FFFFFF;
+    text-decoration:underline;
+    text-decoration-color:rgba(184,115,51,0.7);
+    text-decoration-thickness:3px;
+    text-underline-offset:8px;
+  }
+  .hero p{
+    color:var(--ink-faint);
+    max-width:440px;
+    font-size:1.02rem;
+    font-weight:300;
+    margin:0 0 50px;
+  }
+  .hero-ctas{display:flex;gap:18px;flex-wrap:wrap;}
+
+  /* Repère de défilement, discret */
+  .scroll-cue{
+    position:absolute;left:32px;bottom:34px;z-index:2;
+    display:flex;align-items:center;gap:10px;
+    font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--ink-faint);
+    animation:cuePulse 3.2s ease-in-out infinite;
+  }
+  .scroll-cue span{width:1px;height:30px;background:var(--ink-faint);display:inline-block;}
+  @keyframes cuePulse{0%,100%{opacity:0.35;}50%{opacity:0.85;}}
+  @media(max-width:640px){.scroll-cue{display:none;}}
+
+  /* Section shared */
+  section{padding:130px 0;position:relative;}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;margin-bottom:64px;flex-wrap:wrap;
+    position:relative;
+    padding-bottom:34px;
+  }
+  /* Liseré fin, parfaitement droit — cuivre vers or, discret */
+  .section-head::after{
+    content:"";
+    position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:linear-gradient(90deg, transparent 0%, var(--brass) 22%, var(--gold) 50%, var(--brass) 78%, transparent 100%);
+    opacity:0.6;
+  }
+  .section-head .eyebrow{color:var(--brass);}
+  .section-head h2{font-size:clamp(1.9rem,3vw,2.8rem);margin:0;max-width:640px;font-weight:400;}
+  .section-head p{max-width:340px;color:var(--ink-faint);font-size:0.92rem;margin:0;font-weight:300;}
+
+  /* About */
+  .about{
+    background:var(--choc-1);
+    --ink: var(--ink-on-choc);
+    --ink-soft: var(--ink-on-choc-soft);
+    --ink-faint: var(--ink-on-choc-faint);
+    --brass: var(--copper-dark);
+    --brass-soft: var(--copper-dark);
+    color:var(--ink);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:center;}
+  .about-photo{position:relative;aspect-ratio:4/5;}
+  .about-copy p{color:var(--ink-soft);font-size:1rem;font-weight:300;margin:0 0 20px;}
+  .stat-row{display:flex;gap:44px;margin-top:38px;flex-wrap:wrap;}
+  .stat{border-left:1px solid var(--brass);padding-left:16px;}
+  .stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:500;color:var(--ink);}
+  .stat span{font-size:0.76rem;color:var(--ink-faint);letter-spacing:0.02em;}
+
+  /* Catalogue — galerie éditoriale, fond clair */
+  #catalogue{
+    --lt-bg:var(--choc-2); --lt-panel:var(--ivoire); --lt-ink:var(--ink-on-choc);
+    --lt-ink-faint:var(--ink-on-choc-faint); --lt-line:var(--line);
+    background:var(--lt-bg);
+    color:var(--lt-ink);
+  }
+  #catalogue .eyebrow{color:var(--brass-deep);}
+  #catalogue .section-head h2{color:var(--lt-ink);}
+  #catalogue .section-head p{color:var(--lt-ink-faint);}
+
+  .cat-block{margin-bottom:150px;}
+  .cat-block:last-child{margin-bottom:0;}
+  .cat-title{
+    display:flex;align-items:baseline;gap:20px;margin-bottom:52px;
+  }
+  .cat-num{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.15rem;color:var(--brass-deep);
+  }
+  .cat-title h3{font-size:1.5rem;margin:0;font-weight:400;letter-spacing:0.01em;color:var(--lt-ink);}
+  .cat-title .cat-line{flex:1;height:1px;background:var(--lt-line);}
+
+  /* Rythme : une grande pièce, respiration, deux petites, respiration... */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    grid-auto-flow:dense;
+    gap:44px 32px;
+    counter-reset:piece;
+  }
+  .grid .card:nth-child(3n+1){grid-column:span 2;grid-row:span 2;}
+  .grid .card:nth-child(3n+1) .panel-frame{aspect-ratio:6/5;}
+  .grid .card:nth-child(3n+2){align-self:end;}
+  .grid .card:nth-child(3n+3){align-self:start;}
+
+  .card{
+    cursor:default;background:transparent;
+    transition:transform .5s cubic-bezier(.16,.8,.24,1);
+  }
+  .card:hover{transform:translateY(-3px);}
+  .card .panel-frame{aspect-ratio:4/5;background:var(--lt-panel);}
+  .card:nth-child(3n+1){
+    display:grid;grid-template-columns:1fr;grid-template-rows:1fr auto;
+  }
+  @media(min-width:860px){
+    .card:nth-child(3n+1){grid-template-columns:1fr 190px;grid-template-rows:1fr;align-items:end;}
+  }
+  .card figcaption{
+    margin-top:0;
+    padding:18px 2px 0;
+    font-size:0.86rem;
+    color:var(--lt-ink-faint);
+    display:flex;flex-direction:column;gap:5px;
+    position:relative;
+  }
+  .card:nth-child(3n+1) figcaption{padding:0 0 6px 6px;}
+  @media(min-width:860px){
+    .card:nth-child(3n+1) figcaption{padding:0 0 10px 26px;}
+  }
+  .card figcaption::before{
+    counter-increment:piece;
+    content:counter(piece, decimal-leading-zero);
+    display:block;
+    font-family:'Space Grotesk',sans-serif;font-size:0.66rem;letter-spacing:0.14em;
+    color:var(--brass-deep);opacity:0.7;margin-bottom:2px;
+  }
+  .card figcaption b{color:var(--lt-ink);font-weight:500;letter-spacing:0.01em;line-height:1.3;font-size:1rem;position:relative;display:inline-block;}
+  .card figcaption b::after{
+    content:"";position:absolute;left:0;bottom:-3px;height:1px;width:0;background:var(--brass-deep);
+    transition:width .5s cubic-bezier(.16,.8,.24,1);
+  }
+  .card:hover figcaption b::after{width:100%;}
+  .card:nth-child(3n+1) figcaption b{font-size:1.2rem;font-family:'Cormorant Garamond',serif;font-weight:500;}
+  .card figcaption span:not(.piece-num){line-height:1.3;text-transform:uppercase;letter-spacing:0.06em;font-size:0.72rem;}
+
+  /* Lumière au survol — extrêmement subtile */
+  .panel-frame::after{opacity:0;}
+  .card:hover .panel-frame::after{
+    opacity:1;
+    background:radial-gradient(220px circle at var(--lx) var(--ly), rgba(247,244,238,0.09), transparent 68%);
+  }
+  .card:hover .panel-frame img{transform:scale(1.015);}
+
+  /* Pourquoi me choisir */
+  .why{
+    background:var(--choc-3);
+    --ink: var(--ink-on-choc);
+    --ink-soft: var(--ink-on-choc-soft);
+    --ink-faint: var(--ink-on-choc-faint);
+    --brass: var(--copper-dark);
+    --brass-soft: var(--copper-dark);
+    color:var(--ink);
+  }
+  .why-grid{
+    display:grid;grid-template-columns:repeat(6, 1fr);gap:0;
+    margin-top:40px;
+  }
+  .why-item{
+    padding:34px 22px 28px;text-align:left;
+    border-left:1px solid var(--line);
+    position:relative;
+    transition:background .35s ease;
+  }
+  .why-item:hover{background:rgba(184,115,51,0.05);}
+  .why-item:first-child{border-left:none;}
+  .why-item .ic{
+    display:flex;align-items:center;justify-content:center;
+    width:44px;height:44px;margin-bottom:20px;
+    border:1px solid var(--brass-deep);border-radius:50%;
+    transition:border-color .35s ease, box-shadow .35s ease;
+  }
+  .why-item:hover .ic{border-color:var(--brass-soft);box-shadow:0 0 22px -6px rgba(184,115,51,0.5);}
+  .why-item .ic svg{width:19px;height:19px;stroke:var(--brass-soft);fill:none;stroke-width:1.3;}
+  .why-item b{
+    display:block;font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.1rem;color:var(--ink);margin-bottom:8px;
+  }
+  .why-item span{font-size:0.8rem;color:var(--ink-faint);line-height:1.55;}
+
+  /* Avis clients — composition éditoriale, sans cartes ni guillemets */
+  .reviews{
+    background:var(--choc-4);
+    color:var(--ink);
+    --ink: var(--ivoire);
+    --ink-soft: var(--ink-on-dk-choc-soft);
+    --ink-faint: var(--ink-on-dk-choc-faint);
+    --line: rgba(247,244,238,0.14);
+    --line-strong: rgba(247,244,238,0.24);
+    --brass: var(--gold-light);
+    --brass-soft: var(--gold-light);
+  }
+  .reviews-editorial{
+    display:grid;
+    grid-template-columns:1.35fr 1fr;
+    gap:0 90px;
+    margin-top:60px;
+  }
+  .review-entry{padding:0;}
+  .review-num{
+    display:block;font-family:'Space Grotesk',sans-serif;font-size:0.68rem;
+    letter-spacing:0.14em;color:var(--ink-faint);margin-bottom:18px;
+  }
+  .review-quote{
+    font-family:'Cormorant Garamond',serif;font-weight:400;font-style:normal;
+    color:var(--ink);line-height:1.5;margin:0;
+  }
+  .review-author{
+    margin-top:22px;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--brass-soft);font-family:'Space Grotesk',sans-serif;font-weight:500;
+  }
+  .review-author span{
+    display:block;color:var(--ink-faint);font-size:0.7rem;letter-spacing:0.04em;
+    text-transform:none;font-weight:300;margin-top:3px;
+  }
+  .review-main{grid-column:1;grid-row:1 / span 2;}
+  .review-main .review-quote{font-size:1.7rem;max-width:560px;}
+  .review-side{grid-column:2;}
+  .review-side .review-quote{font-size:1.08rem;max-width:380px;}
+  .review-side:first-of-type{padding-bottom:44px;border-bottom:1px solid var(--line);}
+  .review-side:last-of-type{padding-top:44px;}
+
+  @media(max-width:900px){
+    .reviews-editorial{grid-template-columns:1fr;gap:0;}
+    .review-main, .review-side{grid-column:1;grid-row:auto;}
+    .review-entry{padding:38px 0;border-top:1px solid var(--line);}
+    .review-entry:first-child{border-top:none;padding-top:0;}
+    .review-side:first-of-type{border-bottom:none;}
+    .review-side:last-of-type{padding-top:38px;}
+    .review-main .review-quote, .review-side .review-quote{font-size:1.3rem;max-width:100%;}
+  }
+
+  @media(max-width:760px){
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .why-item{border-left:none;border-top:1px solid var(--line);}
+    .why-item:nth-child(1),.why-item:nth-child(2){border-top:none;}
+    .grid{grid-template-columns:1fr 1fr;gap:32px 20px;}
+    .grid .card:nth-child(3n+1){grid-column:span 2;grid-row:span 1;}
+    .grid .card:nth-child(3n+1) .panel-frame{aspect-ratio:16/11;}
+    .grid .card:nth-child(3n+2),.grid .card:nth-child(3n+3){align-self:auto;}
+    .cat-block{margin-bottom:90px;}
+    .cat-title{margin-bottom:32px;}
+  }
+
+  /* Sur mesure CTA — surface sable, chaleureuse */
+  .mesure{
+    --bg-2: var(--choc-5);
+    background:var(--bg-2);
+    --ink: var(--ivoire);
+    --ink-soft: var(--ink-on-dk-choc-soft);
+    --ink-faint: var(--ink-on-dk-choc-faint);
+    --brass: var(--gold-light);
+    --brass-soft: var(--gold-light);
+    color:var(--ink);
+    position:relative;
+    overflow:hidden;
+  }
+  .mesure::before{
+    content:"";position:absolute;top:-30%;right:-10%;width:60%;height:160%;
+    background:radial-gradient(circle, rgba(184,115,51,0.12), transparent 65%);
+    pointer-events:none;
+  }
+  .mesure-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+  .mesure h2{color:var(--ink);font-size:clamp(2rem,3.4vw,2.8rem);margin:0 0 24px;font-weight:400;}
+  .mesure p{color:var(--ink-faint);font-size:1rem;font-weight:300;margin:0 0 36px;max-width:460px;}
+  .steps{display:flex;flex-direction:column;gap:0;}
+  .step{
+    display:flex;gap:22px;padding:24px 0;border-top:1px solid rgba(184,115,51,0.18);
+    transition:padding-left .35s ease;
+  }
+  .step:hover{padding-left:10px;}
+  .step:last-child{border-bottom:1px solid rgba(184,115,51,0.18);}
+  .step .step-num{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;color:var(--brass-soft);font-size:1.4rem;width:30px;flex-shrink:0;
+  }
+  .step-txt b{display:block;color:var(--ink);font-size:0.98rem;font-weight:500;margin-bottom:5px;}
+  .step-txt span{color:var(--ink-faint);font-size:0.86rem;font-weight:300;}
+
+  /* Contact */
+  .contact{
+    background:var(--choc-6);
+    color:var(--ink);
+    --ink: var(--ivoire);
+    --ink-soft: var(--ink-on-dk-choc-soft);
+    --ink-faint: var(--ink-on-dk-choc-faint);
+    --line: rgba(247,244,238,0.14);
+    --line-strong: rgba(247,244,238,0.24);
+    --brass: var(--gold-light);
+    --brass-soft: var(--gold-light);
+    --brass-deep: var(--gold-light);
+    --bg-2: rgba(247,244,238,0.08);
+    --panel: rgba(247,244,238,0.06);
+  }
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;}
+  .contact-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    padding:40px;
+    display:flex;flex-direction:column;gap:20px;
+    backdrop-filter:blur(6px);
+  }
+  .contact-card h3{margin:0;font-size:1.4rem;font-weight:400;}
+  .contact-card p{margin:0;color:var(--ink-faint);font-size:0.9rem;font-weight:300;}
+  .contact-links{display:flex;flex-direction:column;gap:1px;margin-top:8px;background:var(--line);}
+  .contact-link{
+    display:flex;align-items:center;gap:16px;
+    padding:16px 18px;
+    border:none;
+    background:var(--bg-2);
+    text-decoration:none;
+    color:var(--ink-soft);
+    font-weight:400;
+    font-size:0.92rem;
+    transition:padding-left .25s ease, background .25s ease;
+  }
+  .contact-link:hover{padding-left:24px;background:rgba(184,115,51,0.07);}
+  .contact-link .ic{
+    width:34px;height:34px;border-radius:50%;
+    border:1px solid var(--brass);
+    color:var(--brass-soft);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    font-size:1rem;
+    background:transparent;
+  }
+  .contact-link small{display:block;color:var(--ink-faint);font-weight:300;font-size:0.74rem;margin-top:2px;}
+
+  form.inquiry{display:flex;flex-direction:column;gap:16px;}
+  form.inquiry label{font-size:0.72rem;font-weight:500;color:var(--ink);text-transform:uppercase;letter-spacing:0.08em;}
+  form.inquiry input, form.inquiry textarea, form.inquiry select{
+    width:100%;padding:13px 14px;border:1px solid var(--line-strong);background:var(--bg-2);
+    font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:300;color:var(--ink);
+    border-radius:2px;
+  }
+  form.inquiry textarea{min-height:90px;resize:vertical;}
+  form.inquiry input:focus, form.inquiry textarea:focus, form.inquiry select:focus{
+    outline:1px solid var(--brass);outline-offset:1px;
+  }
+  .field{display:flex;flex-direction:column;gap:7px;}
+
+  /* Carnet de conception — parcours du formulaire */
+  .carnet{display:flex;flex-direction:column;gap:22px;min-height:340px;}
+  .carnet-head{display:flex;justify-content:space-between;align-items:baseline;}
+  .carnet-step-label{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--ink-faint);
+  }
+  .carnet-count{
+    font-size:0.7rem;letter-spacing:0.14em;color:var(--brass-soft);
+    font-family:'Space Grotesk',sans-serif;
+  }
+  /* Règle graduée, clin d'œil au dessin technique */
+  .carnet-ruler{
+    position:relative;height:1px;background:var(--line);
+    background-image:repeating-linear-gradient(90deg, var(--line-strong) 0, var(--line-strong) 1px, transparent 1px, transparent 24px);
+  }
+  .carnet-ruler span{
+    position:absolute;left:0;top:0;height:1px;background:var(--brass);
+    width:0%;transition:width .5s cubic-bezier(.16,.8,.24,1);
+  }
+  .carnet-pages{position:relative;min-height:150px;}
+  .carnet-page{
+    display:none;flex-direction:column;gap:16px;
+    opacity:0;transform:translateY(10px);
+    transition:opacity .4s ease, transform .4s cubic-bezier(.16,.8,.24,1);
+  }
+  .carnet-page.active{display:flex;opacity:1;transform:translateY(0);}
+  .carnet-page.leaving{opacity:0;transform:translateY(-8px);}
+  .carnet-page h3{
+    margin:0;font-size:1.3rem;font-weight:400;max-width:340px;line-height:1.3;
+  }
+  .carnet-page input, .carnet-page textarea, .carnet-page select{
+    width:100%;padding:13px 14px;border:1px solid var(--line-strong);background:var(--bg-2);
+    font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:300;color:var(--ink);
+    border-radius:2px;
+  }
+  .carnet-page textarea{min-height:84px;resize:vertical;}
+  .carnet-page input:focus, .carnet-page textarea:focus, .carnet-page select:focus{
+    outline:1px solid var(--brass);outline-offset:1px;
+  }
+  .carnet-note{margin:0;font-size:0.82rem;color:var(--ink-faint);}
+  .carnet-summary{
+    margin:0;font-size:0.88rem;color:var(--ink-faint);line-height:1.7;
+    border-left:1px solid var(--brass-deep);padding-left:16px;
+  }
+  .carnet-summary b{color:var(--ink);font-weight:500;}
+  .carnet-nav{display:flex;justify-content:space-between;align-items:center;}
+  .carnet-btn{
+    background:none;border:none;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-size:0.82rem;color:var(--ink-faint);
+    letter-spacing:0.03em;padding:8px 2px;transition:color .2s ease;
+  }
+  .carnet-btn:hover{color:var(--ink);}
+  .carnet-btn:disabled{opacity:0.3;cursor:default;}
+  .carnet-btn:disabled:hover{color:var(--ink-faint);}
+  .carnet-btn-primary{
+    color:var(--brass-soft);font-weight:500;
+  }
+  .carnet-btn-primary:hover{color:var(--brass-soft);}
+  .carnet-done .carnet-nav{display:none;}
+  .carnet-done .carnet-ruler{opacity:0.4;}
+
+  footer{
+    --ink: var(--dk-ink);
+    --ink-soft: var(--dk-ink-soft);
+    --ink-faint: var(--dk-ink-faint);
+    --line: var(--dk-line);
+    background:var(--dk-bg);color:var(--ink-faint);
+    padding:56px 0 32px;
+    border-top:none;
+    position:relative;
+  }
+  /* Fondu doux entre le contenu clair et le pied de page sombre, avec un fin liseré droit en clôture */
+  footer::before{
+    content:"";
+    position:absolute;top:0;left:0;right:0;height:48px;
+    background:
+      linear-gradient(180deg, transparent 44px, rgba(184,115,51,0.4) 46px, transparent 48px),
+      linear-gradient(180deg, var(--ivoire) 0%, var(--ebene) 100%);
+    pointer-events:none;
+  }
+  .footer-grid{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+  .footer-logo{font-family:'Cormorant Garamond',serif;color:var(--ink);font-size:1.25rem;font-weight:500;}
+  .footer-note{font-size:0.84rem;font-weight:300;max-width:340px;margin-top:12px;color:var(--ink-faint);}
+  .footer-links{display:flex;gap:48px;flex-wrap:wrap;}
+  .footer-links div b{display:block;color:var(--ink);font-size:0.72rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:14px;}
+  .footer-links a{display:block;color:var(--ink-faint);text-decoration:none;font-size:0.88rem;font-weight:300;margin-bottom:10px;}
+  .footer-bottom{
+    border-top:1px solid var(--dk-line);margin-top:48px;padding-top:22px;
+    font-size:0.76rem;font-weight:300;color:rgba(247,244,238,0.58);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+
+  /* Floating WhatsApp */
+  .float-wa{
+    position:fixed;bottom:26px;right:26px;z-index:60;
+    width:54px;height:54px;border-radius:50%;
+    background:var(--brass);color:var(--ebene);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 26px rgba(184,115,51,0.4);
+    text-decoration:none;font-size:1.3rem;
+    border:1px solid var(--brass-soft);
+    transition:transform .3s cubic-bezier(.16,.8,.24,1), box-shadow .3s ease;
+  }
+  .float-wa:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 12px 34px rgba(184,115,51,0.55);}
+
+  @media (max-width: 860px){
+    nav.links, .nav-cta .btn-outline{display:none;}
+    .menu-toggle{display:block;}
+    .about-grid, .mesure-inner, .contact-grid{grid-template-columns:1fr;}
+    section{padding:76px 0;}
+    .hero{min-height:92vh;}
+  }
+  @media (max-width: 560px){
+    .hero-content{padding:52px 20px 56px;}
+    .hero h1{margin:0 0 22px;}
+    .hero p{margin:0 0 34px;}
+    .wrap{padding:0 20px;}
+    .contact-card{padding:28px 22px;}
+    .carnet{min-height:300px;gap:18px;}
+    .carnet-page h3{font-size:1.15rem;}
+  }
+
+  /* ====================================================================
+     Transitions de section — animations liées au scroll, natives (2026)
+     Chaque frontière a sa propre signature : la teinte de la section
+     précédente se referme, se dissout ou se déchire pour révéler la
+     suivante, synchronisé avec la position de scroll, sans JavaScript.
+     Dégradation silencieuse si le navigateur ne supporte pas encore
+     animation-timeline: view() — les sections restent alors telles
+     quelles, sans effet, rien n'est jamais masqué ni cassé. Neutralisé
+     par la règle "prefers-reduced-motion" globale ci-dessous.
+     ==================================================================== */
+  @supports (animation-timeline: view()) {
+
+    @keyframes stIrisReveal {
+      from { clip-path: circle(150% at 50% 0%); }
+      to   { clip-path: circle(0% at 50% 0%); }
+    }
+    @keyframes stWaveReveal {
+      from { clip-path: polygon(0% 0%,100% 0%,100% 100%,90% 60%,80% 100%,70% 55%,60% 100%,50% 50%,40% 100%,30% 55%,20% 100%,10% 60%,0% 100%); }
+      to   { clip-path: polygon(0% 0%,100% 0%,100% 0%,90% 0%,80% 0%,70% 0%,60% 0%,50% 0%,40% 0%,30% 0%,20% 0%,10% 0%,0% 0%); }
+    }
+    @keyframes stShardsReveal {
+      from { clip-path: polygon(0% 0%,100% 0%,100% 100%,87.5% 30%,75% 90%,62.5% 25%,50% 90%,37.5% 30%,25% 90%,12.5% 25%,0% 90%); }
+      to   { clip-path: polygon(0% 0%,100% 0%,100% 0%,87.5% 0%,75% 0%,62.5% 0%,50% 0%,37.5% 0%,25% 0%,12.5% 0%,0% 0%); }
+    }
+    @keyframes stGrainReveal {
+      from { opacity:1; }
+      to   { opacity:0; }
+    }
+    @keyframes stPeelReveal {
+      from { transform:rotateX(0deg); opacity:1; box-shadow:0 26px 30px -14px rgba(21,17,12,0.4); }
+      to   { transform:rotateX(90deg); opacity:0; box-shadow:0 0 0 0 rgba(21,17,12,0); }
+    }
+
+    /* Hero -> About : ouverture en diaphragme */
+    .about::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:180px;z-index:5;pointer-events:none;
+      background:var(--ebene);
+      clip-path: circle(0% at 50% 0%);
+      animation: stIrisReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* About -> Catalogue : bord liquide qui se rétracte */
+    #catalogue::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-1);
+      clip-path: polygon(0% 0%,100% 0%,100% 0%,90% 0%,80% 0%,70% 0%,60% 0%,50% 0%,40% 0%,30% 0%,20% 0%,10% 0%,0% 0%);
+      animation: stWaveReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Catalogue -> Pourquoi me choisir : facettes qui se résorbent */
+    .why::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-2);
+      clip-path: polygon(0% 0%,100% 0%,100% 0%,87.5% 0%,75% 0%,62.5% 0%,50% 0%,37.5% 0%,25% 0%,12.5% 0%,0% 0%);
+      animation: stShardsReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Pourquoi me choisir -> Avis : dissolution en grain */
+    .reviews::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+        var(--choc-3);
+      opacity:0;
+      animation: stGrainReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Avis -> Sur mesure : pan qui se soulève en 3D */
+    .mesure{ perspective:1000px; }
+    .mesure::after{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-4);
+      transform-origin:top center;
+      transform:rotateX(90deg); opacity:0;
+      animation: stPeelReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Sur mesure -> Contact : second pan qui se soulève */
+    .contact{ perspective:1000px; }
+    .contact::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-5);
+      transform-origin:top center;
+      transform:rotateX(90deg); opacity:0;
+      animation: stPeelReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+    /* Contact -> Footer : fermeture en diaphragme, symétrique du hero */
+    footer::before{
+      content:"";position:absolute;top:0;left:0;right:0;height:150px;z-index:5;pointer-events:none;
+      background:var(--choc-6);
+      clip-path: circle(0% at 50% 0%);
+      animation: stIrisReveal linear both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
+    .reveal{opacity:1 !important;transform:none !important;}
+  }
+</style>
+<style>@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd58jDOjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDDOjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_qE6GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_s06GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_iE9GnM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UUsj.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf) format('truetype');
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "Kin Bois Création Sur Mesure",
+  "image": "https://kinboiscreation.github.io/kinboiscreation/images/artisan-jeantim.webp",
+  "url": "https://kinboiscreation.github.io/kinboiscreation/",
+  "telephone": "+243836002274",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kinshasa",
+    "addressCountry": "CD"
+  },
+  "areaServed": "Kinshasa",
+  "description": "Menuiserie et ébénisterie artisanales à Kinshasa : meubles en bois massif sur mesure, portes, agencement de bureaux et commerces."
+}
+</script>
+</head>
+<body>
+
+<div class="grain" style=""></div>
+<div class="ambient" style=""></div>
+<div class="scroll-progress" id="scrollProgress" style="width: 0%;"></div>
+<div class="cursor-ring" id="cursorRing" style=""></div>
+<div class="cursor-dot" id="cursorDot" style=""></div>
+
+<header style="">
+  <div class="nav">
+    <div class="logo">Kin Bois Création<span>Sur Mesure · Kinshasa</span></div>
+    <nav class="links">
+      <a href="#apropos">L'artisan</a>
+      <a href="#catalogue">Catalogue</a>
+      <a href="#pourquoi">Pourquoi me choisir</a>
+      <a href="#avis">Avis</a>
+      <a href="#surmesure">Sur mesure</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-outline" href="tel:+243836002274">Appeler</a>
+      <a class="btn btn-primary" href="https://wa.me/243836002274" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <img src="file:///home/user/kinboiscreation/images/hero.webp" alt="" loading="eager" fetchpriority="high">
+  <div class="aurora"><span></span><span></span><span></span></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="rule"></span>Kinshasa</div>
+    <h1 id="kineticH1"><span class="kinetic-word"><span style="--wi: 0;">D'une</span></span> <span class="kinetic-word"><span style="--wi: 1;"><span class="kinetic-word" style="--wi: 2;"><span style="--wi: 3;">bûche</span></span></span></span><br><span class="kinetic-word"><span style="--wi: 4;">à</span></span> <em>une pièce qui reste</em>.</h1>
+    <p>Je fabrique seul, à Kinshasa, des meubles en bois massif pensés pour durer : lits, tables, portes, rangements, et agencement de bureaux et d'espaces commerciaux.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-brass magnet" href="#catalogue">Voir le catalogue</a>
+      <a class="btn btn-outline magnet" href="https://wa.me/243836002274" target="_blank" rel="noopener">Discuter sur WhatsApp</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span></span>La matière</div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Bois massif</span><span>Fabrication artisanale</span><span>Sur mesure</span><span>Fait main à Kinshasa</span><span>Héritage congolais</span><span>Pièces uniques</span>
+    <span>Bois massif</span><span>Fabrication artisanale</span><span>Sur mesure</span><span>Fait main à Kinshasa</span><span>Héritage congolais</span><span>Pièces uniques</span>
+  </div>
+</div>
+
+<section class="about" id="apropos">
+  <div class="wrap about-grid">
+    <div class="about-photo panel-frame reveal in" style="--i: 0;">
+      <img src="file:///home/user/kinboiscreation/images/artisan-jeantim.webp" alt="Portrait de Jeantim, artisan menuisier dans son atelier à Kinshasa" loading="lazy">
+    </div>
+    <div class="about-copy reveal in" style="--i: 1;">
+      <div class="eyebrow"><span class="rule"></span>L'artisan</div>
+      <h2 style="font-size:clamp(1.7rem,2.6vw,2.3rem);margin:0 0 22px;">Chaque pièce sort de mes mains, pas d'une usine.</h2>
+      <p>Je m'appelle Jeantim. Je travaille seul, du choix du bois jusqu'à la dernière couche de vernis. Ce format me permet de rester exigeant sur chaque assemblage, chaque panneau, chaque finition, et de vous proposer un prix juste, sans intermédiaire.</p>
+      <p>Basé à Kinshasa, je livre des meubles déjà réalisés ou je construis sur mesure, selon vos dimensions et votre budget.</p>
+      <div class="stat-row">
+        <div class="stat reveal in" style="--i: 2;"><b>100%</b><span>Bois massif &amp; contreplaqué de qualité</span></div>
+        <div class="stat reveal in" style="--i: 3;"><b>1</b><span>Artisan, du dessin à la livraison</span></div>
+        <div class="stat reveal in" style="--i: 4;"><b>Kin</b><span>Fabrication &amp; livraison locales</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="catalogue">
+  <div class="wrap">
+    <div class="section-head reveal in" style="--i: 5;">
+      <div>
+        <div class="eyebrow"><span class="rule"></span>Catalogue</div>
+        <h2>Des pièces déjà réalisées, disponibles ou reproductibles sur mesure.</h2>
+      </div>
+      <p>Chaque modèle peut être ajusté en taille, en essence de bois ou en finition selon vos envies.</p>
+    </div>
+
+    <!-- CHAMBRE -->
+    <div class="cat-block reveal in" style="--i: 6;">
+      <div class="cat-title"><span class="cat-num">01</span><h3>Chambre : lits &amp; chevets</h3><span class="cat-line"></span></div>
+      <div class="grid">
+        <figure class="card reveal tilt in" style="--i: 7;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit en bois massif avec deux tables de chevet assorties" loading="lazy"></div>
+          <figcaption><b>Lit complet + chevets</b><span>Bois massif</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-en-bois-clair-sculpte-avec-tete-de-lit-ouvragee.webp" alt="Lit en bois clair sculpté avec tête de lit ouvragée" loading="lazy"></div>
+          <figcaption><b>Lit tête sculptée</b><span>Finition dorée</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 1;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-brut-en-bois-clair-avec-deux-tables-de-chevet.webp" alt="Lit brut en bois clair avec deux tables de chevet" loading="lazy"></div>
+          <figcaption><b>Lit brut + chevets</b><span>Prêt à finir</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 2;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-brut-avec-sommier-a-lattes-en-bois.webp" alt="Lit brut avec sommier à lattes en bois" loading="lazy"></div>
+          <figcaption><b>Lit sommier à lattes</b><span>Sur mesure</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 3;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-de-chevet-en-bois-clair-avec-tiroir.webp" alt="Table de chevet en bois clair avec tiroir" loading="lazy"></div>
+          <figcaption><b>Table de chevet</b><span>Tiroir + étagère</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 4;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-avec-deux-tables-de-chevet-exterieur.webp" alt="Lit en bois avec deux tables de chevet assorties" loading="lazy"></div>
+          <figcaption><b>Lit et chevets assortis</b><span>Bois massif</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 5;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-tete-arrondie-deux-chevets.webp" alt="Lit en bois avec tête de lit arrondie et deux chevets" loading="lazy"></div>
+          <figcaption><b>Lit tête arrondie</b><span>Avec chevets</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 6;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-tete-de-lit-sculptee-showroom.webp" alt="Lit en bois massif avec tête de lit sculptée" loading="lazy"></div>
+          <figcaption><b>Lit chambre complète</b><span>Finition vernie</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 7;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/lit-brut-non-fini.webp" alt="Lit en bois brut, non fini" loading="lazy"></div>
+          <figcaption><b>Lit brut</b><span>Prêt à finir</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-chevet-tiroir-etageres-chene.webp" alt="Table de chevet en chêne avec tiroir et étagères" loading="lazy"></div>
+          <figcaption><b>Chevet chêne</b><span>Tiroir + étagères</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 1;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/armoire-vernie-portes-ouvertes.webp" alt="Armoire en bois verni avec étagères, portes ouvertes" loading="lazy"></div>
+          <figcaption><b>Armoire penderie</b><span>Étagères intérieures</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- SALON -->
+    <div class="cat-block reveal in" style="--i: 2;">
+      <div class="cat-title"><span class="cat-num">02</span><h3>Salon &amp; séjour</h3><span class="cat-line"></span></div>
+      <div class="grid">
+        <figure class="card reveal tilt in" style="--i: 3;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/meuble-tv-mural-en-bois-avec-claustra-et-niches.webp" alt="Meuble TV mural en bois avec claustra et niches" loading="lazy"></div>
+          <figcaption><b>Meuble TV mural</b><span>Avec rangements</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 4;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet vitré en bois avec portes vitrées et tiroirs" loading="lazy"></div>
+          <figcaption><b>Buffet vitré</b><span>Salle à manger</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 5;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/canape-d-angle-beige-avec-pouf-orange.webp" alt="Canapé d'angle beige avec pouf orange" loading="lazy"></div>
+          <figcaption><b>Canapé d'angle</b><span>Tissu + pouf assorti</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 6;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/banc-coffre-de-rangement-en-bois.webp" alt="Banc coffre de rangement en bois" loading="lazy"></div>
+          <figcaption><b>Banc coffre</b><span>Rangement intégré</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 7;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/buffet-vitre-atelier.webp" alt="Buffet vitré en bois avec portes en verre, vu de profil" loading="lazy"></div>
+          <figcaption><b>Buffet vitré</b><span>Deuxième modèle</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/canape-angle-beige-pouf-orange-2.webp" alt="Canapé d'angle beige avec pouf orange assorti" loading="lazy"></div>
+          <figcaption><b>Canapé d'angle</b><span>Autre finition</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 1;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/petit-meuble-tv-appoint.webp" alt="Petit meuble d'appoint pour téléviseur" loading="lazy"></div>
+          <figcaption><b>Meuble TV d'appoint</b><span>Format compact</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 2;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/meuble-tv-flottant-moderne.webp" alt="Meuble TV mural flottant, style moderne avec étagère" loading="lazy"></div>
+          <figcaption><b>Meuble TV mural</b><span>Style contemporain</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 3;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/coffre-rangement-double.webp" alt="Coffre de rangement en bois à double compartiment" loading="lazy"></div>
+          <figcaption><b>Coffre double</b><span>Deux compartiments</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 4;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/buffet-vernis-fond-bleu.webp" alt="Buffet en bois verni avec tiroirs, fond bleu" loading="lazy"></div>
+          <figcaption><b>Buffet à tiroirs</b><span>Bois verni</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 5;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/meuble-entree-portemanteau.webp" alt="Meuble d'entrée blanc et bois avec portemanteau assorti" loading="lazy"></div>
+          <figcaption><b>Meuble d'entrée</b><span>Avec portemanteau</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 6;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/caisson-meuble-rangement-vitre.webp" alt="Caisson de rangement en bois avec portes vitrées" loading="lazy"></div>
+          <figcaption><b>Caisson vitré</b><span>Portes en verre</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- SALLE A MANGER / TABLES -->
+    <div class="cat-block reveal in" style="--i: 7;">
+      <div class="cat-title"><span class="cat-num">03</span><h3>Tables &amp; salle à manger</h3><span class="cat-line"></span></div>
+      <div class="grid">
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-a-manger-avec-quatre-chaises-plateau-noir.webp" alt="Table à manger avec quatre chaises, plateau noir" loading="lazy"></div>
+          <figcaption><b>Table 4 chaises</b><span>Plateau bicolore</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 1;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-ronde-avec-quatre-chaises-assorties.webp" alt="Table ronde avec quatre chaises assorties" loading="lazy"></div>
+          <figcaption><b>Table ronde</b><span>4 chaises assorties</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 2;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-basse-carree-en-bois-fonce-avec-etagere.webp" alt="Table basse carrée en bois foncé avec étagère" loading="lazy"></div>
+          <figcaption><b>Table basse</b><span>Double plateau</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 3;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/petite-table-ronde-en-bois-sur-pied-tripode.webp" alt="Petite table ronde en bois sur pied tripode" loading="lazy"></div>
+          <figcaption><b>Table d'appoint</b><span>Pied tripode</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 4;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/petite-table-basse-en-bois-brut-aux-pieds-galbes.webp" alt="Petite table basse en bois brut aux pieds galbés" loading="lazy"></div>
+          <figcaption><b>Table basse galbée</b><span>Bois brut, à finir</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 5;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/petite-table-ronde-laquee-blanche.webp" alt="Petite table ronde laquée blanche" loading="lazy"></div>
+          <figcaption><b>Guéridon laqué</b><span>Finition blanche</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 6;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/petite-table-ronde-pied-tripode-bicolore.webp" alt="Petite table ronde bicolore sur pied tripode" loading="lazy"></div>
+          <figcaption><b>Table ronde bicolore</b><span>Pied tripode</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 7;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/petite-table-ronde-blanche-laquee-2.webp" alt="Petite table ronde laquée blanche" loading="lazy"></div>
+          <figcaption><b>Guéridon laqué</b><span>Modèle compact</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-appoint-pieds-galbes-brut.webp" alt="Petite table d'appoint en bois brut aux pieds galbés" loading="lazy"></div>
+          <figcaption><b>Table d'appoint galbée</b><span>Bois brut</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 1;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-ronde-quatre-chaises-fond-blanc.webp" alt="Table ronde avec quatre chaises assorties, fond blanc" loading="lazy"></div>
+          <figcaption><b>Table ronde 4 chaises</b><span>Ensemble complet</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 2;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-basse-carree-bois-fonce-2.webp" alt="Table basse carrée en bois foncé" loading="lazy"></div>
+          <figcaption><b>Table basse carrée</b><span>Bois foncé</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 3;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/table-a-manger-chaises-noires-redmi.webp" alt="Table à manger rectangulaire avec quatre chaises à assise noire" loading="lazy"></div>
+          <figcaption><b>Table à manger</b><span>Assises noires</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 4;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/bureau-enfant-chaise-orange.webp" alt="Petit bureau et chaise en bois pour enfant, finition orangée" loading="lazy"></div>
+          <figcaption><b>Bureau enfant</b><span>Bureau + chaise</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- PORTES -->
+    <div class="cat-block reveal in" style="--i: 5;">
+      <div class="cat-title"><span class="cat-num">04</span><h3>Portes sur mesure</h3><span class="cat-line"></span></div>
+      <div class="grid">
+        <figure class="card reveal tilt in" style="--i: 6;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/porte-double-en-bois-acajou-avec-poignee-metallique.webp" alt="Porte double en bois acajou avec poignée métallique" loading="lazy"></div>
+          <figcaption><b>Porte double</b><span>Acajou verni</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 7;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/porte-en-bois-clair-a-deux-panneaux-avec-poignee-noire.webp" alt="Porte en bois clair à deux panneaux avec poignée noire" loading="lazy"></div>
+          <figcaption><b>Porte 2 panneaux</b><span>Bois clair</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/porte-en-bois-brut-a-trois-panneaux-prete-a-vernir.webp" alt="Porte en bois brut à trois panneaux, prête à vernir" loading="lazy"></div>
+          <figcaption><b>Porte 3 panneaux</b><span>Brute, à finir</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 1;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/trois-portes-en-bois-verni-appuyees-contre-un-mur.webp" alt="Trois portes en bois verni appuyées contre un mur" loading="lazy"></div>
+          <figcaption><b>Série de portes</b><span>Vernies, prêtes à poser</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 2;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/porte-trois-panneaux-fond-bleu.webp" alt="Porte en bois massif à trois panneaux, cadre bleu" loading="lazy"></div>
+          <figcaption><b>Porte 3 panneaux</b><span>Cadre bleu</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 3;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/porte-installee-poignee-noire.webp" alt="Porte en bois installée avec poignée noire" loading="lazy"></div>
+          <figcaption><b>Porte posée</b><span>Poignée noire</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 4;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/porte-double-acajou-fonce.webp" alt="Porte double en bois acajou foncé" loading="lazy"></div>
+          <figcaption><b>Porte double acajou</b><span>Finition foncée</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 5;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/trois-portes-alignees-exterieur.webp" alt="Trois portes en bois alignées contre un mur" loading="lazy"></div>
+          <figcaption><b>Lot de portes</b><span>Prêtes à poser</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- CUISINE -->
+    <div class="cat-block reveal in" style="--i: 6;">
+      <div class="cat-title"><span class="cat-num">05</span><h3>Cuisine</h3><span class="cat-line"></span></div>
+      <div class="grid">
+        <figure class="card reveal tilt in" style="--i: 7;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier en bois avec évier inox" loading="lazy"></div>
+          <figcaption><b>Meuble sous évier</b><span>Bois + inox</span></figcaption>
+        </figure>
+        <figure class="card reveal tilt in" style="--i: 0;">
+          <div class="panel-frame"><img src="file:///home/user/kinboiscreation/images/cuisine-bois-moulures-dorees.webp" alt="Cuisine équipée en bois massif avec moulures et poignées dorées" loading="lazy"></div>
+          <figcaption><b>Cuisine sur mesure</b><span>Moulures dorées</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="why" id="pourquoi">
+  <div class="wrap">
+    <div class="section-head reveal in" style="--i: 1;">
+      <div>
+        <div class="eyebrow"><span class="rule"></span>Pourquoi me choisir</div>
+        <h2>L'exigence d'un artisan, du premier croquis à la livraison.</h2>
+      </div>
+    </div>
+    <div class="why-grid">
+      <div class="why-item reveal tilt in" style="--i: 2;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M7 21v-3a3 3 0 013-3h4a3 3 0 013 3v3"></path><circle cx="12" cy="8" r="4"></circle></svg></span>
+        <b>Fabrication artisanale</b>
+        <span>Chaque pièce façonnée à la main, sans usine ni série.</span>
+      </div>
+      <div class="why-item reveal tilt in" style="--i: 3;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"></path><path d="M21 3v6h-6"></path></svg></span>
+        <b>Créations sur mesure</b>
+        <span>Dimensions, bois et finitions adaptés à votre intérieur.</span>
+      </div>
+      <div class="why-item reveal tilt in" style="--i: 4;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l3 6 6 1-4.5 4 1 6.5L12 16.5 6.5 19.5l1-6.5L3 9l6-1z"></path></svg></span>
+        <b>Pièces uniques</b>
+        <span>Aucune production en série, chaque meuble a son identité.</span>
+      </div>
+      <div class="why-item reveal tilt in" style="--i: 5;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M4 8c0 3 2 5 8 5s8-2 8-5"></path><path d="M4 16c0 3 2 5 8 5s8-2 8-5"></path></svg></span>
+        <b>Bois de qualité</b>
+        <span>Bois massif et contreplaqué sélectionnés avec soin.</span>
+      </div>
+      <div class="why-item reveal tilt in" style="--i: 6;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 7h11v10H3z"></path><path d="M14 11h4l3 3v3h-7z"></path><circle cx="7" cy="19" r="1.6"></circle><circle cx="18" cy="19" r="1.6"></circle></svg></span>
+        <b>Livraison possible</b>
+        <span>Livraison organisée à Kinshasa selon la distance.</span>
+      </div>
+      <div class="why-item reveal tilt in" style="--i: 7;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 21V9l9-6 9 6v12"></path><path d="M9 21v-6h6v6"></path></svg></span>
+        <b>Agencement professionnel</b>
+        <span>Bureaux, comptoirs et espaces commerciaux sur mesure.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews" id="avis">
+  <div class="wrap">
+    <div class="section-head reveal in" style="--i: 0;">
+      <div>
+        <div class="eyebrow"><span class="rule"></span>Avis</div>
+        <h2>Ce que mes clients pensent de mon travail.</h2>
+      </div>
+    </div>
+    <div class="reviews-editorial">
+      <div class="review-entry review-main reveal in" style="--i: 1;">
+        <span class="review-num">01</span>
+        <p class="review-quote">Travail magnifique et très soigné. Je suis vraiment satisfait de ma commande !</p>
+        <div class="review-author">Jules<span>Client</span></div>
+      </div>
+      <div class="review-entry review-side reveal in" style="--i: 2;">
+        <span class="review-num">02</span>
+        <p class="review-quote">Très belle finition et fabrication de qualité. Je recommande sans hésiter.</p>
+        <div class="review-author">Rehum<span>Client</span></div>
+      </div>
+      <div class="review-entry review-side reveal in" style="--i: 3;">
+        <span class="review-num">03</span>
+        <p class="review-quote">Création réalisée selon mes demandes. Le résultat est encore mieux que ce que j'imaginais !</p>
+        <div class="review-author">Tshule Munongo<span>Client</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mesure" id="surmesure">
+  <div class="wrap mesure-inner">
+    <div>
+      <div class="eyebrow"><span class="rule" style="background:var(--brass);"></span>Fabrication sur mesure</div>
+      <h2 class="reveal in" style="--i: 4;">Vous avez un espace précis en tête ? On le façonne ensemble.</h2>
+      <p class="reveal in" style="--i: 5;">Donnez-moi vos dimensions, le bois que vous préférez et votre budget : je vous propose un modèle, puis je fabrique la pièce à la main, du panneau brut à la finition vernie.</p>
+      <a class="btn btn-brass magnet" href="https://wa.me/243836002274?text=Bonjour%2C%20je%20souhaite%20une%20pi%C3%A8ce%20sur%20mesure" target="_blank" rel="noopener">Décrire mon projet sur WhatsApp</a>
+    </div>
+    <div class="steps">
+      <div class="step reveal in" style="--i: 6;">
+        <span class="step-num">01</span>
+        <div class="step-txt"><b>Vous décrivez votre besoin</b><span>Dimensions, pièce de la maison, style souhaité.</span></div>
+      </div>
+      <div class="step reveal in" style="--i: 7;">
+        <span class="step-num">02</span>
+        <div class="step-txt"><b>Je propose un modèle et un prix</b><span>Choix du bois et de la finition inclus.</span></div>
+      </div>
+      <div class="step reveal in" style="--i: 0;">
+        <span class="step-num">03</span>
+        <div class="step-txt"><b>Fabrication à la main</b><span>Suivi possible en cours de réalisation.</span></div>
+      </div>
+      <div class="step reveal in" style="--i: 1;">
+        <span class="step-num">04</span>
+        <div class="step-txt"><b>Livraison à Kinshasa</b><span>Remise en main propre et vérification finale.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="section-head reveal in" style="--i: 2;">
+      <div>
+        <div class="eyebrow"><span class="rule"></span>Le carnet</div>
+        <h2>De l'idée à la pièce : composons-la ensemble.</h2>
+      </div>
+      <p>Réponse rapide par WhatsApp, ou laissez vos coordonnées ci-contre.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card reveal in" style="--i: 3;">
+        <h3>Coordonnées directes</h3>
+        <p>Le plus rapide reste WhatsApp. Envoyez une photo de votre pièce ou un croquis, ça aide beaucoup.</p>
+        <div class="contact-links">
+          <a class="contact-link" href="https://wa.me/243836002274" target="_blank" rel="noopener">
+            <span class="ic">◐</span>
+            <span>WhatsApp<small>+243 836 002 274</small></span>
+          </a>
+          <a class="contact-link" href="tel:+243836002274">
+            <span class="ic">☎</span>
+            <span>Appel direct<small>+243 836 002 274</small></span>
+          </a>
+          <a class="contact-link" href="#carnet">
+            <span class="ic">✎</span>
+            <span>Formulaire du carnet pour votre projet<small>Ci-contre</small></span>
+          </a>
+        </div>
+        <div style="margin-top:28px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px;">
+          <p style="margin:0;font-size:0.92rem;">🚚 Livraison possible à Kinshasa, moyennant des frais selon la distance.</p>
+          <p style="margin:0;font-size:0.92rem;">💰 <strong style="color:var(--ink);font-weight:500;">Prix sur demande</strong>. Chaque création étant réalisée sur mesure, le prix varie selon les dimensions, le modèle et les finitions. Contactez-nous pour recevoir votre devis personnalisé.</p>
+        </div>
+      </div>
+      <div class="contact-card reveal in" style="--i: 4;">
+        <h3>Un carnet pour votre projet</h3>
+        <p>Six questions courtes, à votre rythme. À la fin, votre demande s'ouvre sur WhatsApp — rien n'est envoyé sans votre accord.</p>
+
+        <div class="carnet" id="carnet">
+          <div class="carnet-head">
+            <span class="carnet-step-label" id="carnetStepLabel">La pièce</span>
+            <span class="carnet-count" id="carnetCount">01 / 06</span>
+          </div>
+          <div class="carnet-ruler"><span id="carnetRulerFill" style="width: 0%;"></span></div>
+
+          <div class="carnet-pages" id="carnetPages">
+            <div class="carnet-page active" data-step="0">
+              <h3>Quel meuble imaginez-vous ?</h3>
+              <select id="cType">
+                <option>Lit / chambre</option>
+                <option>Table / salle à manger</option>
+                <option>Meuble de salon</option>
+                <option>Porte</option>
+                <option>Cuisine</option>
+                <option>Agencement bureau / commerce</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="carnet-page" data-step="1">
+              <h3>Quelles dimensions envisagez-vous ?</h3>
+              <input type="text" id="cDim" placeholder="Ex. 2m x 1,20m — ou « je ne sais pas encore »">
+            </div>
+            <div class="carnet-page" data-step="2">
+              <h3>Quelle essence, finition ou tonalité vous inspire ?</h3>
+              <input type="text" id="cMat" placeholder="Bois clair, foncé, brut, verni...">
+            </div>
+            <div class="carnet-page" data-step="3">
+              <h3>Avez-vous une photo ou une idée à partager ?</h3>
+              <textarea id="cInsp" placeholder="Décrivez-la ici — vous pourrez aussi l'envoyer directement sur WhatsApp"></textarea>
+            </div>
+            <div class="carnet-page" data-step="4">
+              <h3>Où souhaitez-vous recevoir votre création ?</h3>
+              <input type="text" id="cLoc" placeholder="Quartier, commune...">
+              <p class="carnet-note">🚚 Livraison possible à Kinshasa, à la charge du client selon la distance.</p>
+            </div>
+            <div class="carnet-page" data-step="5">
+              <h3>Comment pouvons-nous vous joindre ?</h3>
+              <input type="text" id="cName" placeholder="Votre nom">
+              <input type="text" id="cPhone" placeholder="Numéro WhatsApp ou téléphone">
+            </div>
+            <div class="carnet-page" data-step="6">
+              <h3>Votre projet commence ici.</h3>
+              <p class="carnet-summary" id="carnetSummary"></p>
+            </div>
+            <div class="carnet-page" data-step="7">
+              <h3>Message prêt.</h3>
+              <p style="margin:0;color:var(--ink-faint);font-size:0.92rem;">Votre demande vient de s'ouvrir sur WhatsApp — il ne reste qu'à l'envoyer pour que je puisse commencer à y réfléchir avec vous.</p>
+            </div>
+          </div>
+
+          <div class="carnet-nav">
+            <button type="button" id="carnetBack" class="carnet-btn" disabled="" style="visibility: hidden;">← Retour</button>
+            <button type="button" id="carnetNext" class="carnet-btn carnet-btn-primary">Suivant →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Kin Bois Création Sur Mesure</div>
+        <p class="footer-note">Menuiserie et ébénisterie artisanales à Kinshasa, fidèles au savoir-faire congolais. Fabrication et vente de meubles en bois massif, sur mesure ou déjà réalisés.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <b>Explorer</b>
+          <a href="#catalogue">Catalogue</a>
+          <a href="#apropos">L'artisan</a>
+          <a href="#surmesure">Sur mesure</a>
+        </div>
+        <div>
+          <b>Contact</b>
+          <a href="https://wa.me/243836002274" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="tel:+243836002274">+243 836 002 274</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Kin Bois Création Sur Mesure, Kinshasa RDC</span>
+      <span>Fait à la main, présenté avec soin.</span>
+    </div>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/243836002274" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp" style="">◐</a>
+
+<script>
+  // Carnet de conception — parcours en étapes
+  (function(){
+    const pages = Array.from(document.querySelectorAll('.carnet-page'));
+    const total = 6; // questions 0..5 ; 6=récap, 7=confirmation
+    const labels = ['La pièce','Les dimensions','La matière','L\'inspiration','La livraison','Le contact'];
+    const backBtn = document.getElementById('carnetBack');
+    const nextBtn = document.getElementById('carnetNext');
+    const countEl = document.getElementById('carnetCount');
+    const labelEl = document.getElementById('carnetStepLabel');
+    const rulerFill = document.getElementById('carnetRulerFill');
+    const carnet = document.getElementById('carnet');
+    let step = 0;
+
+    function pad(n){ return n < 10 ? '0'+n : ''+n; }
+
+    function render(){
+      pages.forEach(p=>{
+        const idx = parseInt(p.dataset.step, 10);
+        p.classList.toggle('active', idx === step);
+      });
+      if(step <= 5){
+        labelEl.textContent = labels[step];
+        countEl.style.display = '';
+        countEl.textContent = pad(step+1) + ' / 06';
+      } else {
+        countEl.style.display = 'none';
+        labelEl.textContent = step === 6 ? 'Récapitulatif' : 'Confirmation';
+      }
+      rulerFill.style.width = (Math.min(step, 6) / 6 * 100) + '%';
+      backBtn.style.visibility = step === 0 ? 'hidden' : 'visible';
+      backBtn.disabled = step === 0;
+
+      if(step === 6){
+        nextBtn.textContent = 'Envoyer sur WhatsApp →';
+        const type = document.getElementById('cType').value;
+        const dim = document.getElementById('cDim').value || 'à discuter';
+        const mat = document.getElementById('cMat').value || 'à discuter';
+        const insp = document.getElementById('cInsp').value;
+        const loc = document.getElementById('cLoc').value || 'à préciser';
+        const name = document.getElementById('cName').value || 'vous';
+        document.getElementById('carnetSummary').innerHTML =
+          '<b>' + type + '</b>, environ ' + dim + '.<br>' +
+          'Bois : ' + mat + '.<br>' +
+          (insp ? 'Inspiration : ' + insp + '.<br>' : '') +
+          'Livraison : ' + loc + ' (frais à votre charge).<br>' +
+          'Contact : ' + name + '.';
+      } else if(step === 7){
+        carnet.classList.add('carnet-done');
+      } else {
+        nextBtn.textContent = 'Suivant →';
+      }
+    }
+
+    nextBtn.addEventListener('click', function(){
+      if(step === 6){
+        const name = document.getElementById('cName').value || 'Bonjour';
+        const type = document.getElementById('cType').value;
+        const dim = document.getElementById('cDim').value;
+        const mat = document.getElementById('cMat').value;
+        const insp = document.getElementById('cInsp').value;
+        const loc = document.getElementById('cLoc').value;
+        const phone = document.getElementById('cPhone').value;
+        let text = "Bonjour, je suis " + name + ". Je suis intéressé(e) par : " + type + ".";
+        if(dim) text += " Dimensions envisagées : " + dim + ".";
+        if(mat) text += " Bois/finition souhaité(e) : " + mat + ".";
+        if(insp) text += " Inspiration : " + insp + ".";
+        if(loc) text += " Livraison souhaitée à : " + loc + ".";
+        if(phone) text += " Me joindre au : " + phone + ".";
+        const url = "https://wa.me/243836002274?text=" + encodeURIComponent(text);
+        window.open(url, '_blank');
+        step = 7;
+        render();
+        return;
+      }
+      if(step < 7){ step++; render(); }
+    });
+
+    backBtn.addEventListener('click', function(){
+      if(step > 0 && step < 7){ step--; render(); }
+    });
+
+    render();
+  })();
+
+  // subtle reveal on scroll
+  const revealTargets = document.querySelectorAll('.section-head, .card, .cat-block, .why-item, .review-entry, .stat, .step, .contact-card, .about-photo, .about-copy, .mesure h2, .mesure p');
+  revealTargets.forEach((el,i)=>{
+    el.classList.add('reveal');
+    el.style.setProperty('--i', i % 8);
+  });
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+  revealTargets.forEach(el=>observer.observe(el));
+
+  // cursor-follow glow in hero
+  const hero = document.querySelector('.hero');
+  if(hero){
+    hero.addEventListener('mousemove', (e)=>{
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  }
+
+  // animated stat counters
+  const statNums = document.querySelectorAll('.stat b');
+  const counterObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      const raw = el.textContent.trim();
+      const match = raw.match(/^(\d+)(.*)$/);
+      if(match){
+        const target = parseInt(match[1], 10);
+        const suffix = match[2];
+        let cur = 0;
+        const step = Math.max(1, Math.round(target / 40));
+        const tick = ()=>{
+          cur += step;
+          if(cur >= target){ el.textContent = target + suffix; return; }
+          el.textContent = cur + suffix;
+          requestAnimationFrame(tick);
+        };
+        tick();
+      }
+      counterObserver.unobserve(el);
+    });
+  }, {threshold:0.6});
+  statNums.forEach(el=>counterObserver.observe(el));
+
+  // ---- Effets de haute technologie ----
+
+  // 1. Barre de progression de scroll
+  const progressBar = document.getElementById('scrollProgress');
+  window.addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = pct + '%';
+  }, {passive:true});
+
+  // 2. Curseur personnalisé (souris uniquement)
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  const isFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(isFinePointer){
+    document.body.classList.add('has-cursor');
+    let rx=0, ry=0, mx=0, my=0;
+    window.addEventListener('mousemove', (e)=>{
+      dot.style.left = e.clientX+'px'; dot.style.top = e.clientY+'px';
+      mx = e.clientX; my = e.clientY;
+      dot.style.opacity = 1; ring.style.opacity = 0.55;
+    });
+    (function loop(){
+      rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a,button,.tilt,.magnet').forEach(el=>{
+      el.addEventListener('mouseenter', ()=>ring.classList.add('grow'));
+      el.addEventListener('mouseleave', ()=>ring.classList.remove('grow'));
+    });
+    document.addEventListener('mouseleave', ()=>{dot.style.opacity=0; ring.style.opacity=0;});
+  }
+
+  // 3. Boutons magnétiques (attirés légèrement par le curseur)
+  document.querySelectorAll('.magnet').forEach(btn=>{
+    btn.addEventListener('mousemove', (e)=>{
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width/2;
+      const y = e.clientY - r.top - r.height/2;
+      btn.style.transform = `translate(${x*0.22}px, ${y*0.3}px)`;
+    });
+    btn.addEventListener('mouseleave', ()=>{ btn.style.transform = 'translate(0,0)'; });
+  });
+
+  // 4. Tilt 3D léger sur les cartes au survol
+  document.querySelectorAll('.why-item, .card').forEach(el=>{
+    el.classList.add('tilt');
+    el.addEventListener('mousemove', (e)=>{
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left)/r.width - 0.5;
+      const py = (e.clientY - r.top)/r.height - 0.5;
+      el.style.transform = `perspective(700px) rotateX(${py*-5}deg) rotateY(${px*5}deg)`;
+    });
+    el.addEventListener('mouseleave', ()=>{ el.style.transform = 'perspective(700px) rotateX(0) rotateY(0)'; });
+  });
+
+  // 5bis. Signature : lumière naturelle qui balaie la matière sous le curseur
+  document.querySelectorAll('.panel-frame').forEach(el=>{
+    el.addEventListener('mousemove', (e)=>{
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--lx', ((e.clientX-r.left)/r.width*100)+'%');
+      el.style.setProperty('--ly', ((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+
+  // 6. Texte cinétique du hero (lettre par lettre)
+  const h1 = document.getElementById('kineticH1');
+  if(h1){
+    const walk = (node)=>{
+      node.childNodes.forEach(child=>{
+        if(child.nodeType === 3 && child.textContent.trim().length){
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(word=>{
+            if(word.trim() === ''){ frag.appendChild(document.createTextNode(word)); return; }
+            const wrap = document.createElement('span');
+            wrap.className = 'kinetic-word';
+            const inner = document.createElement('span');
+            inner.textContent = word;
+            wrap.appendChild(inner);
+            frag.appendChild(wrap);
+          });
+          child.replaceWith(frag);
+        } else if(child.nodeType === 1){
+          walk(child);
+        }
+      });
+    };
+    walk(h1);
+    let wi = 0;
+    h1.querySelectorAll('.kinetic-word span').forEach(s=>{ s.style.setProperty('--wi', wi++); });
+  }
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<template>
+<style>
+  #root {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: transparent; /* full-bleed ground lives on the .clip layer below, never on #root */
+  }
+
+  #root .clip {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ---- Layer 0: ivoire ground ---- */
+  .hero2-bg {
+    background: #F7F4EE;
+  }
+
+  /* ---- Layer 1+2: the framed screenshot ---- */
+  .hero2-frame {
+    position: absolute;
+    left: 43px;
+    top: 410px;
+    width: 994px;
+    height: 559px;
+  }
+
+  .hero2-pop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #1C130E; /* ebony fallback while the shot settles in, matches the captured page */
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  .hero2-camera {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  .hero2-img {
+    position: absolute;
+    left: -6%;
+    top: -6%;
+    width: 112%;
+    height: 112%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero2-hairline-svg {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .hero2-hairline-svg rect {
+    fill: none;
+    stroke: #B87333;
+    stroke-width: 2;
+  }
+</style>
+
+<div id="root" data-composition-id="02-hero" data-duration="5" data-width="1080" data-height="1920">
+
+  <!-- Scene 1a: ivoire ground -->
+  <div class="clip hero2-bg" data-start="0" data-duration="5" data-track-index="0"></div>
+
+  <div class="hero2-frame">
+
+    <!-- Scene 2: the real captured hero screenshot, full-bleed inside the frame,
+         spring-pop-entrance (subtle) then a barely-perceptible multi-phase-camera drift -->
+    <div class="clip hero2-pop" id="hero2-pop" data-start="0.3" data-duration="4.7" data-track-index="1">
+      <div class="hero2-camera" id="hero2-camera">
+        <img class="hero2-img" src="assets/scroll-000.png" alt="" />
+      </div>
+    </div>
+
+    <!-- Scene 1b: thin cuivre hairline frame, svg-path-draw reveal, sits on top of the screenshot edge -->
+    <svg class="clip hero2-hairline-svg" data-start="0" data-duration="5" data-track-index="2" viewBox="0 0 994 559" xmlns="http://www.w3.org/2000/svg">
+      <rect id="hero2-hairline-rect" x="1" y="1" width="992" height="557" />
+    </svg>
+
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    window.__timelines = window.__timelines || {};
+
+    var TOTAL_DURATION = 4.5;
+
+    var tl = gsap.timeline({ paused: true });
+    window.__timelines["02-hero"] = tl;
+
+    // ---- Scene 1a: ivoire ground settles ----
+    tl.fromTo(
+      ".hero2-bg",
+      { opacity: 0.7 },
+      { opacity: 1, duration: 0.35, ease: "power1.out" },
+      0
+    );
+
+    // ---- Scene 1b: cuivre hairline rectangle draws in (svg-path-draw) ----
+    var rect = document.getElementById("hero2-hairline-rect");
+    var rectLen = rect.getTotalLength();
+    rect.style.strokeDasharray = String(rectLen);
+    rect.style.strokeDashoffset = String(rectLen);
+
+    tl.to(
+      rect,
+      { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" },
+      0
+    );
+
+    // ---- Scene 2: real hero screenshot pops/fades into the frame (spring-pop-entrance, subtle) ----
+    tl.fromTo(
+      "#hero2-pop",
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
+      0.3
+    );
+
+    // ---- Scene 3: multi-phase-camera — slow, barely-perceptible vertical drift within the screenshot ----
+    var camera = document.getElementById("hero2-camera");
+
+    var phase = { scale: 1.0 }; // Phase 1 — initial value, no tween (image already sits flush at 1:1 in the frame)
+
+    // Phase 2 — settle to a hair past neutral (near-imperceptible focus)
+    tl.to(phase, { scale: 1.02, duration: 1.6, ease: "power2.out" }, 1.0);
+
+    // Phase 3 — slow, quiet push toward the end of the hold
+    tl.to(phase, { scale: 1.045, duration: 1.6, ease: "power2.inOut" }, 2.8);
+
+    // Continuous sine-driven micro-drift, composed with the phase scale in one writer.
+    var drift = { p: 0 };
+    tl.to(
+      drift,
+      {
+        p: Math.PI * 2 * 1, // one slow breath across the whole composition
+        duration: TOTAL_DURATION,
+        ease: "none",
+        onUpdate: function () {
+          var dx = Math.sin(drift.p) * 3; // px, imperceptible per-frame
+          var dy = Math.sin(drift.p * 1.3) * 4; // px, the dominant "vertical drift" read
+          camera.style.transform =
+            "scale(" + phase.scale + ") translate(" + dx.toFixed(2) + "px, " + dy.toFixed(2) + "px)";
+        },
+      },
+      0
+    );
+  })();
+</script>
+</template>

@@ -1,0 +1,246 @@
+<template>
+<style>
+  @font-face {
+    font-family: "Cormorant Garamond";
+    src: url("capture/assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Space Grotesk";
+    src: url("capture/assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  #root {
+    container-type: size;
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  #root .clip {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ── full-bleed ivoire ground ── */
+  .kb-bg {
+    background: #f7f4ee;
+    opacity: 0;
+  }
+
+  /* ── atmospheric compass ring (cover-treatment, off-center, bleeds edge) ── */
+  .kb-ring-layer {
+    pointer-events: none;
+  }
+  .kb-ring {
+    position: absolute;
+    left: 700px;
+    top: 110px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 1px solid #b87333;
+    opacity: 0;
+  }
+  .kb-ring::before {
+    content: "";
+    position: absolute;
+    inset: 12.5%;
+    border-radius: 50%;
+    border: 1px dashed #b87333;
+    opacity: 0.7;
+  }
+
+  /* ── ambient cuivre glow behind the logo ── */
+  .kb-glow-layer {
+    pointer-events: none;
+  }
+  .kb-glow {
+    position: absolute;
+    left: 90px;
+    top: 173px;
+    width: 900px;
+    height: 894px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #b87333 0%, rgba(184, 115, 51, 0) 68%);
+    opacity: 0;
+    transform: scale(0.85);
+    transform-origin: 50% 50%;
+  }
+
+  /* ── logo mark ── */
+  .kb-logo-layer {
+    pointer-events: none;
+  }
+  .kb-logo-wrap {
+    position: absolute;
+    left: 243px;
+    top: 323px;
+    width: 594px;
+    height: 594px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #b87333;
+    background: #f7f4ee;
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: 50% 50%;
+  }
+  .kb-logo-wrap img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ── wordmark beneath the logo ── */
+  .kb-text-layer {
+    pointer-events: none;
+  }
+  .kb-words {
+    position: absolute;
+    left: 0;
+    top: 972px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.8cqw;
+  }
+  .kb-word {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 400;
+    font-size: 2.4cqw;
+    line-height: 1.1;
+    letter-spacing: 0.35cqw;
+    text-transform: uppercase;
+    color: #1c130e;
+    opacity: 0;
+  }
+
+  /* ── closing hairline accent ── */
+  .kb-accent-layer {
+    pointer-events: none;
+  }
+  .kb-accent {
+    position: absolute;
+    left: 50%;
+    top: 1088px;
+    width: 194px;
+    height: 1px;
+    margin-left: -97px;
+    background: #b87333;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: 50% 50%;
+  }
+</style>
+
+<div id="root" data-composition-id="01-logo" data-duration="4" data-width="1080" data-height="1920">
+  <div class="clip kb-bg" data-start="0" data-duration="4" data-track-index="0"></div>
+
+  <div class="clip kb-ring-layer" data-start="0" data-duration="4" data-track-index="1">
+    <div class="kb-ring" id="kb-ring"></div>
+  </div>
+
+  <div class="clip kb-glow-layer" data-start="0.1" data-duration="3.9" data-track-index="2">
+    <div class="kb-glow" id="kb-glow"></div>
+  </div>
+
+  <div class="clip kb-logo-layer" data-start="0.35" data-duration="3.65" data-track-index="3">
+    <div class="kb-logo-wrap" id="kb-logo-wrap">
+      <img src="assets/logo-kb.jpg" alt="" />
+    </div>
+  </div>
+
+  <div class="clip kb-text-layer" data-start="1.4" data-duration="2.6" data-track-index="4">
+    <div class="kb-words">
+      <span class="kb-word" id="kb-word-0">Kin</span>
+      <span class="kb-word" id="kb-word-1">Bois</span>
+      <span class="kb-word" id="kb-word-2">Création</span>
+    </div>
+  </div>
+
+  <div class="clip kb-accent-layer" data-start="2.15" data-duration="1.85" data-track-index="5">
+    <div class="kb-accent" id="kb-accent"></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+    window.__timelines["01-logo"] = tl;
+
+    // Scene 1 (0.0–0.6s): ivoire ground settles, compass ring + cuivre glow bloom in behind center.
+    tl.fromTo(".kb-bg", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0);
+    tl.fromTo("#kb-ring", { opacity: 0 }, { opacity: 0.22, duration: 0.6, ease: "power2.out" }, 0);
+
+    // Ambient glow bloom (rules/ambient-glow-bloom) — lands on the logo's settle.
+    var BLOOM_START = 0.1;
+    var BLOOM_DUR = 0.9;
+    var GLOW_PEAK_OPACITY = 0.28;
+    tl.fromTo(
+      "#kb-glow",
+      { opacity: 0, scale: 0.85 },
+      { opacity: GLOW_PEAK_OPACITY, scale: 1, duration: BLOOM_DUR, ease: "power2.out" },
+      BLOOM_START
+    );
+
+    // Scene 2 (0.4–1.4s): spring-pop-entrance — smooth long-tail settle, no overshoot.
+    var POP_START = 0.35;
+    var POP_DUR = 0.65;
+    tl.fromTo(
+      "#kb-logo-wrap",
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, duration: POP_DUR, ease: "power3.out" },
+      POP_START
+    );
+
+    // Scene 3 (1.4–2.4s): "KIN BOIS CRÉATION" reveals per-word, staggered from content length
+    // (dynamic-content-sequencing spirit — longer words get a touch more runway before the next arrives).
+    var words = ["KIN", "BOIS", "CRÉATION"];
+    var BASE = 0.12;
+    var PER_CHAR = 0.02;
+    var t = 1.4;
+    for (var i = 0; i < words.length; i++) {
+      var el = document.getElementById("kb-word-" + i);
+      tl.fromTo(el, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, t);
+      t += BASE + words[i].length * PER_CHAR;
+    }
+
+    // Closing hairline accent grows from center once the wordmark has landed.
+    tl.fromTo(
+      "#kb-accent",
+      { opacity: 0, scaleX: 0 },
+      { opacity: 1, scaleX: 1, duration: 0.35, ease: "power2.out" },
+      2.15
+    );
+
+    // Scene 4 (2.4–3.5s): fully resolved, held — only the glow's low-amplitude jitter alive
+    // (rules/sine-wave-loop, onUpdate form; bounded, phase starts at 0 → no jump off the bloom's rest state).
+    var IDLE_START = 2.4;
+    var IDLE_DUR = 3.5 - IDLE_START;
+    var CYCLES = 0.6;
+    var OPACITY_AMP = 0.03;
+    var SCALE_AMP = 0.015;
+    var glowEl = document.getElementById("kb-glow");
+    var phase = { p: 0 };
+    tl.to(
+      phase,
+      {
+        p: Math.PI * 2 * CYCLES,
+        duration: IDLE_DUR,
+        ease: "none",
+        onUpdate: function () {
+          var s = Math.sin(phase.p);
+          glowEl.style.opacity = String(GLOW_PEAK_OPACITY + s * OPACITY_AMP);
+          glowEl.style.transform = "scale(" + (1 + s * SCALE_AMP) + ")";
+        },
+      },
+      IDLE_START
+    );
+  })();
+</script>
+</template>

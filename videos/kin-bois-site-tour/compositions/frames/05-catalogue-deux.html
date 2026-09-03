@@ -1,0 +1,174 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("capture/assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("capture/assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden;
+      font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .clip {
+      position: absolute;
+    }
+
+    /* full-bleed ivoire ground */
+    .f05-bg {
+      inset: 0;
+      background: #F7F4EE;
+    }
+
+    /* left-side cuivre-hairline "device" frame holding the real screenshot */
+    .f05-frame {
+      left: 36px;
+      top: 190px;
+      width: 664px;
+      height: 1350px;
+      border: 2px solid #B87333;
+      overflow: hidden;
+      background: #EFD9C4;
+      box-sizing: border-box;
+    }
+
+    .f05-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 35% 55%;
+      display: block;
+      transform-origin: 50% 50%;
+    }
+
+    /* thin cuivre divider between image and label column */
+    .f05-divider {
+      left: 736px;
+      top: 190px;
+      width: 1px;
+      height: 1350px;
+      background: #B87333;
+      opacity: 0.35;
+      transform-origin: 50% 0%;
+    }
+
+    /* right-margin label column */
+    .f05-label {
+      left: 780px;
+      top: 640px;
+      width: 264px;
+      height: 520px;
+    }
+
+    .f05-label-text {
+      margin: 0;
+      font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 46px;
+      line-height: 1.16;
+      color: #1C130E;
+    }
+
+    .f05-w {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="05-catalogue-deux"
+    data-duration="4"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div class="clip f05-bg" data-start="0" data-duration="4" data-track-index="0"></div>
+
+    <div class="clip f05-frame" id="f05-frame" data-start="0" data-duration="4" data-track-index="1">
+      <img class="f05-img" id="f05-img" src="assets/scroll-070.png" alt="" />
+    </div>
+
+    <div class="clip f05-divider" id="f05-divider" data-start="0" data-duration="4" data-track-index="2"></div>
+
+    <div class="clip f05-label" data-start="0.4" data-duration="3.6" data-track-index="3">
+      <p class="f05-label-text" id="f05-label-text">
+        <span class="f05-w" id="f05-w0">Sur</span>
+        <span class="f05-w" id="f05-w1">mesure,</span>
+        <span class="f05-w" id="f05-w2">pour</span>
+        <span class="f05-w" id="f05-w3">chaque</span>
+        <span class="f05-w" id="f05-w4">pièce</span>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["05-catalogue-deux"] = tl;
+
+      var frameEl = document.getElementById("f05-frame");
+      var imgEl = document.getElementById("f05-img");
+      var dividerEl = document.getElementById("f05-divider");
+      var words = [
+        document.getElementById("f05-w0"),
+        document.getElementById("f05-w1"),
+        document.getElementById("f05-w2"),
+        document.getElementById("f05-w3"),
+        document.getElementById("f05-w4"),
+      ];
+
+      // Scene 1 (0.0-0.4s): the real screenshot slides/fades into the left-hand
+      // cuivre-hairline frame; the divider draws down alongside it.
+      tl.fromTo(
+        frameEl,
+        { autoAlpha: 0, x: -48 },
+        { autoAlpha: 1, x: 0, duration: 0.4, ease: "power3.out" },
+        0
+      );
+      tl.fromTo(
+        dividerEl,
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.4, ease: "power2.out" },
+        0
+      );
+
+      // Slow drift within the screenshot for the full shot — a restrained
+      // "still scrolling" Ken-Burns feel, never a hard jump.
+      tl.fromTo(
+        imgEl,
+        { scale: 1.0 },
+        { scale: 1.1, duration: 3.5, ease: "none" },
+        0
+      );
+
+      // Scene 2 (0.4-1.4s): "Sur mesure, pour chaque pièce" reveals per-word
+      // in the right margin, then holds while the drift continues underneath.
+      var wordStart = 0.4;
+      var wordStagger = 0.15;
+      words.forEach(function (w, i) {
+        tl.fromTo(
+          w,
+          { autoAlpha: 0, y: 16 },
+          { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out" },
+          wordStart + i * wordStagger
+        );
+      });
+    })();
+  </script>
+</template>

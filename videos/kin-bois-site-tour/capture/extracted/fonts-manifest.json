@@ -1,0 +1,181 @@
+{
+  "files": [
+    {
+      "file": "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+      "family": "Space Grotesk",
+      "rawFamily": "Space Grotesk SemiBold",
+      "subfamily": "Regular",
+      "postscript": "SpaceGrotesk-SemiBold",
+      "weight": 600,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+      "family": "Space Grotesk",
+      "rawFamily": "Space Grotesk",
+      "subfamily": "Bold",
+      "postscript": "SpaceGrotesk-Bold",
+      "weight": 700,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UUsj.ttf",
+      "family": "Space Grotesk",
+      "rawFamily": "Space Grotesk Light",
+      "subfamily": "Regular",
+      "postscript": "SpaceGrotesk-Light",
+      "weight": 300,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+      "family": "Space Grotesk",
+      "rawFamily": "Space Grotesk Medium",
+      "subfamily": "Regular",
+      "postscript": "SpaceGrotesk-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+      "family": "Space Grotesk",
+      "rawFamily": "Space Grotesk",
+      "subfamily": "Regular",
+      "postscript": "SpaceGrotesk-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd58jDOjw.ttf",
+      "family": "Cormorant Garamond",
+      "rawFamily": "Cormorant Garamond",
+      "subfamily": "Italic",
+      "postscript": "CormorantGaramond-Italic",
+      "weight": 400,
+      "style": "italic",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDDOjw.ttf",
+      "family": "Cormorant Garamond",
+      "rawFamily": "Cormorant Garamond Medium",
+      "subfamily": "Italic",
+      "postscript": "CormorantGaramond-MediumItalic",
+      "weight": 500,
+      "style": "italic",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_iE9GnM.ttf",
+      "family": "Cormorant Garamond",
+      "rawFamily": "Cormorant Garamond SemiBold",
+      "subfamily": "Regular",
+      "postscript": "CormorantGaramond-SemiBold",
+      "weight": 600,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_qE6GnM.ttf",
+      "family": "Cormorant Garamond",
+      "rawFamily": "Cormorant Garamond Light",
+      "subfamily": "Regular",
+      "postscript": "CormorantGaramond-Light",
+      "weight": 300,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_s06GnM.ttf",
+      "family": "Cormorant Garamond",
+      "rawFamily": "Cormorant Garamond Medium",
+      "subfamily": "Regular",
+      "postscript": "CormorantGaramond-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf",
+      "family": "Cormorant Garamond",
+      "rawFamily": "Cormorant Garamond",
+      "subfamily": "Regular",
+      "postscript": "CormorantGaramond-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    }
+  ],
+  "families": [
+    {
+      "family": "Cormorant Garamond",
+      "weights": [
+        300,
+        400,
+        500,
+        600
+      ],
+      "variable": false,
+      "fileCount": 6,
+      "files": [
+        "co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd58jDOjw.ttf",
+        "co3smX5slCNuHLi8bLeY9MK7whWMhyjYrGFEsdtdc62E6zd5wDDOjw.ttf",
+        "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_iE9GnM.ttf",
+        "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_qE6GnM.ttf",
+        "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_s06GnM.ttf",
+        "co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf"
+      ]
+    },
+    {
+      "family": "Space Grotesk",
+      "weights": [
+        300,
+        400,
+        500,
+        600,
+        700
+      ],
+      "variable": false,
+      "fileCount": 5,
+      "files": [
+        "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf",
+        "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+        "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UUsj.ttf",
+        "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf",
+        "V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+      ]
+    }
+  ],
+  "unidentified": [],
+  "meta": {
+    "generatedAt": "2026-08-31T08:56:58.479Z",
+    "tool": "fontkit"
+  }
+}

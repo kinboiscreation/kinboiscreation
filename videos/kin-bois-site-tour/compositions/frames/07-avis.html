@@ -1,0 +1,204 @@
+<template>
+<div id="root" data-composition-id="07-avis" data-duration="4.5" data-width="1080" data-height="1920">
+  <style>
+    @font-face {
+      font-family: "Cormorant Garamond";
+      src: url("capture/assets/fonts/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("capture/assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf") format("truetype");
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      overflow: hidden;
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    #root .clip {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* -- Scene 1: backdrop -- */
+    .avis07-bg {
+      background: #1c130e;
+    }
+    .avis07-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      opacity: 0;
+      display: block;
+    }
+    .avis07-bg-scrim {
+      position: absolute;
+      inset: 0;
+      background: rgba(28, 19, 14, 0.35);
+      opacity: 0;
+    }
+    .avis07-bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 900px 520px at 50% 42%,
+        rgba(28, 19, 14, 0.5) 0%,
+        rgba(28, 19, 14, 0.18) 55%,
+        rgba(28, 19, 14, 0) 78%
+      );
+      opacity: 0;
+    }
+
+    /* -- Scene 2/3: quote content -- */
+    .avis07-content {
+      position: absolute;
+      inset: 0;
+    }
+    .avis07-quote-wrap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 660px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 66px;
+      text-align: center;
+    }
+    .avis07-line {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: #f7f4ee;
+      opacity: 0;
+      transform: translateY(24px);
+      white-space: nowrap;
+    }
+    .avis07-line + .avis07-line {
+      margin-top: 8px;
+    }
+    .avis07-attribution {
+      margin-top: 52px;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #b87333;
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    .avis07-underline-wrap {
+      margin-top: 20px;
+      width: 96px;
+      height: 2px;
+    }
+    .avis07-underline {
+      width: 100%;
+      height: 100%;
+      background: #b87333;
+      transform-origin: 50% 50%;
+      transform: scaleX(0);
+    }
+  </style>
+
+  <div class="clip avis07-bg" data-start="0" data-duration="4.5" data-track-index="0">
+    <img class="avis07-bg-img" src="assets/scroll-091.png" alt="" />
+    <div class="avis07-bg-scrim"></div>
+    <div class="avis07-bg-vignette"></div>
+  </div>
+
+  <div class="clip avis07-content" data-start="0.4" data-duration="4.1" data-track-index="1">
+    <div class="avis07-quote-wrap">
+      <div class="avis07-line" id="avis07-line1">Travail magnifique et très soigné.</div>
+      <div class="avis07-line" id="avis07-line2">Je suis vraiment satisfait de ma commande !</div>
+      <div class="avis07-attribution" id="avis07-attribution">&mdash; Jules</div>
+      <div class="avis07-underline-wrap" id="avis07-underline-wrap">
+        <div class="avis07-underline" id="avis07-underline"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.currentScript.closest("#root") || document.getElementById("root");
+      var bgImg = root.querySelector(".avis07-bg-img");
+      var bgScrim = root.querySelector(".avis07-bg-scrim");
+      var bgVignette = root.querySelector(".avis07-bg-vignette");
+      var line1 = root.querySelector("#avis07-line1");
+      var line2 = root.querySelector("#avis07-line2");
+      var attribution = root.querySelector("#avis07-attribution");
+      var underline = root.querySelector("#avis07-underline");
+      var underlineWrap = root.querySelector("#avis07-underline-wrap");
+
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["07-avis"] = tl;
+
+      // Scene 1 (0.0-0.4s): backdrop settles under the ink scrim — quiet, no camera motion.
+      tl.fromTo(bgImg, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0);
+      tl.fromTo(bgScrim, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0);
+      tl.fromTo(bgVignette, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 0);
+
+      // Scene 2 (0.4-2.0s): the quote stacks in, two lines, then the attribution lands.
+      tl.fromTo(
+        line1,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        0.4
+      );
+      tl.fromTo(
+        line2,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        0.75
+      );
+      tl.fromTo(
+        attribution,
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" },
+        1.35
+      );
+      tl.fromTo(
+        underline,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.35, ease: "power2.out" },
+        1.6
+      );
+
+      // Scene 3 (2.0-4.0s): fully resolved, held — a barely-visible jitter on the cuivre
+      // underline (sine-wave-loop, low amplitude) so the frame doesn't read as dead.
+      var IDLE_START = 2.0;
+      var IDLE_DUR = 4.0 - IDLE_START;
+      var CYCLES = 1;
+      var X_AMP_PX = 2;
+      var phase = { p: 0 };
+      tl.to(
+        phase,
+        {
+          p: Math.PI * 2 * CYCLES,
+          duration: IDLE_DUR,
+          ease: "none",
+          onUpdate: function () {
+            var s = Math.sin(phase.p);
+            underlineWrap.style.transform = "translateX(" + (s * X_AMP_PX).toFixed(2) + "px)";
+          },
+        },
+        IDLE_START
+      );
+    })();
+  </script>
+</div>
+</template>

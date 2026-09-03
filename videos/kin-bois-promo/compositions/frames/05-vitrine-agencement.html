@@ -1,0 +1,164 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "Space Grotesk";
+      src: url("assets/fonts/space-grotesk-latin-700-normal.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    #root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      overflow: hidden; /* required: camera phase 1 scale (0.92) is < 1 */
+      background: transparent;
+    }
+
+    .va05-bg {
+      position: absolute;
+      inset: 0;
+      background: #f7f4ee;
+    }
+
+    .va05-camera {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    .va05-content {
+      position: absolute;
+      inset: 0;
+    }
+
+    .va05-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .va05-label-card {
+      position: absolute;
+      top: 1436px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: fit-content;
+      max-width: 860px;
+      padding: 24px 44px 28px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid #b87333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+
+    .va05-label-rule {
+      width: 150px;
+      height: 1px;
+      background: #b87333;
+    }
+
+    .va05-label-text {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 1.2;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #985f2a;
+      text-align: center;
+      white-space: nowrap;
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-vitrine-agencement" data-duration="2.7" data-width="1080" data-height="1920">
+    <div class="va05-bg clip" data-start="0" data-duration="2.7" data-track-index="0"></div>
+
+    <div class="va05-camera" id="va05-camera">
+      <div class="va05-content">
+        <img
+          class="va05-image clip"
+          data-start="0"
+          data-duration="2.7"
+          data-track-index="1"
+          src="assets/cuisine-bois-moulures-dorees.webp"
+          alt=""
+        />
+
+        <div class="va05-label-card clip" data-start="0.5" data-duration="2.2" data-track-index="2" id="va05-label-card">
+          <span class="va05-label-rule" id="va05-label-rule"></span>
+          <span class="va05-label-text">Cuisines &amp; agencement</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var camera = document.getElementById("va05-camera");
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // --- Multi-phase camera: fast push-in, then a slow climax push. ---
+      // This is the mid-run "high point" shot — a touch more push than the
+      // other showcase frames (3/4/6), landing near the top of the range.
+      var phase = { scale: 0.92 }; // Phase 1 — initial value, no tween.
+
+      // Phase 2 — fast push-in, lands right as the label is about to arrive.
+      tl.to(phase, { scale: 1.06, duration: 0.4, ease: "power2.out" }, 0);
+
+      // Phase 3 — slow continued push through to the end, the climax.
+      tl.to(phase, { scale: 1.13, duration: 1.6, ease: "power2.inOut" }, 0.6);
+
+      // Drift — continuous sine micro-drift overlaid on the phase scale.
+      // The ONE writer of camera.style.transform.
+      var drift = { p: 0 };
+      tl.to(
+        drift,
+        {
+          p: Math.PI * 2 * 1,
+          duration: 2.2,
+          ease: "none",
+          onUpdate: function () {
+            var dx = Math.sin(drift.p) * 4;
+            var dy = Math.sin(drift.p * 1.3) * 2;
+            camera.style.transform =
+              "scale(" + phase.scale + ") translate(" + dx + "px, " + dy + "px)";
+          },
+        },
+        0,
+      );
+
+      // --- Scene 2: label pops in (spring-pop-entrance), lower-third, holds. ---
+      tl.fromTo(
+        "#va05-label-card",
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.55, ease: "power3.out" },
+        0.5,
+      );
+
+      tl.fromTo(
+        "#va05-label-rule",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.3, ease: "power2.out" },
+        0.85,
+      );
+
+      window.__timelines["05-vitrine-agencement"] = tl;
+    })();
+  </script>
+</template>

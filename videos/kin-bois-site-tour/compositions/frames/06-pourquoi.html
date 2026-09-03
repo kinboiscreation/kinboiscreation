@@ -1,0 +1,174 @@
+<template>
+<style>
+  @font-face {
+    font-family: "KB Space Grotesk";
+    src: url("capture/assets/fonts/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  #root {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #root .clip {
+    position: absolute;
+    inset: 0;
+  }
+
+  #root .pourquoi-bg {
+    background: #f7f4ee;
+  }
+
+  #root .pourquoi-scene {
+    overflow: hidden; /* required — phase scale starts < 1 */
+  }
+
+  #root .pourquoi-camera {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  #root .pourquoi-content {
+    position: absolute;
+    inset: 0;
+  }
+
+  #root .pourquoi-frame-box {
+    position: absolute;
+    left: 60px;
+    top: 210px;
+    width: 960px;
+    height: 1350px;
+    border: 3px solid #b87333;
+    background: #f7f4ee;
+    overflow: hidden;
+  }
+
+  #root .pourquoi-frame-box img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 26%;
+    transform-origin: 50% 50%;
+  }
+
+  #root .pourquoi-scrim {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 360px;
+    background: linear-gradient(to bottom, rgba(28, 19, 14, 0) 0%, rgba(28, 19, 14, 0.5) 65%, rgba(28, 19, 14, 0.6) 100%);
+  }
+
+  #root .pourquoi-label-wrap {
+    position: absolute;
+    left: 60px;
+    top: 210px;
+    width: 960px;
+    height: 1350px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 76px;
+    transform-origin: 50% 100%;
+    will-change: transform;
+  }
+
+  #root .pourquoi-label-inner {
+    text-align: center;
+  }
+
+  #root .pourquoi-label-rule {
+    width: 56px;
+    height: 2px;
+    background: #b87333;
+    margin: 0 auto 18px;
+    opacity: 0.9;
+  }
+
+  #root .pourquoi-label-text {
+    font-family: "KB Space Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #c38a54;
+    white-space: nowrap;
+  }
+</style>
+
+<div id="root" data-composition-id="06-pourquoi" data-duration="4.5" data-width="1080" data-height="1920">
+  <div class="clip pourquoi-bg" data-start="0" data-duration="4.5" data-track-index="0"></div>
+
+  <div class="pourquoi-scene">
+    <div class="pourquoi-camera" id="pourquoi-camera">
+      <div class="pourquoi-content">
+        <div class="clip pourquoi-frame-box" data-start="0" data-duration="4.5" data-track-index="1">
+          <img id="pourquoi-img" src="assets/scroll-084.png" alt="" />
+          <div class="pourquoi-scrim"></div>
+        </div>
+
+        <div class="clip pourquoi-label-wrap" data-start="0.5" data-duration="4" data-track-index="2">
+          <div class="pourquoi-label-inner" id="pourquoi-label">
+            <div class="pourquoi-label-rule"></div>
+            <div class="pourquoi-label-text">Pourquoi me choisir</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+    window.__timelines["06-pourquoi"] = tl;
+
+    var camera = document.getElementById("pourquoi-camera");
+
+    // Multi-phase camera — brisk pull-back-in settle, then a slow steady
+    // push that keeps running under the held label (calmer beat, per storyboard).
+    var phase = { scale: 0.9 }; // Phase 1 — initial value, no tween
+    tl.to(phase, { scale: 1.0, duration: 0.5, ease: "power2.out" }, 0.05); // Phase 2 — quick settle
+    tl.to(phase, { scale: 1.06, duration: 2.8, ease: "power2.inOut" }, 0.9); // Phase 3 — slow push-in
+
+    var drift = { p: 0 };
+    tl.to(
+      drift,
+      {
+        p: Math.PI * 2 * 2,
+        duration: 4,
+        ease: "none",
+        onUpdate: function () {
+          var dx = Math.sin(drift.p) * 5;
+          var dy = Math.sin(drift.p * 1.3) * 3;
+          camera.style.transform = "scale(" + phase.scale + ") translate(" + dx + "px, " + dy + "px)";
+        },
+      },
+      0,
+    );
+
+    // Scene 1 (0.0–0.4s) — screenshot cuts in, fast push-in under it.
+    tl.fromTo("#pourquoi-img", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0);
+
+    // Scene 2 (0.5–4.0s) — "Pourquoi me choisir" pops in lower-third, holds.
+    tl.fromTo(
+      "#pourquoi-label",
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
+      0.5,
+    );
+  })();
+</script>
+</template>
