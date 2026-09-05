@@ -2,3 +2,51 @@
 .agents/
 .claude/
 skills-lock.json
+
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production
+/dist
+/build
+out/
+
+# Remotion
+.remotion
+remotion_versions.json
+
+# Development
+.DS_Store
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-workspace
+.sublime-project
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Video outputs
+*.mp4
+*.webm
+*.mov
+*.avi
+
+# Cache
+.cache/
+.turbo/

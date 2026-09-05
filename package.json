@@ -1,0 +1,39 @@
+{
+  "name": "kinboiscreation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "remotion preview src/index.tsx",
+    "build": "remotion render src/index.tsx Main",
+    "render:all": "remotion render src/index.tsx",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kinboiscreation/kinboiscreation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kinboiscreation/kinboiscreation/issues"
+  },
+  "homepage": "https://github.com/kinboiscreation/kinboiscreation#readme",
+  "dependencies": {
+    "@remotion/captions": "^4.0.520",
+    "@remotion/gif": "^4.0.520",
+    "@remotion/media-utils": "^4.0.520",
+    "@remotion/paths": "^4.0.520",
+    "@remotion/shapes": "^4.0.520",
+    "@remotion/tailwind": "^4.0.520",
+    "@remotion/transitions": "^4.0.520",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.520",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2"
+  }
+}
