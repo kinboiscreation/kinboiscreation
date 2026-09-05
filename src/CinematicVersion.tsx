@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCurrentFrame, interpolate, Easing } from 'remotion';
+import { AudioLayerCinematic } from './components/AudioLayerCinematic';
 
 /**
  * MYRTILLE & ABRICOT - LA COLÈRE
@@ -439,6 +440,9 @@ export const CinematicVersion: React.FC = () => {
           La vraie force, c'est la maîtrise de soi.
         </div>
       </div>
+
+      {/* ========== AUDIO LAYER ========== */}
+      <AudioLayerCinematic />
     </div>
   );
 };
