@@ -7,6 +7,7 @@
     "start": "remotion studio",
     "build": "remotion build",
     "render": "remotion render src/index.tsx MyrtilleAbricot output.mp4",
+    "render-cinematic": "remotion render src/index-cinematic.tsx MyrtilleAbricotCinematic output-cinematic.mp4",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
