@@ -2,32 +2,32 @@ import React from "react";
 import { AbsoluteFill, Sequence } from "remotion";
 import {
   linearTiming,
-  sequenceElement,
   TransitionSeries,
-  fade,
-  slide,
-  wipeLeft,
 } from "@remotion/transitions";
 
-const Slide: React.FC<{ color: string; text: string }> = ({
+const Slide: React.FC<{ color: string; text: string; number: number }> = ({
   color,
   text,
+  number,
 }) => (
   <AbsoluteFill
     style={{
       backgroundColor: color,
       justifyContent: "center",
       alignItems: "center",
-      fontSize: 60,
+      fontSize: 80,
       fontWeight: "bold",
       color: "white",
+      flexDirection: "column",
+      gap: 40,
     }}
   >
-    {text}
+    <div style={{ fontSize: 120 }}>{number}</div>
+    <div>{text}</div>
   </AbsoluteFill>
 );
 
-export const TransitionsDemo: React.FC = () => {
+export const TransitionsPlayground: React.FC = () => {
   return (
     <AbsoluteFill
       style={{
@@ -37,25 +37,36 @@ export const TransitionsDemo: React.FC = () => {
       <TransitionSeries>
         <TransitionSeries.Sequence
           durationInFrames={90}
-          from={<Slide color="#00d9ff" text="Fade Transition" />}
+          from={<Slide color="#00d9ff" text="Fade" number={1} />}
           transition={{
             type: "fade",
             timing: linearTiming({ durationInFrames: 30 }),
           }}
         />
+
         <TransitionSeries.Sequence
           durationInFrames={90}
-          from={<Slide color="#ff00d9" text="Slide Transition" />}
+          from={<Slide color="#ff00d9" text="Slide" number={2} />}
           transition={{
             type: "slide",
             timing: linearTiming({ durationInFrames: 30 }),
           }}
         />
+
         <TransitionSeries.Sequence
           durationInFrames={90}
-          from={<Slide color="#00ff88" text="Wipe Left" />}
+          from={<Slide color="#00ff88" text="Wipe Left" number={3} />}
           transition={{
             type: "wipe-left",
+            timing: linearTiming({ durationInFrames: 30 }),
+          }}
+        />
+
+        <TransitionSeries.Sequence
+          durationInFrames={90}
+          from={<Slide color="#ffaa00" text="Zoom" number={4} />}
+          transition={{
+            type: "fade",
             timing: linearTiming({ durationInFrames: 30 }),
           }}
         />
@@ -64,17 +75,17 @@ export const TransitionsDemo: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          bottom: 40,
+          top: 40,
           left: 0,
           right: 0,
           textAlign: "center",
           color: "#00d9ff",
-          fontSize: 24,
+          fontSize: 36,
           fontWeight: "bold",
           zIndex: 100,
         }}
       >
-        Transitions Demo - @remotion/transitions
+        @remotion/transitions Playground
       </div>
     </AbsoluteFill>
   );

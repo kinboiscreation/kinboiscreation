@@ -1,80 +1,79 @@
 import React from "react";
 import { Composition } from "remotion";
-import { Main } from "./Root";
-import { ShapesDemo } from "./compositions/ShapesDemo";
-import { PathsDemo } from "./compositions/PathsDemo";
-import { TransitionsDemo } from "./compositions/TransitionsDemo";
-import { CaptionsDemo } from "./compositions/CaptionsDemo";
-import { GifDemo } from "./compositions/GifDemo";
-import { MediaUtilsDemo } from "./compositions/MediaUtilsDemo";
-import { TailwindDemo } from "./compositions/TailwindDemo";
+import { BlankCanvas } from "./BlankCanvas";
+import { ShapesPlayground } from "./playgrounds/ShapesPlayground";
+import { PathsPlayground } from "./playgrounds/PathsPlayground";
+import { TransitionsPlayground } from "./playgrounds/TransitionsPlayground";
+import { MediaPlayground } from "./playgrounds/MediaPlayground";
+import { NoisePlayground } from "./playgrounds/NoisePlayground";
+import { ThreePlayground } from "./playgrounds/ThreePlayground";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* Main Blank Canvas */}
       <Composition
-        id="Main"
-        component={Main}
+        id="BlankCanvas"
+        component={BlankCanvas}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
+
+      {/* Package Playgrounds */}
       <Composition
-        id="ShapesDemo"
-        component={ShapesDemo}
+        id="ShapesPlayground"
+        component={ShapesPlayground}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
+
       <Composition
-        id="PathsDemo"
-        component={PathsDemo}
+        id="PathsPlayground"
+        component={PathsPlayground}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
+
       <Composition
-        id="TransitionsDemo"
-        component={TransitionsDemo}
+        id="TransitionsPlayground"
+        component={TransitionsPlayground}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
+
       <Composition
-        id="CaptionsDemo"
-        component={CaptionsDemo}
+        id="MediaPlayground"
+        component={MediaPlayground}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
+
       <Composition
-        id="GifDemo"
-        component={GifDemo}
+        id="NoisePlayground"
+        component={NoisePlayground}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
+
       <Composition
-        id="MediaUtilsDemo"
-        component={MediaUtilsDemo}
+        id="ThreePlayground"
+        component={ThreePlayground}
         durationInFrames={300}
         fps={30}
-        width={1280}
-        height={720}
-      />
-      <Composition
-        id="TailwindDemo"
-        component={TailwindDemo}
-        durationInFrames={300}
-        fps={30}
-        width={1280}
-        height={720}
+        width={1920}
+        height={1080}
       />
     </>
   );
