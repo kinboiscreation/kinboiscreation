@@ -8,6 +8,7 @@ import { Scene5 } from './scenes/Scene5';
 import { Scene6 } from './scenes/Scene6';
 import { Scene7 } from './scenes/Scene7';
 import { Scene8 } from './scenes/Scene8';
+import { AudioLayer } from './components/AudioLayer';
 import { SCENE_TIMING } from './config';
 
 export const MyrtilleAbricot: React.FC = () => {
@@ -64,6 +65,9 @@ export const MyrtilleAbricot: React.FC = () => {
       <Sequence from={SCENE_TIMING.scene8.start} durationInFrames={SCENE_TIMING.scene8.duration}>
         <Scene8 />
       </Sequence>
+
+      {/* Audio Layer - Dialogue and Music */}
+      <AudioLayer />
     </div>
   );
 };
