@@ -1,24 +1,25 @@
-import { Config } from "remotion";
+/**
+ * Remotion Configuration
+ * All configuration options: https://remotion.dev/docs/config
+ */
 
-// Video Rendering Configuration
-Config.setVideoImageFormat("png");
+import { Config } from "@remotion/cli/config";
+
+// Use Rspack for faster builds
+Config.setRspack(true);
+
+// Video output settings
+Config.setVideoImageFormat("jpeg");
 Config.setCodec("h264");
-Config.setFrameRange([0, 300]);
+Config.setOverwriteOutput(true);
 
-// Audio Configuration
+// Audio configuration
 Config.setAudioBitrate("192k");
 Config.setAudioCodec("aac");
 
-// Performance Configuration
+// Performance
 Config.setConcurrency(4);
 Config.setPixelFormat("yuv420p");
 
-// Output configuration
-Config.setOutputFormat("mp4");
-
 // Logging
 Config.setLogLevel("info");
-
-export const COMP_NAME = "BlankCanvas";
-
-export default undefined;
