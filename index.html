@@ -206,6 +206,7 @@
     will-change:transform;
   }
   @keyframes kineticUp{to{transform:translateY(0);}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.7;}}
 
   .wrap{max-width:1180px;margin:0 auto;padding:0 32px;position:relative;z-index:1;}
 
@@ -890,6 +891,7 @@
     text-decoration:none;font-size:1.35rem;
     border:2px solid var(--brass-soft);
     transition:transform .35s cubic-bezier(.16,.8,.24,1), box-shadow .35s ease;
+    animation:pulse 2.5s ease-in-out infinite;
   }
   .float-wa:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 14px 38px rgba(184,115,51,0.6);}
   .float-wa:focus-visible{
@@ -1649,6 +1651,7 @@
 
   // subtle reveal on scroll
   const revealTargets = document.querySelectorAll('.section-head, .card, .cat-block, .why-item, .review-entry, .stat, .step, .contact-card, .about-photo, .about-copy, .mesure h2, .mesure p');
+  console.log('🎬 Reveal targets found:', revealTargets.length);
   revealTargets.forEach((el,i)=>{
     el.classList.add('reveal');
     el.style.setProperty('--i', i % 8);
@@ -1656,12 +1659,14 @@
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
+        console.log('✨ Revealing element:', entry.target.className);
         entry.target.classList.add('in');
         observer.unobserve(entry.target);
       }
     });
   }, {threshold:0.12});
   revealTargets.forEach(el=>observer.observe(el));
+  console.log('👁️ IntersectionObserver initialized for', revealTargets.length, 'elements');
 
   // cursor-follow glow in hero
   const hero = document.querySelector('.hero');
