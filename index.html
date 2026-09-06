@@ -135,63 +135,61 @@
     100%{transform:rotateX(360deg) rotateY(360deg) rotateZ(0deg);}
   }
 
-  /* 3D Objects in Hero Background */
-  .hero-3d-objects{
-    position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  /* 3D Fluid Waves Animation */
+  @keyframes wave-flow-1{
+    0%{transform:translateX(0) translateY(0) scaleY(1) rotateX(0deg);}
+    25%{transform:translateX(-50px) translateY(-20px) scaleY(1.1) rotateX(2deg);}
+    50%{transform:translateX(0) translateY(-40px) scaleY(1.05) rotateX(4deg);}
+    75%{transform:translateX(50px) translateY(-20px) scaleY(1.08) rotateX(2deg);}
+    100%{transform:translateX(0) translateY(0) scaleY(1) rotateX(0deg);}
   }
-  .hero-3d-obj{
-    position:absolute;
-    width:120px;height:120px;
-    transform-style:preserve-3d;
-    animation:rotate3D-continuous 12s linear infinite;
+  @keyframes wave-flow-2{
+    0%{transform:translateX(0) translateY(0) scaleY(1) rotateX(0deg);}
+    25%{transform:translateX(60px) translateY(30px) scaleY(1.08) rotateX(-2deg);}
+    50%{transform:translateX(0) translateY(50px) scaleY(1.1) rotateX(-4deg);}
+    75%{transform:translateX(-60px) translateY(30px) scaleY(1.07) rotateX(-2deg);}
+    100%{transform:translateX(0) translateY(0) scaleY(1) rotateX(0deg);}
   }
-  .hero-3d-obj.obj-1{
-    top:15%;left:10%;
-    width:150px;height:150px;
-    animation-duration:14s;
-    opacity:0.7;
+  @keyframes wave-flow-3{
+    0%{transform:translateX(0) scaleY(1) rotateX(0deg);}
+    50%{transform:translateX(-80px) scaleY(1.12) rotateX(3deg);}
+    100%{transform:translateX(0) scaleY(1) rotateX(0deg);}
   }
-  .hero-3d-obj.obj-2{
-    top:60%;right:12%;
-    width:100px;height:100px;
-    animation-duration:16s;
-    animation-direction:reverse;
-    opacity:0.6;
-  }
-  .hero-3d-obj.obj-3{
-    top:35%;right:8%;
-    width:80px;height:80px;
-    animation-duration:18s;
-    opacity:0.5;
-  }
-  .hero-3d-obj.obj-4{
-    bottom:20%;left:15%;
-    width:110px;height:110px;
-    animation-duration:20s;
-    animation-direction:reverse;
-    opacity:0.55;
+  @keyframes wave-flow-4{
+    0%{transform:translateX(0) scaleY(1) rotateX(0deg);}
+    50%{transform:translateX(70px) scaleY(1.1) rotateX(-3deg);}
+    100%{transform:translateX(0) scaleY(1) rotateX(0deg);}
   }
 
-  .hero-3d-cube{
-    width:100%;height:100%;
-    position:relative;
+  .hero-3d-waves{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events:none;
+    filter:drop-shadow(0 0 80px rgba(201,169,97,0.1));
+  }
+
+  .wave-path{
+    transform-origin:center;
     transform-style:preserve-3d;
   }
-  .hero-3d-face{
-    position:absolute;
-    width:100%;height:100%;
-    display:flex;align-items:center;justify-content:center;
-    border:2px solid rgba(201,169,97,0.4);
-    background:rgba(51,36,26,0.3);
-    backdrop-filter:blur(10px);
-    font-size:2rem;
+  .wave-1{
+    animation:wave-flow-1 8s ease-in-out infinite;
   }
-  .hero-3d-face:nth-child(1){transform:rotateY(0deg) translateZ(60px);}
-  .hero-3d-face:nth-child(2){transform:rotateY(90deg) translateZ(60px);}
-  .hero-3d-face:nth-child(3){transform:rotateY(180deg) translateZ(60px);}
-  .hero-3d-face:nth-child(4){transform:rotateY(270deg) translateZ(60px);}
-  .hero-3d-face:nth-child(5){transform:rotateX(90deg) translateZ(60px);}
-  .hero-3d-face:nth-child(6){transform:rotateX(-90deg) translateZ(60px);}
+  .wave-2{
+    animation:wave-flow-2 10s ease-in-out infinite;
+    animation-delay:1s;
+  }
+  .wave-3{
+    animation:wave-flow-3 7s ease-in-out infinite;
+    animation-delay:0.5s;
+  }
+  .wave-4{
+    animation:wave-flow-4 9s ease-in-out infinite;
+    animation-delay:1.5s;
+  }
   body{
     margin:0;
     background:var(--bg);
@@ -1182,49 +1180,38 @@
   <img src="images/hero.webp" alt="" loading="eager" fetchpriority="high">
   <div class="aurora"><span></span><span></span><span></span></div>
 
-  <!-- 3D Rotating Objects in Hero Background -->
-  <div class="hero-3d-objects">
-    <div class="hero-3d-obj obj-1">
-      <div class="hero-3d-cube">
-        <div class="hero-3d-face">◆</div>
-        <div class="hero-3d-face">◆</div>
-        <div class="hero-3d-face">◆</div>
-        <div class="hero-3d-face">◆</div>
-        <div class="hero-3d-face">◆</div>
-        <div class="hero-3d-face">◆</div>
-      </div>
-    </div>
-    <div class="hero-3d-obj obj-2">
-      <div class="hero-3d-cube">
-        <div class="hero-3d-face">⬟</div>
-        <div class="hero-3d-face">⬟</div>
-        <div class="hero-3d-face">⬟</div>
-        <div class="hero-3d-face">⬟</div>
-        <div class="hero-3d-face">⬟</div>
-        <div class="hero-3d-face">⬟</div>
-      </div>
-    </div>
-    <div class="hero-3d-obj obj-3">
-      <div class="hero-3d-cube">
-        <div class="hero-3d-face">▲</div>
-        <div class="hero-3d-face">▲</div>
-        <div class="hero-3d-face">▲</div>
-        <div class="hero-3d-face">▲</div>
-        <div class="hero-3d-face">▲</div>
-        <div class="hero-3d-face">▲</div>
-      </div>
-    </div>
-    <div class="hero-3d-obj obj-4">
-      <div class="hero-3d-cube">
-        <div class="hero-3d-face">◈</div>
-        <div class="hero-3d-face">◈</div>
-        <div class="hero-3d-face">◈</div>
-        <div class="hero-3d-face">◈</div>
-        <div class="hero-3d-face">◈</div>
-        <div class="hero-3d-face">◈</div>
-      </div>
-    </div>
-  </div>
+  <!-- 3D Fluid Waves Background -->
+  <svg class="hero-3d-waves" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="blur-wave">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+      </filter>
+      <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:rgba(201,169,97,0.25);stop-opacity:1" />
+        <stop offset="100%" style="stop-color:rgba(184,115,51,0.15);stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="wave-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" style="stop-color:rgba(220,140,80,0.2);stop-opacity:1" />
+        <stop offset="100%" style="stop-color:rgba(160,90,40,0.1);stop-opacity:1" />
+      </linearGradient>
+    </defs>
+
+    <!-- Wave 1 - Large flowing -->
+    <path class="wave-path wave-1" d="M0,350 Q350,250 700,350 T1400,350 L1400,0 L0,0 Z"
+          fill="url(#wave-grad-1)" filter="url(#blur-wave)" opacity="0.4"/>
+
+    <!-- Wave 2 - Medium flowing opposite -->
+    <path class="wave-path wave-2" d="M0,500 Q350,600 700,500 T1400,500 L1400,900 L0,900 Z"
+          fill="url(#wave-grad-2)" filter="url(#blur-wave)" opacity="0.35"/>
+
+    <!-- Wave 3 - Small accent -->
+    <path class="wave-path wave-3" d="M0,600 Q250,550 500,600 T1000,600 T1400,600 L1400,400 L0,400 Z"
+          fill="url(#wave-grad-1)" filter="url(#blur-wave)" opacity="0.3"/>
+
+    <!-- Wave 4 - Deep movement -->
+    <path class="wave-path wave-4" d="M0,200 Q400,150 800,200 T1400,200 L1400,100 L0,100 Z"
+          fill="url(#wave-grad-2)" filter="url(#blur-wave)" opacity="0.25"/>
+  </svg>
 
   <div class="hero-content">
     <div class="eyebrow"><span class="rule"></span>Kinshasa</div>
