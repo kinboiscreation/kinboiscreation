@@ -130,6 +130,68 @@
     50%{transform:rotateX(5deg) rotateY(10deg);}
     100%{transform:rotateX(0) rotateY(0);}
   }
+  @keyframes rotate3D-continuous{
+    0%{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);}
+    100%{transform:rotateX(360deg) rotateY(360deg) rotateZ(0deg);}
+  }
+
+  /* 3D Objects in Hero Background */
+  .hero-3d-objects{
+    position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  }
+  .hero-3d-obj{
+    position:absolute;
+    width:120px;height:120px;
+    transform-style:preserve-3d;
+    animation:rotate3D-continuous 12s linear infinite;
+  }
+  .hero-3d-obj.obj-1{
+    top:15%;left:10%;
+    width:150px;height:150px;
+    animation-duration:14s;
+    opacity:0.7;
+  }
+  .hero-3d-obj.obj-2{
+    top:60%;right:12%;
+    width:100px;height:100px;
+    animation-duration:16s;
+    animation-direction:reverse;
+    opacity:0.6;
+  }
+  .hero-3d-obj.obj-3{
+    top:35%;right:8%;
+    width:80px;height:80px;
+    animation-duration:18s;
+    opacity:0.5;
+  }
+  .hero-3d-obj.obj-4{
+    bottom:20%;left:15%;
+    width:110px;height:110px;
+    animation-duration:20s;
+    animation-direction:reverse;
+    opacity:0.55;
+  }
+
+  .hero-3d-cube{
+    width:100%;height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+  }
+  .hero-3d-face{
+    position:absolute;
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid rgba(201,169,97,0.4);
+    background:rgba(51,36,26,0.3);
+    backdrop-filter:blur(10px);
+    font-size:2rem;
+  }
+  .hero-3d-face:nth-child(1){transform:rotateY(0deg) translateZ(60px);}
+  .hero-3d-face:nth-child(2){transform:rotateY(90deg) translateZ(60px);}
+  .hero-3d-face:nth-child(3){transform:rotateY(180deg) translateZ(60px);}
+  .hero-3d-face:nth-child(4){transform:rotateY(270deg) translateZ(60px);}
+  .hero-3d-face:nth-child(5){transform:rotateX(90deg) translateZ(60px);}
+  .hero-3d-face:nth-child(6){transform:rotateX(-90deg) translateZ(60px);}
   body{
     margin:0;
     background:var(--bg);
@@ -369,7 +431,7 @@
   .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px;}
   .menu-toggle span{display:block;width:22px;height:1px;background:var(--ink);margin:6px 0;}
 
-  /* Hero — zone de contraste sombre volontaire (ébène), scope local */
+  /* Hero — 3D Objects Premium Dark Background */
   .hero{
     position:relative;
     min-height:100vh;
@@ -380,24 +442,24 @@
     --ink-faint: var(--dk-ink-faint);
     --line: var(--dk-line);
     --line-strong: var(--dk-line-strong);
-    background:var(--dk-bg);
+    background:#0a0805;
     --mx:50%;--my:40%;
     perspective:1200px;
     perspective-origin:50% 50%;
   }
-  .hero img{
-    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    opacity:0.26;filter:saturate(0.75) contrast(1.08);
-  }
   .hero::before{
-    content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:radial-gradient(640px circle at var(--mx) var(--my), rgba(184,115,51,0.13), transparent 62%);
+    content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(640px circle at var(--mx) var(--my), rgba(201,169,97,0.08), transparent 68%);
     transition:background .1s linear;
   }
   .hero::after{
     content:"";
-    position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(21,17,12,0.42) 0%, rgba(21,17,12,0.7) 45%, rgba(21,17,12,0.97) 100%);
+    position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg, rgba(10,8,5,0.3) 0%, rgba(10,8,5,0.6) 45%, rgba(10,8,5,0.95) 100%);
+  }
+  .hero img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;display:none;
   }
   .hero-content{
     position:relative;z-index:2;
@@ -419,13 +481,14 @@
   .eyebrow .rule{width:24px;height:1.2px;background:var(--brass);display:inline-block;opacity:0.95;}
   .hero h1{
     color:#FFFFFF;
-    font-size:clamp(3rem, 7.6vw, 6.8rem);
-    line-height:0.97;
-    max-width:920px;
-    margin:0 0 40px;
-    font-weight:500;
-    letter-spacing:-0.016em;
-    text-shadow:0 4px 30px rgba(21,17,12,0.6);
+    font-size:clamp(3.5rem, 8.5vw, 7.6rem);
+    line-height:0.95;
+    max-width:950px;
+    margin:0 0 32px;
+    font-weight:600;
+    letter-spacing:-0.02em;
+    text-shadow:0 8px 40px rgba(21,17,12,0.8);
+    font-family:'Cormorant Garamond', serif;
   }
   .hero h1 em{
     font-style:italic;font-weight:500;
@@ -1118,6 +1181,51 @@
 <section class="hero">
   <img src="images/hero.webp" alt="" loading="eager" fetchpriority="high">
   <div class="aurora"><span></span><span></span><span></span></div>
+
+  <!-- 3D Rotating Objects in Hero Background -->
+  <div class="hero-3d-objects">
+    <div class="hero-3d-obj obj-1">
+      <div class="hero-3d-cube">
+        <div class="hero-3d-face">◆</div>
+        <div class="hero-3d-face">◆</div>
+        <div class="hero-3d-face">◆</div>
+        <div class="hero-3d-face">◆</div>
+        <div class="hero-3d-face">◆</div>
+        <div class="hero-3d-face">◆</div>
+      </div>
+    </div>
+    <div class="hero-3d-obj obj-2">
+      <div class="hero-3d-cube">
+        <div class="hero-3d-face">⬟</div>
+        <div class="hero-3d-face">⬟</div>
+        <div class="hero-3d-face">⬟</div>
+        <div class="hero-3d-face">⬟</div>
+        <div class="hero-3d-face">⬟</div>
+        <div class="hero-3d-face">⬟</div>
+      </div>
+    </div>
+    <div class="hero-3d-obj obj-3">
+      <div class="hero-3d-cube">
+        <div class="hero-3d-face">▲</div>
+        <div class="hero-3d-face">▲</div>
+        <div class="hero-3d-face">▲</div>
+        <div class="hero-3d-face">▲</div>
+        <div class="hero-3d-face">▲</div>
+        <div class="hero-3d-face">▲</div>
+      </div>
+    </div>
+    <div class="hero-3d-obj obj-4">
+      <div class="hero-3d-cube">
+        <div class="hero-3d-face">◈</div>
+        <div class="hero-3d-face">◈</div>
+        <div class="hero-3d-face">◈</div>
+        <div class="hero-3d-face">◈</div>
+        <div class="hero-3d-face">◈</div>
+        <div class="hero-3d-face">◈</div>
+      </div>
+    </div>
+  </div>
+
   <div class="hero-content">
     <div class="eyebrow"><span class="rule"></span>Kinshasa</div>
     <h1 id="kineticH1">D'une bûche<br>à <em>une pièce qui reste</em>.</h1>
