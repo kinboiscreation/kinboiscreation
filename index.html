@@ -436,6 +436,12 @@
     }
   }
 
+  /* Floating Rise Animation — les logos remontent */
+  @keyframes floatRise{
+    0%, 100%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-16px) scale(1.02);}
+  }
+
   /* Section shared */
   section{
     padding:130px 0;position:relative;
@@ -528,8 +534,10 @@
     cursor:default;background:transparent;
     transition:transform .5s cubic-bezier(.16,.8,.24,1);
     border-radius:2px;
+    animation:floatRise 4s ease-in-out infinite;
   }
   .card:hover{transform:translateY(-4px);}
+  @media(prefers-reduced-motion:reduce){.card{animation:none;}}
   .card:focus-within{outline:none;}
   .card:focus-within .panel-frame{
     box-shadow:0 0 0 2px var(--brass);
@@ -608,6 +616,7 @@
     border:1.2px solid var(--brass-deep);border-radius:50%;
     transition:border-color .35s ease, box-shadow .35s ease, transform .35s cubic-bezier(.16,.8,.24,1);
     transform-style:preserve-3d;
+    animation:floatRise 3.6s ease-in-out infinite;
   }
   .why-item:hover .ic{
     border-color:var(--brass-soft);
