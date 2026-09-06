@@ -33,7 +33,7 @@
   "homepage": "https://github.com/kinboiscreation/kinboiscreation#readme",
   "dependencies": {
     "@remotion/captions": "^4.0.520",
-    "@remotion/cli": "^4.0.520",
+    "@remotion/cli": "^4.0.521",
     "@remotion/gif": "^4.0.520",
     "@remotion/media-utils": "^4.0.520",
     "@remotion/noise": "^4.0.520",
@@ -46,9 +46,8 @@
     "@types/react-dom": "^19.2.7",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "remotion": "^4.0.520",
+    "remotion": "^4.0.521",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2"
-  },
-  "devDependencies": {}
+  }
 }
