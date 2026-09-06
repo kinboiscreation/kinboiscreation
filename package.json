@@ -1,7 +1,7 @@
 {
   "name": "kinboiscreation",
   "version": "1.0.0",
-  "description": "",
+  "description": "Une implémentation complète de Remotion avec tous les packages officiels installés et intégrés.",
   "main": "index.js",
   "scripts": {
     "start": "remotion studio",
@@ -49,5 +49,6 @@
     "remotion": "^4.0.520",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2"
-  }
+  },
+  "devDependencies": {}
 }
