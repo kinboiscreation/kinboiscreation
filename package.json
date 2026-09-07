@@ -1,0 +1,31 @@
+{
+  "name": "midp-app",
+  "version": "1.0.0",
+  "description": "MIDP - Application de gestion des activités de prière",
+  "private": true,
+  "workspaces": [
+    "web",
+    "mobile",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "install-all": "npm install",
+    "web:dev": "npm run dev -w web",
+    "web:build": "npm run build -w web",
+    "mobile:dev": "npm run dev -w mobile",
+    "mobile:build": "npm run build -w mobile",
+    "backend:dev": "npm run dev -w backend",
+    "backend:build": "npm run build -w backend",
+    "backend:start": "npm run start -w backend",
+    "dev": "concurrently \"npm run backend:dev\" \"npm run web:dev\" \"npm run mobile:dev\"",
+    "build": "npm run build -w shared && npm run build -w backend && npm run build -w web && npm run build -w mobile",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "eslint": "^8.50.0",
+    "typescript": "^5.2.2"
+  }
+}
