@@ -29,6 +29,7 @@ const menuItems = [
   { icon: FileText, label: 'Documents', href: '/documents' },
   { icon: BarChart3, label: 'Conseil', href: '/council' },
   { icon: Heart, label: 'Sujets de Prière', href: '/prayer-subjects' },
+  { icon: Users, label: 'Utilisateurs', href: '/users' },
   { icon: Settings, label: 'Paramètres', href: '/settings' }
 ];
 

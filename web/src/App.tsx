@@ -13,6 +13,7 @@ import Council from './pages/Council';
 import Settings from './pages/Settings';
 import PrayerSubjects from './pages/PrayerSubjects';
 import Login from './pages/Login';
+import UserManagement from './pages/UserManagement';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -73,6 +74,7 @@ function App() {
           <Route path="/documents" element={<Documents />} />
           <Route path="/council" element={<Council />} />
           <Route path="/prayer-subjects" element={<PrayerSubjects />} />
+          <Route path="/users" element={<UserManagement />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>
