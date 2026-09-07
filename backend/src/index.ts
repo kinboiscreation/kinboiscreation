@@ -210,6 +210,93 @@ app.get('/api/activities', async (req: Request, res: Response) => {
   }
 });
 
+// PUT: Update activity
+app.put('/api/activities/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { type, date, totalParticipants, menCount, womenCount, sessionNumber, remarks, conductorId } = req.body;
+
+    const docRef = db.collection('activities').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (!docSnapshot.exists) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    const dateObj = new Date(date);
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+
+    const updatedActivity = {
+      type: type || docSnapshot.data()?.type,
+      date: admin.firestore.Timestamp.fromDate(dateObj),
+      totalParticipants: Number(totalParticipants) || 0,
+      menCount: Number(menCount) || 0,
+      womenCount: Number(womenCount) || 0,
+      sessionNumber: Number(sessionNumber) || 1,
+      remarks: remarks || '',
+      conductorId: conductorId || null,
+      month,
+      year,
+      fiscalYear: month >= 8 ? year : year - 1,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    await docRef.update(updatedActivity);
+
+    // Recalculate stats for both old and new months
+    const oldData = docSnapshot.data();
+    if (oldData?.month && oldData?.year && oldData?.type) {
+      calculateMonthlyStats(oldData.type, oldData.month, oldData.year).catch(error => {
+        console.error('Error recalculating old month stats:', error);
+      });
+    }
+    calculateMonthlyStats(type || oldData?.type, month, year).catch(error => {
+      console.error('Error recalculating new month stats:', error);
+    });
+
+    res.json({
+      id,
+      ...updatedActivity,
+      date: updatedActivity.date.toDate().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error updating activity:', error);
+    res.status(500).json({ error: 'Failed to update activity' });
+  }
+});
+
+// DELETE: Delete activity
+app.delete('/api/activities/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const docRef = db.collection('activities').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (!docSnapshot.exists) {
+      return res.status(404).json({ error: 'Activity not found' });
+    }
+
+    const data = docSnapshot.data();
+
+    await docRef.delete();
+
+    // Recalculate stats for the month
+    if (data?.month && data?.year && data?.type) {
+      calculateMonthlyStats(data.type, data.month, data.year).catch(error => {
+        console.error('Error recalculating stats after delete:', error);
+      });
+    }
+
+    res.json({ success: true, message: 'Activity deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting activity:', error);
+    res.status(500).json({ error: 'Failed to delete activity' });
+  }
+});
+
 // ============= STATISTICS ENDPOINTS =============
 
 // GET: Monthly statistics
@@ -353,6 +440,51 @@ app.get('/api/announcements', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching announcements:', error);
     res.status(500).json({ error: 'Failed to fetch announcements' });
+  }
+});
+
+// PUT: Publish announcement
+app.put('/api/announcements/:id/publish', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const docRef = db.collection('announcements').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (!docSnapshot.exists) {
+      return res.status(404).json({ error: 'Announcement not found' });
+    }
+
+    await docRef.update({
+      status: 'published',
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    res.json({ success: true, message: 'Announcement published' });
+  } catch (error) {
+    console.error('Error publishing announcement:', error);
+    res.status(500).json({ error: 'Failed to publish announcement' });
+  }
+});
+
+// DELETE: Delete announcement
+app.delete('/api/announcements/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const docRef = db.collection('announcements').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (!docSnapshot.exists) {
+      return res.status(404).json({ error: 'Announcement not found' });
+    }
+
+    await docRef.delete();
+
+    res.json({ success: true, message: 'Announcement deleted' });
+  } catch (error) {
+    console.error('Error deleting announcement:', error);
+    res.status(500).json({ error: 'Failed to delete announcement' });
   }
 });
 

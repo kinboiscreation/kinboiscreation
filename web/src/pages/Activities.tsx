@@ -45,7 +45,18 @@ export default function Activities() {
     try {
       if (editingActivity) {
         // Update activity
-        console.log('Updating activity:', data);
+        const response = await fetch(`/api/activities/${editingActivity.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Failed to update activity');
+
+        setShowForm(false);
+        setEditingActivity(null);
+        await fetchActivities();
+        await fetchStats();
       } else {
         // Create new activity
         const response = await fetch('/api/activities', {
@@ -62,6 +73,26 @@ export default function Activities() {
       }
     } catch (error) {
       console.error('Error submitting activity:', error);
+    }
+  };
+
+  const handleDelete = async (activityId: string) => {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer cette activité ?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/activities/${activityId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) throw new Error('Failed to delete activity');
+
+      await fetchActivities();
+      await fetchStats();
+    } catch (error) {
+      console.error('Error deleting activity:', error);
     }
   };
 
@@ -163,7 +194,10 @@ export default function Activities() {
                       >
                         <Edit className="h-4 w-4 text-blue-400" />
                       </button>
-                      <button className="p-2 hover:bg-red-500/20 rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleDelete(activity.id)}
+                        className="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+                      >
                         <Trash2 className="h-4 w-4 text-red-400" />
                       </button>
                     </div>
