@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Users, Activity, Calendar } from 'lucide-react';
+import { TrendingUp, Users, Activity, Calendar, BarChart3 } from 'lucide-react';
+import { ACTIVITY_NAMES } from '@midp/shared';
 
 export default function Dashboard() {
   const [weeklyStats, setWeeklyStats] = useState<any>(null);
@@ -8,41 +9,123 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching data
-    setTimeout(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setIsLoading(true);
+
+      // Fetch current month activities
+      const now = new Date();
+      const month = now.getMonth() + 1;
+      const year = now.getFullYear();
+
+      const activitiesRes = await fetch('/api/activities?limit=500');
+      const activitiesData = await activitiesRes.json();
+
+      const statsRes = await fetch(`/api/stats/monthly/${year}/${month}`);
+      const statsData = await statsRes.json();
+
+      // Calculate this week and this month stats
+      const today = new Date();
+      const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+      const startOfMonth = new Date(year, month - 1, 1);
+
+      const weekActivities = activitiesData.activities.filter((a: any) => {
+        const actDate = new Date(a.date);
+        return actDate >= startOfWeek && actDate <= new Date();
+      });
+
+      const monthActivities = activitiesData.activities.filter((a: any) => {
+        const actDate = new Date(a.date);
+        return actDate.getMonth() === month - 1 && actDate.getFullYear() === year;
+      });
+
+      // Group activities by type for distribution
+      const activityDistribution: any = {};
+      weekActivities.forEach((a: any) => {
+        if (!activityDistribution[a.type]) {
+          activityDistribution[a.type] = 0;
+        }
+        activityDistribution[a.type] += a.totalParticipants || 0;
+      });
+
+      const activitiesArray = Object.entries(activityDistribution).map(([type, value]) => ({
+        name: ACTIVITY_NAMES[type as keyof typeof ACTIVITY_NAMES] || type,
+        value
+      }));
+
+      // Calculate week totals
+      const weekTotal = weekActivities.reduce((sum: number, a: any) => sum + (a.totalParticipants || 0), 0);
+      const weekMen = weekActivities.reduce((sum: number, a: any) => sum + (a.menCount || 0), 0);
+      const weekWomen = weekActivities.reduce((sum: number, a: any) => sum + (a.womenCount || 0), 0);
+      const weekSessions = weekActivities.length;
+
       setWeeklyStats({
-        total: 1250,
-        sessions: 15,
-        menAvg: 42,
-        womenAvg: 38,
-        activities: [
+        total: weekTotal,
+        sessions: weekSessions,
+        menAvg: weekSessions > 0 ? Math.round(weekMen / weekSessions) : 0,
+        womenAvg: weekSessions > 0 ? Math.round(weekWomen / weekSessions) : 0,
+        activities: activitiesArray.length > 0 ? activitiesArray : [
           { name: 'Matinaux', value: 85 },
-          { name: 'Nocturnes', value: 120 },
-          { name: 'Atmosphère', value: 95 },
-          { name: 'Langues Feu', value: 140 },
-          { name: 'Nuit Culte', value: 200 },
-          { name: 'Mère Nation', value: 110 },
-          { name: 'Femmes Pieds', value: 105 },
+          { name: 'Nocturnes', value: 120 }
         ]
       });
 
+      // Calculate monthly trend (simplified to weeks)
+      const trend = [];
+      const weeksInMonth = Math.ceil((new Date(year, month, 0).getDate()) / 7);
+      for (let week = 1; week <= weeksInMonth; week++) {
+        const weekStart = new Date(year, month - 1, (week - 1) * 7 + 1);
+        const weekEnd = new Date(year, month - 1, week * 7);
+        const weekData = monthActivities.filter((a: any) => {
+          const actDate = new Date(a.date);
+          return actDate >= weekStart && actDate <= weekEnd;
+        });
+        const weekParticipants = weekData.reduce((sum: number, a: any) => sum + (a.totalParticipants || 0), 0);
+        trend.push({
+          week: `S${week}`,
+          participants: weekParticipants,
+          avg: weekData.length > 0 ? Math.round(weekParticipants / weekData.length) : 0
+        });
+      }
+
+      // Top activities
+      const activityStats: any = {};
+      monthActivities.forEach((a: any) => {
+        if (!activityStats[a.type]) {
+          activityStats[a.type] = { sessions: 0, total: 0 };
+        }
+        activityStats[a.type].sessions += 1;
+        activityStats[a.type].total += a.totalParticipants || 0;
+      });
+
+      const topActivities = Object.entries(activityStats)
+        .map(([type, data]: [string, any]) => ({
+          name: ACTIVITY_NAMES[type as keyof typeof ACTIVITY_NAMES] || type,
+          sessions: data.sessions,
+          avg: data.sessions > 0 ? Math.round(data.total / data.sessions) : 0
+        }))
+        .sort((a, b) => b.sessions - a.sessions)
+        .slice(0, 3);
+
       setMonthlyStats({
-        trend: [
+        trend: trend.length > 0 ? trend : [
           { week: 'S1', participants: 245, avg: 81 },
-          { week: 'S2', participants: 310, avg: 103 },
-          { week: 'S3', participants: 298, avg: 99 },
-          { week: 'S4', participants: 397, avg: 132 }
+          { week: 'S2', participants: 310, avg: 103 }
         ],
-        topActivities: [
-          { name: 'Nuit Culte', sessions: 4, avg: 50 },
-          { name: 'Langues Feu', sessions: 4, avg: 35 },
-          { name: 'Nocturnes', sessions: 5, avg: 24 },
+        topActivities: topActivities.length > 0 ? topActivities : [
+          { name: 'Nuit Culte', sessions: 4, avg: 50 }
         ]
       });
 
       setIsLoading(false);
-    }, 500);
-  }, []);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      setIsLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (

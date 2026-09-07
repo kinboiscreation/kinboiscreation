@@ -11,6 +11,7 @@ import Meetings from './pages/Meetings';
 import Documents from './pages/Documents';
 import Council from './pages/Council';
 import Settings from './pages/Settings';
+import PrayerSubjects from './pages/PrayerSubjects';
 import Login from './pages/Login';
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
           <Route path="/meetings" element={<Meetings />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/council" element={<Council />} />
+          <Route path="/prayer-subjects" element={<PrayerSubjects />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>

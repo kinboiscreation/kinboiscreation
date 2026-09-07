@@ -9,6 +9,7 @@ import {
   FileText,
   BarChart3,
   Settings,
+  Heart,
   X
 } from 'lucide-react';
 import clsx from 'clsx';
@@ -27,6 +28,7 @@ const menuItems = [
   { icon: Clock, label: 'Réunions', href: '/meetings' },
   { icon: FileText, label: 'Documents', href: '/documents' },
   { icon: BarChart3, label: 'Conseil', href: '/council' },
+  { icon: Heart, label: 'Sujets de Prière', href: '/prayer-subjects' },
   { icon: Settings, label: 'Paramètres', href: '/settings' }
 ];
 
