@@ -1,6 +1,7 @@
-import { BarChart3, Download, TrendingUp } from 'lucide-react';
+import { BarChart3, Download, TrendingUp, FileJson, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Activity, ACTIVITY_NAMES } from '@midp/shared';
+import { generateCSV, downloadCSV, generateJSON, downloadJSON, generateHTMLReport, exportToPDF } from '../utils/export';
 
 export default function Council() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -60,8 +61,35 @@ export default function Council() {
     }
   };
 
-  const handleExportPowerPoint = async () => {
-    alert('Génération du rapport PowerPoint...\n(Fonctionnalité à implémenter avec pptxgen)');
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
+  const handleExportCSV = () => {
+    const filename = `MIDP_Rapport_Q${quarter}_${year}.csv`;
+    const csv = generateCSV({
+      title: `Rapport Trimestriel Q${quarter} ${year} - MIDP`,
+      activities
+    });
+    downloadCSV(csv, filename);
+  };
+
+  const handleExportJSON = () => {
+    const filename = `MIDP_Rapport_Q${quarter}_${year}.json`;
+    const json = generateJSON({
+      title: `Rapport Trimestriel Q${quarter} ${year} - MIDP`,
+      activities,
+      stats
+    });
+    downloadJSON(json, filename);
+  };
+
+  const handleExportPDF = () => {
+    const filename = `MIDP_Rapport_Q${quarter}_${year}.pdf`;
+    const html = generateHTMLReport({
+      title: `Rapport Trimestriel Q${quarter} ${year} - MIDP`,
+      activities,
+      stats
+    });
+    exportToPDF(html, filename);
   };
 
   const totalParticipants = Object.values(stats || {}).reduce(
@@ -76,13 +104,49 @@ export default function Council() {
           <BarChart3 className="h-8 w-8 text-amber-500" />
           Espace Conseil
         </h1>
-        <button
-          onClick={handleExportPowerPoint}
-          className="btn btn-primary"
-        >
-          <Download className="h-5 w-5" />
-          Exporter Rapport
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            className="btn btn-primary"
+          >
+            <Download className="h-5 w-5" />
+            Exporter Rapport
+          </button>
+          {showExportMenu && (
+            <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-10">
+              <button
+                onClick={() => {
+                  handleExportCSV();
+                  setShowExportMenu(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-slate-700 flex items-center gap-2 text-slate-300"
+              >
+                <FileText className="h-4 w-4" />
+                Exporter en CSV
+              </button>
+              <button
+                onClick={() => {
+                  handleExportJSON();
+                  setShowExportMenu(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-slate-700 flex items-center gap-2 text-slate-300"
+              >
+                <FileJson className="h-4 w-4" />
+                Exporter en JSON
+              </button>
+              <button
+                onClick={() => {
+                  handleExportPDF();
+                  setShowExportMenu(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-slate-700 flex items-center gap-2 text-slate-300 border-t border-slate-700"
+              >
+                <FileText className="h-4 w-4" />
+                Imprimer/PDF
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Quarter Selection */}

@@ -1,7 +1,8 @@
-import { Plus, Edit, Trash2, BarChart3 } from 'lucide-react';
+import { Plus, Edit, Trash2, BarChart3, Download, FileText, FileJson } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Activity, ACTIVITY_NAMES } from '@midp/shared';
 import ActivityForm from '../components/activity-form';
+import { generateCSV, downloadCSV, generateJSON, downloadJSON, generateHTMLReport, exportToPDF } from '../utils/export';
 
 export default function Activities() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -9,6 +10,7 @@ export default function Activities() {
   const [showForm, setShowForm] = useState(false);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [stats, setStats] = useState<any>(null);
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   useEffect(() => {
     fetchActivities();
@@ -96,6 +98,38 @@ export default function Activities() {
     }
   };
 
+  const handleExportCSV = () => {
+    const now = new Date();
+    const filename = `MIDP_Activites_${now.getMonth() + 1}_${now.getFullYear()}.csv`;
+    const csv = generateCSV({
+      title: `Liste des Activités - ${now.toLocaleDateString('fr-FR')}`,
+      activities
+    });
+    downloadCSV(csv, filename);
+  };
+
+  const handleExportJSON = () => {
+    const now = new Date();
+    const filename = `MIDP_Activites_${now.getMonth() + 1}_${now.getFullYear()}.json`;
+    const json = generateJSON({
+      title: `Liste des Activités - ${now.toLocaleDateString('fr-FR')}`,
+      activities,
+      stats
+    });
+    downloadJSON(json, filename);
+  };
+
+  const handleExportPDF = () => {
+    const now = new Date();
+    const filename = `MIDP_Activites_${now.getMonth() + 1}_${now.getFullYear()}.pdf`;
+    const html = generateHTMLReport({
+      title: `Liste des Activités - ${now.toLocaleDateString('fr-FR')}`,
+      activities,
+      stats
+    });
+    exportToPDF(html, filename);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -104,16 +138,61 @@ export default function Activities() {
           <BarChart3 className="h-8 w-8 text-amber-500" />
           Gestion des Activités
         </h1>
-        <button
-          onClick={() => {
-            setEditingActivity(null);
-            setShowForm(!showForm);
-          }}
-          className="btn btn-primary"
-        >
-          <Plus className="h-5 w-5" />
-          Nouvelle Activité
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <button
+              onClick={() => setShowExportMenu(!showExportMenu)}
+              className="btn btn-secondary"
+            >
+              <Download className="h-5 w-5" />
+              Exporter
+            </button>
+            {showExportMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-10">
+                <button
+                  onClick={() => {
+                    handleExportCSV();
+                    setShowExportMenu(false);
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-slate-700 flex items-center gap-2 text-slate-300"
+                >
+                  <FileText className="h-4 w-4" />
+                  Exporter en CSV
+                </button>
+                <button
+                  onClick={() => {
+                    handleExportJSON();
+                    setShowExportMenu(false);
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-slate-700 flex items-center gap-2 text-slate-300"
+                >
+                  <FileJson className="h-4 w-4" />
+                  Exporter en JSON
+                </button>
+                <button
+                  onClick={() => {
+                    handleExportPDF();
+                    setShowExportMenu(false);
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-slate-700 flex items-center gap-2 text-slate-300 border-t border-slate-700"
+                >
+                  <FileText className="h-4 w-4" />
+                  Imprimer/PDF
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              setEditingActivity(null);
+              setShowForm(!showForm);
+            }}
+            className="btn btn-primary"
+          >
+            <Plus className="h-5 w-5" />
+            Nouvelle Activité
+          </button>
+        </div>
       </div>
 
       {/* Form Modal */}
