@@ -1,4 +1,5 @@
 import { Menu, LogOut, Settings, Bell } from 'lucide-react';
+import Logo from './logo';
 
 interface NavigationProps {
   onMenuClick: () => void;
@@ -17,15 +18,7 @@ export default function Navigation({ onMenuClick }: NavigationProps) {
             >
               <Menu className="h-6 w-6 text-amber-500" />
             </button>
-            <div className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg">
-                <span className="text-xl font-bold text-white">🙏</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-white">MIDP</h1>
-                <p className="text-xs text-slate-400">Ministère d'Intercession</p>
-              </div>
-            </div>
+            <Logo size="medium" showText={true} showSubtext={true} />
           </div>
 
           {/* Right Actions */}

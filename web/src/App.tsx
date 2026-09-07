@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Layout from './components/Layout';
+import SplashScreen from './components/splash-screen';
 import Dashboard from './pages/Dashboard';
 import Activities from './pages/Activities';
 import Calendar from './pages/Calendar';
@@ -15,8 +16,17 @@ import Login from './pages/Login';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // Simulate loading progress
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 85) return prev;
+        return prev + Math.random() * 25;
+      });
+    }, 200);
+
     // Check authentication status
     const checkAuth = async () => {
       try {
@@ -24,6 +34,11 @@ function App() {
         if (token) {
           setIsAuthenticated(true);
         }
+        setProgress(95);
+
+        // Final delay for smooth transition
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setProgress(100);
       } catch (error) {
         console.error('Auth check error:', error);
       } finally {
@@ -32,16 +47,12 @@ function App() {
     };
 
     checkAuth();
+
+    return () => clearInterval(progressInterval);
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <div className="animate-spin">
-          <div className="h-12 w-12 border-4 border-amber-500 border-t-transparent rounded-full"></div>
-        </div>
-      </div>
-    );
+    return <SplashScreen message="Initialisation de l'application..." progress={progress} />;
   }
 
   if (!isAuthenticated) {
