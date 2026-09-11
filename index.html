@@ -153,8 +153,33 @@
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://wa.me">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /*
+   * Kin Bois Création — Site artisanal avec animations 3D avancées & UX interactive
+   *
+   * STRUCTURE CSS:
+   * 1. Root variables (palette & rôles)
+   * 2. Global & typography
+   * 3. 3D animations (hero, cards, transitions)
+   * 4. Component-level styles (header, sections, cards)
+   * 5. Interactive states (hover, focus, active)
+   * 6. Responsive design & media queries
+   * 7. Accessibility (reduced motion, focus states)
+   * 8. Print styles
+   *
+   * KEY FEATURES:
+   * - Scroll-based animations with animation-timeline: view()
+   * - Custom cursor with magnetic button effects
+   * - Lightbox gallery with keyboard/touch navigation
+   * - Catalogue filters with smooth transitions
+   * - Form state persistence via localStorage
+   * - Performance monitoring (CLS, Web Vitals)
+   * - Enhanced accessibility (a11y) features
+   */
+
   :root{
     /* Palette « Impeccable » — noir profond, blanc cassé, bois, cuivre & or fin */
     --ivoire: #F7F4EE;
@@ -1362,6 +1387,21 @@
       transform:none !important;
       perspective:none !important;
     }
+  }
+
+  /* ===== PRINT STYLES ===== */
+  @media print{
+    header, footer, .float-wa, .gallery-lightbox, .scroll-progress, .cursor-dot, .cursor-ring{display:none;}
+    section{page-break-after:always;padding:2cm 0;}
+    .wrap{max-width:100%;}
+    a{color:inherit;}
+    img{max-width:100%;page-break-inside:avoid;}
+    h1, h2, h3{page-break-after:avoid;page-break-inside:avoid;}
+  }
+
+  /* ===== DARK MODE SUPPORT (optional future) =====*/
+  @media (prefers-color-scheme: dark){
+    /* Note: This site maintains light theme but respects user preferences for certain elements */
   }
 </style>
 <body>
