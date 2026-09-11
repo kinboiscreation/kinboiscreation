@@ -4,8 +4,12 @@
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="dS_c8ovKhp7AmSfw05OhektagFVQIwAPJs9K-XQovUU" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
 <title>Kin Bois Création Sur Mesure | Menuiserie & Ébénisterie à Kinshasa</title>
-<meta name="description" content="Menuiserie et ébénisterie artisanales à Kinshasa : meubles en bois massif sur mesure, portes, agencement de bureaux et commerces. Devis rapide sur WhatsApp.">
+<meta name="description" content="Menuiserie et ébénisterie artisanales à Kinshasa : meubles en bois massif sur mesure, portes, agencement de bureaux et commerces. Fabrication artisanale par Jeantim. Devis rapide sur WhatsApp.">
+<meta name="keywords" content="menuiserie Kinshasa, ébénisterie, meubles sur mesure, bois massif, portes, agencement bureaux">
+<meta name="author" content="Jeantim - Kin Bois Création">
+<meta name="theme-color" content="#15110C">
 <link rel="canonical" href="https://kinboiscreation.github.io/kinboiscreation/">
 
 <meta property="og:type" content="website">
@@ -15,6 +19,8 @@
 <meta property="og:description" content="Meubles en bois massif sur mesure, portes et agencement, fabriqués à la main à Kinshasa par un artisan menuisier.">
 <meta property="og:url" content="https://kinboiscreation.github.io/kinboiscreation/">
 <meta property="og:image" content="https://kinboiscreation.github.io/kinboiscreation/images/artisan-jeantim.webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kin Bois Création Sur Mesure | Menuiserie & Ébénisterie à Kinshasa">
 <meta name="twitter:description" content="Meubles en bois massif sur mesure, portes et agencement, fabriqués à la main à Kinshasa.">
@@ -37,7 +43,53 @@
     "addressCountry": "CD"
   },
   "areaServed": "Kinshasa",
-  "description": "Menuiserie et ébénisterie artisanales à Kinshasa : meubles en bois massif sur mesure, portes, agencement de bureaux et commerces."
+  "description": "Menuiserie et ébénisterie artisanales à Kinshasa : meubles en bois massif sur mesure, portes, agencement de bureaux et commerces.",
+  "founder": {
+    "@type": "Person",
+    "name": "Jeantim"
+  },
+  "knowsAbout": [
+    "Menuiserie",
+    "Ébénisterie",
+    "Meubles sur mesure",
+    "Bois massif",
+    "Fabrication artisanale"
+  ],
+  "sameAs": [
+    "https://wa.me/243836002274"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "telephone": "+243836002274",
+    "url": "https://wa.me/243836002274"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "https://kinboiscreation.github.io/kinboiscreation/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Catalogue",
+      "item": "https://kinboiscreation.github.io/kinboiscreation/#catalogue"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Contact",
+      "item": "https://kinboiscreation.github.io/kinboiscreation/#contact"
+    }
+  ]
 }
 </script>
 
@@ -1142,6 +1194,82 @@
     }
   }
 
+  /* ===== GALERIE LIGHTBOX ===== */
+  .gallery-lightbox{
+    display:none;position:fixed;inset:0;z-index:999;background:rgba(10,8,5,0.95);
+    align-items:center;justify-content:center;padding:20px;opacity:0;
+    transition:opacity 0.4s cubic-bezier(0.16,0.8,0.24,1);backdrop-filter:blur(12px);
+  }
+  .gallery-lightbox.active{
+    display:flex;opacity:1;
+  }
+  .lightbox-container{
+    position:relative;max-width:90vw;max-height:90vh;
+    transform:scale(0.9);transition:transform 0.4s cubic-bezier(0.16,0.8,0.24,1);
+  }
+  .gallery-lightbox.active .lightbox-container{transform:scale(1);}
+  .lightbox-img{width:100%;height:auto;max-height:80vh;object-fit:contain;}
+  .lightbox-close{
+    position:absolute;top:-40px;right:0;
+    background:none;border:none;color:var(--dk-ink);font-size:1.8rem;
+    cursor:pointer;padding:8px;transition:transform 0.2s ease;
+  }
+  .lightbox-close:hover{transform:scale(1.2);}
+  .lightbox-nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    background:rgba(247,244,238,0.15);border:none;color:var(--dk-ink);
+    padding:12px 16px;cursor:pointer;font-size:1.4rem;
+    transition:background 0.3s ease;border-radius:2px;
+  }
+  .lightbox-prev{left:-60px;}
+  .lightbox-next{right:-60px;}
+  .lightbox-nav:hover{background:rgba(247,244,238,0.25);}
+  .lightbox-caption{
+    position:absolute;bottom:-50px;left:0;right:0;text-align:center;
+    color:var(--dk-ink-soft);font-size:0.92rem;
+  }
+
+  /* ===== CATALOGUE FILTERS ===== */
+  .cat-filters{
+    display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;
+    padding:16px;background:rgba(51,36,26,0.04);border-radius:4px;
+  }
+  .cat-filter-btn{
+    background:transparent;border:1px solid var(--line-strong);color:var(--ink-faint);
+    padding:8px 16px;border-radius:2px;cursor:pointer;font-size:0.85rem;
+    font-weight:500;letter-spacing:0.05em;text-transform:uppercase;
+    transition:all 0.3s cubic-bezier(0.16,0.8,0.24,1);
+  }
+  .cat-filter-btn:hover{
+    border-color:var(--brass);color:var(--brass);background:rgba(184,115,51,0.08);
+  }
+  .cat-filter-btn.active{
+    background:var(--brass);color:var(--ebene);border-color:var(--brass);
+  }
+  .cat-block.hidden{display:none;}
+
+  /* ===== FORM ENHANCEMENTS ===== */
+  form.inquiry input:invalid, form.inquiry textarea:invalid, form.inquiry select:invalid{
+    border-color:#E74C3C;box-shadow:0 0 0 2px rgba(231,76,60,0.1);
+  }
+  form.inquiry input:valid, form.inquiry textarea:valid, form.inquiry select:valid{
+    border-color:rgba(46,213,115,0.5);box-shadow:0 0 0 2px rgba(46,213,115,0.1);
+  }
+  .form-feedback{display:none;font-size:0.76rem;margin-top:4px;color:#E74C3C;}
+  form.inquiry .field.error .form-feedback{display:block;}
+
+  /* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+  :focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0;}
+
+  /* ===== SKIP LINK ===== */
+  .skip-link{
+    position:absolute;top:-40px;left:0;background:var(--brass);color:var(--ebene);
+    padding:8px 16px;text-decoration:none;z-index:100;border-radius:0 0 4px 0;
+  }
+  .skip-link:focus{top:0;}
+
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
     .reveal{opacity:1 !important;transform:none !important;}
@@ -1152,11 +1280,23 @@
   }
 </style>
 <body>
+<a href="#content" class="skip-link">Aller au contenu principal</a>
 <div class="grain"></div>
 <div class="ambient"></div>
 <div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="cursor-dot" id="cursorDot"></div>
+
+<!-- Galerie Lightbox -->
+<div class="gallery-lightbox" id="galleryLightbox">
+  <div class="lightbox-container">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Fermer la galerie">✕</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Image précédente">❮</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Image suivante">❯</button>
+  </div>
+</div>
 
 <header>
   <div class="nav">
@@ -1261,8 +1401,18 @@
       <p>Chaque modèle peut être ajusté en taille, en essence de bois ou en finition selon vos envies.</p>
     </div>
 
+    <!-- FILTRES DE CATALOGUE -->
+    <div class="cat-filters">
+      <button class="cat-filter-btn active" data-filter="tous">Tous</button>
+      <button class="cat-filter-btn" data-filter="chambre">Chambre</button>
+      <button class="cat-filter-btn" data-filter="salon">Salon</button>
+      <button class="cat-filter-btn" data-filter="tables">Tables</button>
+      <button class="cat-filter-btn" data-filter="portes">Portes</button>
+      <button class="cat-filter-btn" data-filter="cuisine">Cuisine</button>
+    </div>
+
     <!-- CHAMBRE -->
-    <div class="cat-block">
+    <div class="cat-block" data-filter="chambre">
       <div class="cat-title"><span class="cat-num">01</span><h3>Chambre : lits &amp; chevets</h3><span class="cat-line"></span></div>
       <div class="grid">
         <figure class="card">
@@ -1317,7 +1467,7 @@
     </div>
 
     <!-- SALON -->
-    <div class="cat-block">
+    <div class="cat-block" data-filter="salon">
       <div class="cat-title"><span class="cat-num">02</span><h3>Salon &amp; séjour</h3><span class="cat-line"></span></div>
       <div class="grid">
         <figure class="card">
@@ -1372,7 +1522,7 @@
     </div>
 
     <!-- SALLE A MANGER / TABLES -->
-    <div class="cat-block">
+    <div class="cat-block" data-filter="tables">
       <div class="cat-title"><span class="cat-num">03</span><h3>Tables &amp; salle à manger</h3><span class="cat-line"></span></div>
       <div class="grid">
         <figure class="card">
@@ -1431,7 +1581,7 @@
     </div>
 
     <!-- PORTES -->
-    <div class="cat-block">
+    <div class="cat-block" data-filter="portes">
       <div class="cat-title"><span class="cat-num">04</span><h3>Portes sur mesure</h3><span class="cat-line"></span></div>
       <div class="grid">
         <figure class="card">
@@ -1470,7 +1620,7 @@
     </div>
 
     <!-- CUISINE -->
-    <div class="cat-block">
+    <div class="cat-block" data-filter="cuisine">
       <div class="cat-title"><span class="cat-num">05</span><h3>Cuisine</h3><span class="cat-line"></span></div>
       <div class="grid">
         <figure class="card">
@@ -1957,6 +2107,135 @@
     walk(h1);
     let wi = 0;
     h1.querySelectorAll('.kinetic-word span').forEach(s=>{ s.style.setProperty('--wi', wi++); });
+  }
+
+  // ===== GALERIE LIGHTBOX =====
+  (function(){
+    const lightbox = document.getElementById('galleryLightbox');
+    const img = document.getElementById('lightboxImg');
+    const caption = document.getElementById('lightboxCaption');
+    const close = document.getElementById('lightboxClose');
+    const prev = document.getElementById('lightboxPrev');
+    const next = document.getElementById('lightboxNext');
+    let currentIndex = 0;
+    let images = [];
+
+    function openLightbox(index){
+      currentIndex = index;
+      if(images.length === 0) return;
+      const item = images[index];
+      img.src = item.src;
+      img.alt = item.alt;
+      caption.textContent = item.caption || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(){
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigate(direction){
+      currentIndex += direction;
+      if(currentIndex < 0) currentIndex = images.length - 1;
+      if(currentIndex >= images.length) currentIndex = 0;
+      openLightbox(currentIndex);
+    }
+
+    // Initialize lightbox for all cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, idx) => {
+      const panel = card.querySelector('.panel-frame img');
+      if(panel && panel.src){
+        images.push({
+          src: panel.src,
+          alt: panel.alt,
+          caption: card.querySelector('figcaption b')?.textContent || ''
+        });
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => openLightbox(images.indexOf({src: panel.src, alt: panel.alt, caption: card.querySelector('figcaption b')?.textContent || ''})));
+      }
+    });
+
+    close.addEventListener('click', closeLightbox);
+    prev.addEventListener('click', () => navigate(-1));
+    next.addEventListener('click', () => navigate(1));
+    lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if(!lightbox.classList.contains('active')) return;
+      if(e.key === 'Escape') closeLightbox();
+      if(e.key === 'ArrowLeft') navigate(-1);
+      if(e.key === 'ArrowRight') navigate(1);
+    });
+  })();
+
+  // ===== CATALOGUE FILTERS =====
+  (function(){
+    const filterBtns = document.querySelectorAll('.cat-filter-btn');
+    const catBlocks = document.querySelectorAll('.cat-block');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.filter;
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        catBlocks.forEach(block => {
+          if(filter === 'tous' || block.dataset.filter === filter){
+            block.classList.remove('hidden');
+            block.style.animation = 'none';
+            setTimeout(() => { block.style.animation = ''; }, 10);
+          } else {
+            block.classList.add('hidden');
+          }
+        });
+      });
+    });
+  })();
+
+  // ===== FORM VALIDATION =====
+  (function(){
+    const form = document.querySelector('form.inquiry');
+    if(form){
+      const inputs = form.querySelectorAll('input, textarea, select');
+      inputs.forEach(input => {
+        input.addEventListener('blur', () => {
+          const field = input.closest('.field') || input.parentElement;
+          if(!field) return;
+          if(input.value.trim() === ''){
+            field.classList.add('error');
+            if(!field.querySelector('.form-feedback')){
+              const feedback = document.createElement('span');
+              feedback.className = 'form-feedback';
+              feedback.textContent = 'Ce champ est requis';
+              field.appendChild(feedback);
+            }
+          } else {
+            field.classList.remove('error');
+          }
+        });
+      });
+    }
+  })();
+
+  // ===== PERFORMANCE: Lazy load images & Code splitting hints =====
+  if('IntersectionObserver' in window){
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    lazyImages.forEach(img => {
+      img.addEventListener('load', () => {
+        img.style.animation = 'fadeIn 0.4s ease';
+      });
+    });
+  }
+
+  // ===== ACCESSIBILITY: Add main landmark =====
+  const main = document.querySelector('main');
+  if(!main){
+    const hero = document.querySelector('.hero');
+    if(hero && !hero.id) hero.id = 'content';
   }
 </script>
 
