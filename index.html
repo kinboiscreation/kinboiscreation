@@ -11,8 +11,21 @@
     <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect fill='%230a0a0a' width='1200' height='630'/%3E%3Ctext x='600' y='315' font-family='Georgia' font-size='120' font-weight='bold' fill='%23d4af37' text-anchor='middle' dominant-baseline='middle'%3ELUXE%3C/text%3E%3C/svg%3E">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0a0a'/%3E%3Ctext x='32' y='40' font-family='Georgia' font-size='40' font-weight='bold' fill='%23d4af37' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
 
+    <!-- RESOURCE HINTS & PERFORMANCE -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- PRELOAD CRITICAL RESOURCES -->
+    <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js">
+
+    <!-- META TAGS PERFORMANCE -->
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="color-scheme" content="dark">
+    <link rel="canonical" href="https://kinboiscreation.github.io/kinboiscreation/">
 
     <style>
         * {
@@ -194,9 +207,12 @@
             letter-spacing: 2px;
             margin-bottom: 1rem;
             color: var(--dore);
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            text-shadow:
+                0 0 30px rgba(212, 175, 55, 0.3),
+                0 2px 10px rgba(0, 0, 0, 0.5);
             line-height: 1.2;
             animation: fadeInUp 1s ease-out;
+            font-variation-settings: 'wght' 600;
         }
 
         @keyframes fadeInUp {
@@ -344,6 +360,15 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 4rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 1600px) {
+            .creations-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .creation-card {
@@ -967,6 +992,9 @@
             renderer.setClearColor(0x000000, 0);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1;
 
             camera.position.z = 5;
 
