@@ -92,6 +92,65 @@
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Proposez-vous des meubles sur mesure ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, je fabrique tous les meubles sur mesure selon vos dimensions, votre choix de bois et votre budget. Contactez-moi sur WhatsApp pour discuter de votre projet."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quel est le délai de fabrication ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Le délai dépend de la complexité du projet et de mes engagements actuels. Contactez-moi pour un devis et un calendrier précis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Livrez-vous à Kinshasa ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, je livre à Kinshasa. Les frais de livraison dépendent de la distance et de la taille de la pièce."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Utilisez-vous du bois de qualité ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, je sélectionne uniquement du bois massif et du contreplaqué de qualité pour assurer la durabilité de mes créations."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Fabrication de meubles en bois sur mesure",
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Kin Bois Création Sur Mesure"
+  },
+  "areaServed": {
+    "@type": "Place",
+    "name": "Kinshasa, RDC"
+  },
+  "availableChannel": {
+    "@type": "ServiceChannel",
+    "serviceUrl": "https://wa.me/243836002274"
+  }
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -185,6 +244,20 @@
   @keyframes rotate3D-continuous{
     0%{transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg);}
     100%{transform:rotateX(360deg) rotateY(360deg) rotateZ(0deg);}
+  }
+
+  /* Image loading animation */
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
+  @keyframes slideInUp{
+    from{transform:translateY(20px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+  }
+  @keyframes filterFade{
+    from{opacity:0;transform:scale(0.95);}
+    to{opacity:1;transform:scale(1);}
   }
 
   /* 3D Fluid Waves Animation */
@@ -1246,7 +1319,8 @@
   .cat-filter-btn.active{
     background:var(--brass);color:var(--ebene);border-color:var(--brass);
   }
-  .cat-block.hidden{display:none;}
+  .cat-block{animation:filterFade 0.5s ease-out forwards;}
+  .cat-block.hidden{display:none;opacity:0;}
 
   /* ===== FORM ENHANCEMENTS ===== */
   form.inquiry input:invalid, form.inquiry textarea:invalid, form.inquiry select:invalid{
@@ -1317,7 +1391,7 @@
 </header>
 
 <section class="hero">
-  <img src="images/hero.webp" alt="" loading="eager" fetchpriority="high">
+  <img src="images/hero.webp" alt="Atelier de menuiserie artisanale avec meubles en bois massif" loading="eager" fetchpriority="high" decoding="async">
   <div class="aurora"><span></span><span></span><span></span></div>
 
   <!-- 3D Fluid Waves Background -->
@@ -2236,6 +2310,64 @@
   if(!main){
     const hero = document.querySelector('.hero');
     if(hero && !hero.id) hero.id = 'content';
+  }
+
+  // ===== PERFORMANCE: Web Vitals Monitoring (Basic) =====
+  if('PerformanceObserver' in window){
+    try{
+      // Measure First Contentful Paint & Largest Contentful Paint
+      new PerformanceObserver((list) => {
+        for(const entry of list.getEntries()){
+          console.log('📊 Paint timing:', entry.name, Math.round(entry.startTime) + 'ms');
+        }
+      }).observe({entryTypes: ['paint']});
+
+      // Measure Cumulative Layout Shift
+      new PerformanceObserver((list) => {
+        let cls = 0;
+        for(const entry of list.getEntries()){
+          if(!entry.hadRecentInput) cls += entry.value;
+        }
+        console.log('📊 CLS:', cls.toFixed(3));
+      }).observe({entryTypes: ['layout-shift']});
+    }catch(e){
+      console.log('⚠️ Performance monitoring limited:', e.message);
+    }
+  }
+
+  // ===== TOUCH SUPPORT for Lightbox =====
+  (function(){
+    let touchStartX = 0;
+    const lightbox = document.getElementById('galleryLightbox');
+    if(lightbox){
+      lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, false);
+
+      lightbox.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        if(touchStartX - touchEndX > 50){
+          document.getElementById('lightboxNext').click();
+        } else if(touchEndX - touchStartX > 50){
+          document.getElementById('lightboxPrev').click();
+        }
+      }, false);
+    }
+  })();
+
+  // ===== PERFORMANCE: Prefetch next images in sequence =====
+  if('requestIdleCallback' in window){
+    requestIdleCallback(() => {
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      images.forEach((img, i) => {
+        if(i < 3){
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = img.src;
+          document.head.appendChild(link);
+        }
+      });
+    });
   }
 </script>
 
