@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastry Luxury Experience - Main</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Söhne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e0f 0%, #1a1f23 100%);
+            color: #f5f1ed;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(10, 14, 15, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #f5f1ed;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #d97706;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px;
+        }
+
+        .hero-background {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.15) 0%, transparent 70%);
+            animation: glow-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero-tagline {
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #d97706;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f5f1ed 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #bfb5af;
+            margin-bottom: 50px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+            color: #0a0e0f;
+            box-shadow: 0 20px 40px rgba(217, 119, 6, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 60px rgba(217, 119, 6, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fbbf24;
+            border: 2px solid #d97706;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(217, 119, 6, 0.1);
+        }
+
+        /* Section Creations */
+        .creations {
+            padding: 120px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #f5f1ed;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: #bfb5af;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .creations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .creation-card {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .creation-card:hover {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-color: rgba(217, 119, 6, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .creation-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .creation-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fbbf24;
+        }
+
+        .creation-desc {
+            font-size: 16px;
+            color: #bfb5af;
+            line-height: 1.6;
+        }
+
+        /* Ingredients Orbital */
+        .ingredients {
+            padding: 120px 60px;
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.5) 0%, rgba(30, 30, 30, 0.5) 100%);
+            position: relative;
+        }
+
+        .orbital-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            aspect-ratio: 1;
+        }
+
+        .orbital-item {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(135deg, #d97706 0%, #fbbf24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 0 30px rgba(217, 119, 6, 0.4);
+        }
+
+        /* Savoir-faire Steps */
+        .savoir-faire {
+            padding: 120px 60px;
+            position: relative;
+        }
+
+        .steps-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+            align-items: start;
+            position: relative;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 40px;
+            top: 120px;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, rgba(217, 119, 6, 0.4) 0%, transparent 100%);
+        }
+
+        .step:last-child::before {
+            display: none;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: #0a0e0f;
+            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.3);
+        }
+
+        .step-content h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #fbbf24;
+        }
+
+        .step-content p {
+            font-size: 16px;
+            color: #bfb5af;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 14, 15, 0.95);
+            border-top: 1px solid rgba(217, 119, 6, 0.1);
+            padding: 60px;
+            text-align: center;
+            color: #bfb5af;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .social-links a {
+            color: #d97706;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #fbbf24;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .creations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 0 30px;
+            }
+
+            .hero, .creations, .ingredients, .savoir-faire {
+                padding: 60px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Pastry Luxury</div>
+        <ul class="nav-links">
+            <li><a href="#creations">Créations</a></li>
+            <li><a href="#ingrédients">Ingrédients</a></li>
+            <li><a href="#savoir-faire">Savoir-Faire</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <div class="hero-tagline">Expérience Numérique Avant-Gardiste</div>
+            <h1 class="hero-title">Pâtisserie Haute Couture</h1>
+            <p class="hero-subtitle">Où l'art pâtissier rencontre la technologie 3D immersive. Une expérience numérique aussi raffinée que nos créations.</p>
+            <div class="hero-cta">
+                <button class="btn btn-primary">Explorer</button>
+                <button class="btn btn-secondary">En Savoir Plus</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creations Section -->
+    <section class="creations" id="creations">
+        <div class="section-header">
+            <h2 class="section-title">Nos Créations Exceptionnelles</h2>
+            <p class="section-subtitle">Chaque création est une oeuvre d'art qui marie tradition et innovation technologique</p>
+        </div>
+        <div class="creations-grid">
+            <div class="creation-card">
+                <div class="creation-icon">🍰</div>
+                <div class="creation-name">Opéra Noir</div>
+                <p class="creation-desc">Couches délicates de chocolat noir intense, café et émulsion aérienne</p>
+            </div>
+            <div class="creation-card">
+                <div class="creation-icon">🥐</div>
+                <div class="creation-name">Croissant Doré</div>
+                <p class="creation-desc">Feuilletage délicat avec feuilles d'or comestible et ganache champagne</p>
+            </div>
+            <div class="creation-card">
+                <div class="creation-icon">🍫</div>
+                <div class="creation-name">Truffes Élégantes</div>
+                <p class="creation-desc">Chocolat tempéré artisanalement avec cacao noble et essences précieuses</p>
+            </div>
+            <div class="creation-card">
+                <div class="creation-icon">🎂</div>
+                <div class="creation-name">Mille-Feuille Contemporain</div>
+                <p class="creation-desc">Pâte feuilletée ultra-croustillante et crème diplomatique parfumée</p>
+            </div>
+            <div class="creation-card">
+                <div class="creation-icon">🍮</div>
+                <div class="creation-name">Mousse Aérienne</div>
+                <p class="creation-desc">Mousse légère infusée de vanille bourbon avec touches de caramel</p>
+            </div>
+            <div class="creation-card">
+                <div class="creation-icon">🌹</div>
+                <div class="creation-name">Rose Suprême</div>
+                <p class="creation-desc">Pétales de rose cristallisés et centre de pistache premium</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ingredients Section -->
+    <section class="ingredients" id="ingrédients">
+        <div class="section-header">
+            <h2 class="section-title">Ingrédients en Orbite</h2>
+            <p class="section-subtitle">Nos plus nobles ingrédients, présentés dans une danse cosmique</p>
+        </div>
+        <div class="orbital-container">
+            <div class="orbital-item" style="top: 10%; left: 50%; transform: translateX(-50%);">🍫</div>
+            <div class="orbital-item" style="top: 25%; right: 10%;">🌾</div>
+            <div class="orbital-item" style="bottom: 25%; right: 5%;">✨</div>
+            <div class="orbital-item" style="bottom: 10%; left: 50%; transform: translateX(-50%);">🥜</div>
+            <div class="orbital-item" style="bottom: 25%; left: 5%;">🌸</div>
+            <div class="orbital-item" style="top: 25%; left: 10%;">🍯</div>
+            <div class="orbital-item" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; font-size: 48px;">🍰</div>
+        </div>
+    </section>
+
+    <!-- Savoir-Faire Section -->
+    <section class="savoir-faire" id="savoir-faire">
+        <div class="section-header">
+            <h2 class="section-title">Notre Savoir-Faire en 5 Étapes</h2>
+            <p class="section-subtitle">La quintessence de l'excellence artisanale</p>
+        </div>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Sélection Minutieuse</h3>
+                    <p>Nous sourçons les meilleurs ingrédients du monde, du cacao fin d'Équateur aux vanilles de Madagascar, en passant par les pistaches iraniennes premium.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Préparation Alchimique</h3>
+                    <p>Chaque ingrédient est transformé avec précision et patience, en utilisant des techniques millénaires combinées à l'innovation contemporaine.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Création Artistique</h3>
+                    <p>Nos pâtissiers experts façonnent chaque création avec une vision d'artiste, transformant les ingrédients en véritables œuvres d'art comestibles.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Contrôle Qualité Absolu</h3>
+                    <p>Chaque création subit un contrôle rigoureux pour garantir la perfection gustative et esthétique, sans aucune concession.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Livraison Personnalisée</h3>
+                    <p>Vos créations arrivent dans des emballages luxueux, préservant fraîcheur et intégrité, prêtes à ravir les plus exigeants palais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <h3 style="font-size: 24px; margin-bottom: 20px; color: #fbbf24;">Pastry Luxury</h3>
+            <p class="footer-text">Une expérience numérique qui célèbre l'excellence pâtissière</p>
+            <div class="social-links">
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+            </div>
+            <p class="footer-text">© 2026 Pastry Luxury Experience. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html>
