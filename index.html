@@ -295,13 +295,6 @@
   /* Tilt 3D au survol */
   .tilt{transform-style:preserve-3d;transition:transform .35s cubic-bezier(.16,.8,.24,1);will-change:transform;}
 
-  /* 3D Card Effects */
-  .card{perspective:1200px;}
-  .card .panel-frame{transform-style:preserve-3d;transform-origin:center center;}
-  .card:hover .panel-frame{
-    transform:rotateX(2deg) rotateY(-4deg) rotateZ(0.5deg);
-  }
-
   /* 3D Reveal Animation */
   /* Texte cinétique du hero */
   .kinetic-word{display:inline-block;overflow:hidden;vertical-align:top;}
@@ -585,10 +578,10 @@
   .stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:500;color:var(--ink);}
   .stat span{font-size:0.76rem;color:var(--ink-faint);letter-spacing:0.02em;}
 
-  /* Catalogue — galerie éditoriale, fond clair */
+  /* Catalogue — grille de cartes blanches, fond clair */
   #catalogue{
-    --lt-bg:var(--choc-2); --lt-panel:var(--ivoire); --lt-ink:var(--ink-on-choc);
-    --lt-ink-faint:var(--ink-on-choc-faint); --lt-line:var(--line);
+    --lt-bg:#FAF8F5; --lt-panel:#FFFFFF; --lt-ink:#4A2E1C;
+    --lt-ink-faint:rgba(74,46,28,0.62); --lt-line:rgba(120,73,43,0.35);
     background:var(--lt-bg);
     color:var(--lt-ink);
   }
@@ -596,79 +589,66 @@
   #catalogue .section-head h2{color:var(--lt-ink);}
   #catalogue .section-head p{color:var(--lt-ink-faint);}
 
-  .cat-block{margin-bottom:150px;}
+  .cat-block{margin-bottom:96px;}
   .cat-block:last-child{margin-bottom:0;}
   .cat-title{
-    display:flex;align-items:baseline;gap:20px;margin-bottom:52px;
+    display:block;text-align:center;margin-bottom:38px;
+    border-bottom:1px solid var(--lt-line);padding-bottom:18px;position:relative;
   }
   .cat-num{
-    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.15rem;color:var(--brass-deep);
+    position:absolute;left:0;top:0;
+    font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:0.8rem;
+    letter-spacing:0.12em;color:var(--lt-ink-faint);
   }
-  .cat-title h3{font-size:1.5rem;margin:0;font-weight:400;letter-spacing:0.01em;color:var(--lt-ink);}
-  .cat-title .cat-line{flex:1;height:1px;background:var(--lt-line);}
+  .cat-title h3{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:2rem;margin:0;font-weight:700;letter-spacing:0.01em;color:var(--lt-ink);
+  }
+  .cat-title .cat-line{display:none;}
 
-  /* Rythme : une grande pièce, respiration, deux petites, respiration... */
+  /* Grille régulière de cartes blanches */
   .grid{
     display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    grid-auto-flow:dense;
-    gap:44px 32px;
-    counter-reset:piece;
+    grid-template-columns:repeat(4, 1fr);
+    gap:28px;
   }
-  .grid .card:nth-child(3n+1){grid-column:span 2;grid-row:span 2;}
-  .grid .card:nth-child(3n+1) .panel-frame{aspect-ratio:6/5;}
-  .grid .card:nth-child(3n+2){align-self:end;}
-  .grid .card:nth-child(3n+3){align-self:start;}
+  @media(max-width:1080px){
+    .grid{grid-template-columns:repeat(3, 1fr);gap:22px;}
+  }
 
   .card{
-    cursor:default;background:transparent;
-    transition:transform .5s cubic-bezier(.16,.8,.24,1);
-    border-radius:2px;
+    cursor:default;
+    background:var(--lt-panel);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(74,46,28,0.07);
+    display:flex;flex-direction:column;
+    transition:transform .4s cubic-bezier(.16,.8,.24,1), box-shadow .4s ease;
   }
-  .card{perspective:1200px;}
   .card:hover{
-    transform:translateY(-8px) perspective(1200px) rotateX(6deg) rotateY(-8deg);
-    animation:flip3D 0.6s ease-in-out;
+    transform:translateY(-6px);
+    box-shadow:0 12px 28px rgba(74,46,28,0.14);
   }
-  .card:focus-within{outline:none;}
-  .card:focus-within .panel-frame{
-    box-shadow:0 0 0 2px var(--brass);
-  }
-  .card .panel-frame{aspect-ratio:4/5;background:var(--lt-panel);}
-  .card:nth-child(3n+1){
-    display:grid;grid-template-columns:1fr;grid-template-rows:1fr auto;
-  }
-  @media(min-width:860px){
-    .card:nth-child(3n+1){grid-template-columns:1fr 190px;grid-template-rows:1fr;align-items:end;}
+  .card:focus-within{outline:none;box-shadow:0 0 0 2px var(--brass);}
+  .card .panel-frame{
+    aspect-ratio:4/3;
+    background:var(--lt-panel);
+    border:none;
+    border-radius:0;
   }
   .card figcaption{
-    margin-top:0;
-    padding:20px 2px 0;
-    font-size:0.86rem;
-    color:var(--lt-ink-faint);
-    display:flex;flex-direction:column;gap:8px;
-    position:relative;
+    padding:18px 20px 22px;
+    display:flex;flex-direction:column;gap:6px;
+    flex:1;
   }
-  .card:nth-child(3n+1) figcaption{padding:0 0 8px 6px;}
-  @media(min-width:860px){
-    .card:nth-child(3n+1) figcaption{padding:0 0 12px 26px;}
+  .card figcaption b{
+    color:var(--lt-ink);font-weight:600;letter-spacing:0.01em;
+    line-height:1.35;font-size:1.02rem;
   }
-  .card figcaption::before{
-    counter-increment:piece;
-    content:counter(piece, decimal-leading-zero);
-    display:block;
-    font-family:'Space Grotesk',sans-serif;font-size:0.66rem;letter-spacing:0.14em;
-    color:var(--brass-deep);opacity:0.75;margin-bottom:4px;
-    font-weight:500;
+  .card figcaption span{
+    line-height:1.5;text-transform:uppercase;letter-spacing:0.06em;
+    font-size:0.7rem;color:var(--lt-ink-faint);
   }
-  .card figcaption b{color:var(--lt-ink);font-weight:500;letter-spacing:0.01em;line-height:1.35;font-size:1rem;position:relative;display:inline-block;}
-  .card figcaption b::after{
-    content:"";position:absolute;left:0;bottom:-4px;height:1.5px;width:0;background:var(--brass-deep);
-    transition:width .5s cubic-bezier(.16,.8,.24,1);
-  }
-  .card:hover figcaption b::after{width:100%;}
-  .card:nth-child(3n+1) figcaption b{font-size:1.2rem;font-family:'Cormorant Garamond',serif;font-weight:500;}
-  .card figcaption span:not(.piece-num){line-height:1.5;text-transform:uppercase;letter-spacing:0.06em;font-size:0.72rem;}
 
   /* Lumière au survol — extrêmement subtile */
   .panel-frame::after{opacity:0;}
@@ -676,7 +656,7 @@
     opacity:1;
     background:radial-gradient(220px circle at var(--lx) var(--ly), rgba(247,244,238,0.09), transparent 68%);
   }
-  .card:hover .panel-frame img{transform:scale(1.015);}
+  .card:hover .panel-frame img{transform:scale(1.04);}
 
   /* Pourquoi me choisir */
   .why{
@@ -778,12 +758,13 @@
     .why-grid{grid-template-columns:repeat(2,1fr);}
     .why-item{border-left:none;border-top:1px solid var(--line);}
     .why-item:nth-child(1),.why-item:nth-child(2){border-top:none;}
-    .grid{grid-template-columns:1fr 1fr;gap:32px 20px;}
-    .grid .card:nth-child(3n+1){grid-column:span 2;grid-row:span 1;}
-    .grid .card:nth-child(3n+1) .panel-frame{aspect-ratio:16/11;}
-    .grid .card:nth-child(3n+2),.grid .card:nth-child(3n+3){align-self:auto;}
-    .cat-block{margin-bottom:90px;}
-    .cat-title{margin-bottom:32px;}
+    .grid{grid-template-columns:1fr 1fr;gap:18px;}
+    .cat-block{margin-bottom:64px;}
+    .cat-title{margin-bottom:28px;}
+    .cat-title h3{font-size:1.4rem;}
+    .cat-num{position:static;display:block;margin-bottom:6px;}
+    .card figcaption{padding:14px 16px 18px;}
+    .card figcaption b{font-size:0.94rem;}
   }
 
   /* Sur mesure CTA — surface sable, chaleureuse */
@@ -1272,7 +1253,7 @@
 
     <!-- CHAMBRE -->
     <div class="cat-block">
-      <div class="cat-title"><span class="cat-num">01</span><h3>Chambre : lits &amp; chevets</h3><span class="cat-line"></span></div>
+      <div class="cat-title"><span class="cat-num">01</span><h3>🛏️ Chambre : Lits &amp; Chevets</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit en bois massif avec deux tables de chevet assorties" loading="lazy"></div>
@@ -1327,7 +1308,7 @@
 
     <!-- SALON -->
     <div class="cat-block">
-      <div class="cat-title"><span class="cat-num">02</span><h3>Salon &amp; séjour</h3><span class="cat-line"></span></div>
+      <div class="cat-title"><span class="cat-num">02</span><h3>🛋️ Salon &amp; Séjour</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet vitré en bois avec portes vitrées et tiroirs" loading="lazy"></div>
@@ -1378,7 +1359,7 @@
 
     <!-- SALLE A MANGER / TABLES -->
     <div class="cat-block">
-      <div class="cat-title"><span class="cat-num">03</span><h3>Tables &amp; salle à manger</h3><span class="cat-line"></span></div>
+      <div class="cat-title"><span class="cat-num">03</span><h3>🪑 Tables &amp; Salle à Manger</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/table-a-manger-avec-quatre-chaises-plateau-noir.webp" alt="Table à manger avec quatre chaises, plateau noir" loading="lazy"></div>
@@ -1437,7 +1418,7 @@
 
     <!-- PORTES -->
     <div class="cat-block">
-      <div class="cat-title"><span class="cat-num">04</span><h3>Portes sur mesure</h3><span class="cat-line"></span></div>
+      <div class="cat-title"><span class="cat-num">04</span><h3>🚪 Portes sur Mesure</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/porte-double-en-bois-acajou-avec-poignee-metallique.webp" alt="Porte double en bois acajou avec poignée métallique" loading="lazy"></div>
@@ -1476,7 +1457,7 @@
 
     <!-- CUISINE -->
     <div class="cat-block">
-      <div class="cat-title"><span class="cat-num">05</span><h3>Cuisine</h3><span class="cat-line"></span></div>
+      <div class="cat-title"><span class="cat-num">05</span><h3>👨‍🍳 Cuisine</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier en bois avec évier inox" loading="lazy"></div>
