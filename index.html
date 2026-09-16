@@ -1810,8 +1810,7 @@
   })();
 
   // subtle reveal on scroll
-  const revealTargets = document.querySelectorAll('.section-head, .why-item, .review-entry, .stat, .step, .contact-card, .about-photo, .about-copy, .mesure h2, .mesure p');
-  console.log('🎬 Reveal targets found:', revealTargets.length);
+  const revealTargets = document.querySelectorAll('.section-head, .card, .cat-block, .why-item, .review-entry, .stat, .step, .contact-card, .about-photo, .about-copy, .mesure h2, .mesure p');
   revealTargets.forEach((el,i)=>{
     el.classList.add('reveal');
     el.style.setProperty('--i', i % 8);
@@ -1819,14 +1818,21 @@
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
-        console.log('✨ Revealing element:', entry.target.className);
         entry.target.classList.add('in');
         observer.unobserve(entry.target);
       }
     });
-  }, {threshold:0.12});
+  }, {threshold:0, rootMargin:'0px 0px -5% 0px'});
   revealTargets.forEach(el=>observer.observe(el));
-  console.log('👁️ IntersectionObserver initialized for', revealTargets.length, 'elements');
+  // Filet de sécurité : si un élément n'a jamais été révélé (bug du détecteur), on force l'affichage
+  setTimeout(()=>{
+    revealTargets.forEach(el=>{
+      if(!el.classList.contains('in')){
+        el.classList.add('in');
+        observer.unobserve(el);
+      }
+    });
+  }, 1500);
 
   // cursor-follow glow in hero
   const hero = document.querySelector('.hero');
