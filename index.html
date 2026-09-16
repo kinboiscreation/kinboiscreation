@@ -689,12 +689,18 @@
     to  { opacity:1;
           transform:perspective(1200px) rotateY(0) rotateZ(0) translateX(0) scale(1); }
   }
-  /* 04 · PORTES — Ouverture : chaque porte pivote sur sa charnière */
+  /* 05 · PORTES — Ouverture : chaque porte pivote sur sa charnière */
   @keyframes doorOpen{
     from{ opacity:0; transform:perspective(1400px) rotateY(-85deg); }
     to  { opacity:1; transform:perspective(1400px) rotateY(0deg); }
   }
-  /* 05 · CUISINE — Balayage : révélation nette au clip-path */
+  /* 03 · MEUBLES TV — Allumage : l'image s'ouvre comme un écran qui s'allume */
+  @keyframes screenOn{
+    0%  { opacity:0; clip-path:inset(49.5% 0 49.5% 0); filter:brightness(2.3) contrast(1.5); }
+    55% { opacity:1; clip-path:inset(0 0 0 0);         filter:brightness(1.55) contrast(1.2); }
+    100%{ opacity:1; clip-path:inset(0 0 0 0);         filter:brightness(1) contrast(1); }
+  }
+  /* 06 · CUISINE — Balayage : révélation nette au clip-path */
   @keyframes wipe{
     from{ opacity:0; clip-path:inset(0 100% 0 0); transform:scale(1.04); }
     to  { opacity:1; clip-path:inset(0 0 0 0);    transform:scale(1); }
@@ -712,6 +718,7 @@
     }
     .anim-chambre .card{animation-name:unfold; transform-origin:top center;}
     .anim-salon   .card{animation-name:ambient;}
+    .anim-tv      .card{animation-name:screenOn;}
     .anim-tables  .card{animation-name:deal;   transform-origin:left center;}
     .anim-portes  .card{animation-name:doorOpen; transform-origin:left center;}
     .anim-cuisine .card{animation-name:wipe;}
@@ -754,7 +761,24 @@
     animation:haloSpin 4s linear infinite;
   }
 
-  /* 03 · TABLES — bascule comme un plateau que l'on regarde */
+  /* 03 · MEUBLES TV — ligne de balayage qui descend, comme sur un écran */
+  .anim-tv .card{transition:transform .5s cubic-bezier(.16,.8,.24,1), box-shadow .5s ease;}
+  .anim-tv .card:hover{
+    transform:translateY(-9px) scale(1.02);
+    box-shadow:0 20px 44px rgba(30,58,86,0.26);
+  }
+  .anim-tv .card::before{
+    background:linear-gradient(180deg,
+      transparent 0%, rgba(186,222,255,0.16) 42%,
+      rgba(210,236,255,0.58) 50%, rgba(186,222,255,0.16) 58%, transparent 100%);
+    opacity:0;transform:translateY(-115%);transition:none;
+  }
+  .anim-tv .card:hover::before{
+    opacity:1;transform:translateY(115%);
+    transition:transform 1.15s cubic-bezier(.4,.08,.3,1), opacity .18s ease;
+  }
+
+  /* 04 · TABLES — bascule comme un plateau que l'on regarde */
   .anim-tables .card{transition:transform .6s cubic-bezier(.16,.8,.24,1), box-shadow .5s ease;}
   .anim-tables .card:hover{
     transform:perspective(1100px) rotateX(9deg) translateY(-12px) scale(1.03);
@@ -762,7 +786,7 @@
   }
   .anim-tables .card:hover .panel-frame img{transform:scale(1.05) translateY(-2%);}
 
-  /* 04 · PORTES — la carte s'entrouvre sur sa charnière */
+  /* 05 · PORTES — la carte s'entrouvre sur sa charnière */
   .anim-portes .card{transition:transform .75s cubic-bezier(.22,.9,.28,1), box-shadow .5s ease;}
   .anim-portes .card:hover{
     transform:perspective(1300px) rotateY(-16deg) translateX(3px) scale(1.01);
@@ -774,7 +798,7 @@
   }
   .anim-portes .card:hover .panel-frame::before{opacity:1;}
 
-  /* 05 · CUISINE — éclat net qui traverse la carte */
+  /* 06 · CUISINE — éclat net qui traverse la carte */
   .anim-cuisine .card{transition:transform .5s cubic-bezier(.16,.8,.24,1), box-shadow .5s ease;}
   .anim-cuisine .card:hover{transform:translateY(-9px) scale(1.025);}
   .anim-cuisine .card::before{
@@ -1490,28 +1514,12 @@
           <figcaption><b>Banc coffre</b><span>Rangement intégré</span></figcaption>
         </figure>
         <figure class="card">
-          <div class="panel-frame"><img src="images/petit-meuble-tv-appoint.webp" alt="Petit meuble d'appoint pour téléviseur" loading="lazy"></div>
-          <figcaption><b>Meuble TV d'appoint</b><span>Format compact</span></figcaption>
-        </figure>
-        <figure class="card">
-          <div class="panel-frame"><img src="images/meuble-tv-flottant-moderne.webp" alt="Meuble TV mural flottant, style moderne avec étagère" loading="lazy"></div>
-          <figcaption><b>Meuble TV mural</b><span>Style contemporain</span></figcaption>
-        </figure>
-        <figure class="card">
           <div class="panel-frame"><img src="images/meuble-entree-portemanteau.webp" alt="Meuble d'entrée blanc et bois avec portemanteau assorti" loading="lazy"></div>
           <figcaption><b>Meuble d'entrée</b><span>Avec portemanteau</span></figcaption>
         </figure>
         <figure class="card">
           <div class="panel-frame"><img src="images/comptoir-bois-massif.webp" alt="Comptoir en bois massif pour espace commercial" loading="lazy"></div>
           <figcaption><b>Comptoir en bois</b><span>Agencement commercial</span></figcaption>
-        </figure>
-        <figure class="card">
-          <div class="panel-frame"><img src="images/meuble-tv-mural-claustra-led.webp" alt="Meuble TV mural avec claustra en bois et éclairage" loading="lazy"></div>
-          <figcaption><b>Meuble TV mural</b><span>Claustra + éclairage</span></figcaption>
-        </figure>
-        <figure class="card">
-          <div class="panel-frame"><img src="images/buffet-bas-tv-bois-clair.webp" alt="Buffet bas pour téléviseur en bois clair" loading="lazy"></div>
-          <figcaption><b>Buffet bas TV</b><span>Trois portes + niche</span></figcaption>
         </figure>
         <figure class="card">
           <div class="panel-frame"><img src="images/etagere-angle-bois.webp" alt="Étagère d&#x27;angle en bois à cinq niveaux" loading="lazy"></div>
@@ -1522,12 +1530,38 @@
           <figcaption><b>Casier de rangement</b><span>Sur mesure</span></figcaption>
         </figure>
         <figure class="card">
-          <div class="panel-frame"><img src="images/meuble-tv-bas-tiroir.webp" alt="Meuble TV bas en bois avec tiroir" loading="lazy"></div>
-          <figcaption><b>Meuble TV bas</b><span>Avec tiroir</span></figcaption>
-        </figure>
-        <figure class="card">
           <div class="panel-frame"><img src="images/bibliotheque-niches-bois.webp" alt="Bibliothèque en bois à niches ouvertes" loading="lazy"></div>
           <figcaption><b>Bibliothèque</b><span>Niches ouvertes</span></figcaption>
+        </figure>
+        <figure class="card">
+          <div class="panel-frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine blanche avec étagères en verre" loading="lazy"></div>
+          <figcaption><b>Vitrine blanche</b><span>Étagères vitrées</span></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="cat-block anim-tv">
+      <div class="cat-title"><span class="cat-num">03</span><h3>📺 Meubles TV</h3></div>
+      <div class="grid">
+        <figure class="card">
+          <div class="panel-frame"><img src="images/petit-meuble-tv-appoint.webp" alt="Petit meuble d'appoint pour téléviseur" loading="lazy"></div>
+          <figcaption><b>Meuble TV d'appoint</b><span>Format compact</span></figcaption>
+        </figure>
+        <figure class="card">
+          <div class="panel-frame"><img src="images/meuble-tv-flottant-moderne.webp" alt="Meuble TV mural flottant, style moderne avec étagère" loading="lazy"></div>
+          <figcaption><b>Meuble TV mural</b><span>Style contemporain</span></figcaption>
+        </figure>
+        <figure class="card">
+          <div class="panel-frame"><img src="images/meuble-tv-mural-claustra-led.webp" alt="Meuble TV mural avec claustra en bois et éclairage" loading="lazy"></div>
+          <figcaption><b>Meuble TV mural</b><span>Claustra + éclairage</span></figcaption>
+        </figure>
+        <figure class="card">
+          <div class="panel-frame"><img src="images/buffet-bas-tv-bois-clair.webp" alt="Buffet bas pour téléviseur en bois clair" loading="lazy"></div>
+          <figcaption><b>Buffet bas TV</b><span>Trois portes + niche</span></figcaption>
+        </figure>
+        <figure class="card">
+          <div class="panel-frame"><img src="images/meuble-tv-bas-tiroir.webp" alt="Meuble TV bas en bois avec tiroir" loading="lazy"></div>
+          <figcaption><b>Meuble TV bas</b><span>Avec tiroir</span></figcaption>
         </figure>
         <figure class="card">
           <div class="panel-frame"><img src="images/meuble-tv-noir-laque.webp" alt="Meuble TV en bois laqué noir" loading="lazy"></div>
@@ -1540,10 +1574,6 @@
         <figure class="card">
           <div class="panel-frame"><img src="images/meuble-tv-blanc-noir.webp" alt="Meuble TV blanc et noir avec niches" loading="lazy"></div>
           <figcaption><b>Meuble TV blanc &amp; noir</b><span>Niches ouvertes</span></figcaption>
-        </figure>
-        <figure class="card">
-          <div class="panel-frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine blanche avec étagères en verre" loading="lazy"></div>
-          <figcaption><b>Vitrine blanche</b><span>Étagères vitrées</span></figcaption>
         </figure>
         <figure class="card">
           <div class="panel-frame"><img src="images/meuble-tv-bicolore-plateau-noir.webp" alt="Meuble TV blanc avec plateau noir" loading="lazy"></div>
@@ -1570,7 +1600,7 @@
 
     <!-- SALLE A MANGER / TABLES -->
     <div class="cat-block anim-tables">
-      <div class="cat-title"><span class="cat-num">03</span><h3>🪑 Tables &amp; Salle à Manger</h3></div>
+      <div class="cat-title"><span class="cat-num">04</span><h3>🪑 Tables &amp; Salle à Manger</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/table-a-manger-avec-quatre-chaises-plateau-noir.webp" alt="Table à manger avec quatre chaises, plateau noir" loading="lazy"></div>
@@ -1645,7 +1675,7 @@
 
     <!-- PORTES -->
     <div class="cat-block anim-portes">
-      <div class="cat-title"><span class="cat-num">04</span><h3>🚪 Portes sur Mesure</h3></div>
+      <div class="cat-title"><span class="cat-num">05</span><h3>🚪 Portes sur Mesure</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/porte-en-bois-clair-a-deux-panneaux-avec-poignee-noire.webp" alt="Porte en bois clair à deux panneaux avec poignée noire" loading="lazy"></div>
@@ -1680,7 +1710,7 @@
 
     <!-- CUISINE -->
     <div class="cat-block anim-cuisine">
-      <div class="cat-title"><span class="cat-num">05</span><h3>👨‍🍳 Cuisine</h3></div>
+      <div class="cat-title"><span class="cat-num">06</span><h3>👨‍🍳 Cuisine</h3></div>
       <div class="grid">
         <figure class="card">
           <div class="panel-frame"><img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier en bois avec évier inox" loading="lazy"></div>
