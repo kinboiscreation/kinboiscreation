@@ -142,6 +142,65 @@
     opacity:.85;margin-top:5px;
   }
 
+  /* ═══ 7 · LIGHTBOX (clic pour agrandir) ═══ */
+  .fx7 .card{cursor:zoom-in;transition:transform .45s cubic-bezier(.16,.8,.24,1),box-shadow .45s;}
+  .fx7 .card:hover{transform:translateY(-7px);box-shadow:0 20px 42px rgba(74,46,28,.22);}
+  .fx7 .frame img{transition:transform 1s cubic-bezier(.16,.8,.24,1);}
+  .fx7 .card:hover .frame img{transform:scale(1.07);}
+  .lb{
+    position:fixed;inset:0;z-index:99;display:none;
+    background:rgba(24,14,8,.93);backdrop-filter:blur(8px);
+    align-items:center;justify-content:center;padding:32px;
+  }
+  .lb.on{display:flex;animation:lbIn .3s ease;}
+  @keyframes lbIn{from{opacity:0;}to{opacity:1;}}
+  .lb img{
+    max-width:min(1100px,92vw);max-height:82vh;object-fit:contain;
+    border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.6);
+    animation:lbZoom .45s cubic-bezier(.16,.8,.24,1);
+  }
+  @keyframes lbZoom{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .lb-cap{
+    position:absolute;bottom:28px;left:0;right:0;text-align:center;
+    color:#F3E9DC;font-size:.95rem;letter-spacing:.02em;
+  }
+  .lb-x,.lb-nav{
+    position:absolute;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
+    color:#fff;width:46px;height:46px;border-radius:50%;cursor:pointer;
+    font-size:1.2rem;line-height:1;display:grid;place-items:center;
+    transition:background .25s;
+  }
+  .lb-x:hover,.lb-nav:hover{background:rgba(255,255,255,.22);}
+  .lb-x{top:24px;right:26px;}
+  .lb-nav.prev{left:26px;top:50%;transform:translateY(-50%);}
+  .lb-nav.next{right:26px;top:50%;transform:translateY(-50%);}
+
+  /* ═══ 8 · PARALLAXE MULTI-COLONNES AU SCROLL ═══ */
+  .fx8{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start;}
+  @media(max-width:700px){.fx8{grid-template-columns:repeat(2,1fr);}}
+  .fx8 .col{display:flex;flex-direction:column;gap:20px;}
+  .fx8 .card{transition:transform .2s linear;}
+  .fx8 .frame{aspect-ratio:3/4;}
+
+  /* ═══ 9 · VOLET QUI SE RÉDUIT ═══ */
+  .fx9 .card{height:330px;overflow:hidden;}
+  .fx9 .frame{
+    aspect-ratio:auto;height:100%;
+    transition:height .6s cubic-bezier(.22,.9,.28,1);
+  }
+  .fx9 .card:hover .frame{height:52%;}
+  .fx9 .reveal-txt{
+    position:absolute;left:0;right:0;bottom:0;height:48%;
+    padding:20px 20px 22px;display:flex;flex-direction:column;justify-content:center;gap:7px;
+    background:var(--panel);
+  }
+  .fx9 .reveal-txt b{font-size:1.05rem;}
+  .fx9 .reveal-txt span{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);}
+  .fx9 .reveal-txt em{
+    font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--brass);
+    font-size:.98rem;margin-top:3px;
+  }
+
   footer{padding:66px 0 80px;color:var(--faint);font-size:.92rem;line-height:1.6;}
   footer b{color:var(--ink);}
 </style>
@@ -232,6 +291,60 @@
     </div>
   </section>
 
+  <!-- 7 -->
+  <section>
+    <div class="head"><span class="num">7</span><h2>Lightbox — cliquer pour agrandir</h2></div>
+    <p class="note"><b>Cliquez</b> sur une photo : elle s'ouvre en grand, plein écran, avec les flèches pour passer d'une pièce à l'autre. C'est ce qui permet à un client d'examiner le travail du bois en détail avant de vous appeler.</p>
+    <div class="grid fx7">
+      <figure class="card"><div class="frame"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit complet + chevets"></div><figcaption class="cap"><b>Lit complet + chevets</b><span>Bois massif</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine bois doré"></div><figcaption class="cap"><b>Cuisine bois doré</b><span>Moulures</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte double acajou"></div><figcaption class="cap"><b>Porte double</b><span>Acajou verni</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet vitré"></div><figcaption class="cap"><b>Buffet vitré</b><span>Salle à manger</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine blanche"></div><figcaption class="cap"><b>Vitrine blanche</b><span>Étagères vitrées</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/table-a-manger-chene-clair-quatre-chaises.webp" alt="Table à manger chêne"></div><figcaption class="cap"><b>Table à manger chêne</b><span>4 chaises</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section>
+    <div class="head"><span class="num">8</span><h2>Parallaxe au défilement</h2></div>
+    <p class="note">Les colonnes défilent à des vitesses légèrement différentes : la grille respire pendant que vous scrollez. Faites défiler la page pour voir l'effet.</p>
+    <div class="fx8">
+      <div class="col" data-speed="-26">
+        <figure class="card"><div class="frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte"></div></figure>
+        <figure class="card"><div class="frame"><img src="images/table-basse-tiroir-gueridon-verre.webp" alt="Table basse"></div></figure>
+      </div>
+      <div class="col" data-speed="18">
+        <figure class="card"><div class="frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine"></div></figure>
+        <figure class="card"><div class="frame"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine"></div></figure>
+      </div>
+      <div class="col" data-speed="-12">
+        <figure class="card"><div class="frame"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit"></div></figure>
+        <figure class="card"><div class="frame"><img src="images/meuble-tv-long-blanc-plateau-noir.webp" alt="Meuble TV"></div></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section>
+    <div class="head"><span class="num">9</span><h2>Volet qui se réduit</h2></div>
+    <p class="note">La photo remplit toute la carte, puis se réduit vers le haut au survol pour laisser apparaître le descriptif. Élégant et lisible.</p>
+    <div class="grid fx9">
+      <figure class="card">
+        <div class="frame"><img src="images/table-a-manger-chene-clair-quatre-chaises.webp" alt="Table"></div>
+        <figcaption class="reveal-txt"><b>Table à manger chêne</b><span>4 chaises assorties</span><em>Ajustable à vos dimensions</em></figcaption>
+      </figure>
+      <figure class="card">
+        <div class="frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine"></div>
+        <figcaption class="reveal-txt"><b>Vitrine blanche</b><span>Étagères vitrées</span><em>Finition au choix</em></figcaption>
+      </figure>
+      <figure class="card">
+        <div class="frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte"></div>
+        <figcaption class="reveal-txt"><b>Porte double</b><span>Acajou verni</span><em>Pose comprise</em></figcaption>
+      </figure>
+    </div>
+  </section>
+
   <footer>
     <b>Comment répondre :</b> donnez-moi simplement le numéro qui vous plaît (par exemple « le 3 »).<br>
     Vous pouvez aussi en choisir plusieurs, un par catégorie du catalogue.
@@ -257,6 +370,61 @@
       card.style.setProperty('--px','0'); card.style.setProperty('--py','0');
     });
   });
+
+  // Lightbox (7)
+  (function(){
+    const cards=[...document.querySelectorAll('.fx7 .card')];
+    if(!cards.length) return;
+    const lb=document.createElement('div');
+    lb.className='lb';
+    lb.innerHTML='<button class="lb-x" aria-label="Fermer">✕</button>'
+      +'<button class="lb-nav prev" aria-label="Précédent">‹</button>'
+      +'<button class="lb-nav next" aria-label="Suivant">›</button>'
+      +'<img alt=""><div class="lb-cap"></div>';
+    document.body.appendChild(lb);
+    const img=lb.querySelector('img'), cap=lb.querySelector('.lb-cap');
+    let i=0;
+    function show(n){
+      i=(n+cards.length)%cards.length;
+      const src=cards[i].querySelector('img');
+      img.src=src.src; img.alt=src.alt;
+      cap.textContent=cards[i].querySelector('b').textContent
+        +' — '+cards[i].querySelector('.cap span').textContent
+        +'   ('+(i+1)+'/'+cards.length+')';
+      img.style.animation='none'; void img.offsetWidth; img.style.animation='';
+    }
+    cards.forEach((c,n)=>c.addEventListener('click',()=>{show(n);lb.classList.add('on');}));
+    lb.querySelector('.lb-x').addEventListener('click',()=>lb.classList.remove('on'));
+    lb.querySelector('.prev').addEventListener('click',e=>{e.stopPropagation();show(i-1);});
+    lb.querySelector('.next').addEventListener('click',e=>{e.stopPropagation();show(i+1);});
+    lb.addEventListener('click',e=>{if(e.target===lb) lb.classList.remove('on');});
+    document.addEventListener('keydown',e=>{
+      if(!lb.classList.contains('on')) return;
+      if(e.key==='Escape') lb.classList.remove('on');
+      if(e.key==='ArrowLeft') show(i-1);
+      if(e.key==='ArrowRight') show(i+1);
+    });
+  })();
+
+  // Parallaxe multi-colonnes au scroll (8)
+  (function(){
+    const cols=[...document.querySelectorAll('.fx8 .col')];
+    if(!cols.length) return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf=null;
+    function tick(){
+      const vh=innerHeight;
+      cols.forEach(col=>{
+        const r=col.getBoundingClientRect();
+        const prog=(vh-r.top)/(vh+r.height);   // 0 -> 1 pendant la traversée
+        const sp=parseFloat(col.dataset.speed||0);
+        col.style.transform='translateY('+((prog-0.5)*sp).toFixed(1)+'px)';
+      });
+      raf=null;
+    }
+    addEventListener('scroll',()=>{ if(!raf) raf=requestAnimationFrame(tick); },{passive:true});
+    tick();
+  })();
 </script>
 </body>
 </html>
