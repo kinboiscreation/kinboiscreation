@@ -6,6 +6,9 @@
 <title>Kin Bois — Démonstration d'effets</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Effets 14 à 30 : servis directement par la bibliothèque réutilisable -->
+<link rel="stylesheet" href="effets/effets.css">
+<script src="effets/effets.js" defer></script>
 <style>
   @property --halo{syntax:'<angle>';inherits:false;initial-value:0deg;}
 
@@ -37,7 +40,9 @@
   @media(max-width:560px){.grid{grid-template-columns:1fr;}}
 
   .card{
-    position:relative;background:var(--panel);border-radius:10px;overflow:hidden;
+    /* margin:0 — sans quoi la marge par défaut des <figure> (1em 40px)
+       rétrécit chaque carte de 80 px dans sa colonne. */
+    position:relative;margin:0;background:var(--panel);border-radius:10px;overflow:hidden;
     box-shadow:0 2px 10px rgba(74,46,28,.08);
   }
   .frame{position:relative;aspect-ratio:4/3;overflow:hidden;background:#eee;}
@@ -273,8 +278,8 @@
 
 <div class="wrap">
   <header>
-    <h1>Six effets, vos vraies photos</h1>
-    <p>Passez la souris sur les images de chaque section. Repérez celui que vous préférez et donnez-moi son numéro — je l'applique au catalogue du site. Tout est en CSS natif : aucun coût, aucune dépendance.</p>
+    <h1>Trente effets, vos vraies photos</h1>
+    <p>Passez la souris sur les images, et faites défiler lentement : certains effets se déclenchent au scroll. Repérez ceux que vous préférez et donnez-moi leurs numéros — je les applique au site. Tout est en CSS et JavaScript natifs : aucun coût, aucune dépendance, rien à installer.</p>
   </header>
 
   <!-- 1 -->
@@ -445,6 +450,188 @@
     <div class="fx13">
       <p class="cut" data-cut="Lits · Tables · Portes|Rangements · Cuisines|Agencement sur mesure"></p>
       <div class="rule"></div>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section>
+    <div class="head"><span class="num">14</span><h2>Comparateur avant / après</h2></div>
+    <p class="note">Tirez la poignée : à gauche l'atelier, à droite le meuble installé. C'est l'effet qui montre le mieux votre travail — le client voit le chemin parcouru.</p>
+    <div class="fx-compare" data-before="À l'atelier" data-after="Chez le client">
+      <img class="fx-before" src="images/lit-brut-avec-sommier-a-lattes-en-bois.webp" alt="Lit brut en atelier">
+      <img class="fx-after" src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit fini installé avec ses chevets">
+    </div>
+  </section>
+
+  <!-- 15 -->
+  <section>
+    <div class="head"><span class="num">15</span><h2>Bande défilante</h2></div>
+    <p class="note">Les photos défilent en boucle sans fin. Idéal pour montrer beaucoup de pièces sans prendre de place. Le défilement s'arrête quand la souris se pose dessus.</p>
+    <div class="fx-marquee" data-speed="42">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/armoire-vernie-porte-miroir.webp" alt="Armoire"></div><figcaption class="fx-cap"><b>Armoire vernie</b><span>Porte miroir</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-massive-double-plateau.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse</b><span>Double plateau</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/bibliotheque-niches-bois.webp" alt="Bibliothèque"></div><figcaption class="fx-cap"><b>Bibliothèque</b><span>Niches ouvertes</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-tv-mural-claustra-led.webp" alt="Meuble TV"></div><figcaption class="fx-cap"><b>Meuble TV claustra</b><span>Éclairage LED</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/comptoir-bois-massif.webp" alt="Comptoir"></div><figcaption class="fx-cap"><b>Comptoir</b><span>Bois massif</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/tete-de-lit-ovale-bois.webp" alt="Tête de lit"></div><figcaption class="fx-cap"><b>Tête de lit ovale</b><span>Chambre</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 16 -->
+  <section>
+    <div class="head"><span class="num">16</span><h2>Loupe sur le grain du bois</h2></div>
+    <p class="note">Le curseur devient une loupe. Le client peut examiner la finition et le veinage de près, comme s'il était devant le meuble. Très convaincant sur une belle essence.</p>
+    <div class="fx-loupe" data-zoom="2.6">
+      <img src="images/deux-portes-sculptees-bois.webp" alt="Portes sculptées, détail du bois">
+    </div>
+  </section>
+
+  <!-- 17 -->
+  <section>
+    <div class="head"><span class="num">17</span><h2>Empilement au défilement</h2></div>
+    <p class="note">Chaque photo se cale sous la précédente et s'empile comme un jeu de cartes. Donne du rythme à une page longue. Faites défiler lentement.</p>
+    <div class="fx-stack">
+      <div class="fx-sticky"><figure class="fx-card"><div class="fx-frame"><img src="images/cuisine-plan-granit-armoires-vitrees.webp" alt="Cuisine"></div><figcaption class="fx-cap"><b>Cuisine plan granit</b><span>Armoires vitrées</span></figcaption></figure></div>
+      <div class="fx-sticky"><figure class="fx-card"><div class="fx-frame"><img src="images/canape-d-angle-beige-avec-pouf-orange.webp" alt="Canapé"></div><figcaption class="fx-cap"><b>Canapé d'angle</b><span>Avec pouf</span></figcaption></figure></div>
+      <div class="fx-sticky"><figure class="fx-card"><div class="fx-frame"><img src="images/table-a-manger-six-chaises-vernie.webp" alt="Table à manger"></div><figcaption class="fx-cap"><b>Table six chaises</b><span>Finition vernie</span></figcaption></figure></div>
+    </div>
+  </section>
+
+  <!-- 18 -->
+  <section>
+    <div class="head"><span class="num">18</span><h2>Rail horizontal</h2></div>
+    <p class="note">Une rangée qui se fait glisser à la souris ou au doigt, sans bouton. Parfait pour une catégorie entière sur téléphone.</p>
+    <div class="fx-rail">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/porte-acajou-installee.webp" alt="Porte acajou"></div><figcaption class="fx-cap"><b>Porte acajou</b><span>Installée</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/porte-bois-clair-installee.webp" alt="Porte bois clair"></div><figcaption class="fx-cap"><b>Porte bois clair</b><span>Deux panneaux</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/porte-trois-panneaux-fond-bleu.webp" alt="Porte trois panneaux"></div><figcaption class="fx-cap"><b>Trois panneaux</b><span>Sur mesure</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/trois-portes-en-bois-verni-appuyees-contre-un-mur.webp" alt="Portes vernies"></div><figcaption class="fx-cap"><b>Série de portes</b><span>Bois verni</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte double"></div><figcaption class="fx-cap"><b>Porte double</b><span>Acajou foncé</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 19 -->
+  <section>
+    <div class="head"><span class="num">19</span><h2>Zoom lent continu (Ken Burns)</h2></div>
+    <p class="note">L'image respire toute seule, sans rien faire : un zoom très lent qui va et vient. Donne vie à une photo fixe, comme au cinéma.</p>
+    <div class="fx-grid fx-kenburns">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine"></div><figcaption class="fx-cap"><b>Cuisine moulurée</b><span>Détails dorés</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/armoire-vernie-portes-ouvertes.webp" alt="Armoire"></div><figcaption class="fx-cap"><b>Armoire ouverte</b><span>Aménagement intérieur</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/comptoir-bois-massif.webp" alt="Comptoir"></div><figcaption class="fx-cap"><b>Comptoir massif</b><span>Agencement</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 20 -->
+  <section>
+    <div class="head"><span class="num">20</span><h2>Inclinaison 3D</h2></div>
+    <p class="note">La carte entière s'incline vers le curseur, avec un reflet qui suit. Plus marqué que la parallaxe du n° 1 : c'est l'objet qui bouge, pas l'image.</p>
+    <div class="fx-grid fx-tilt">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-bicolore-bois-blanc.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse bicolore</b><span>Bois et blanc</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-tv-noir-laque.webp" alt="Meuble TV"></div><figcaption class="fx-cap"><b>Meuble TV laqué</b><span>Noir mat</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/etagere-angle-bois.webp" alt="Étagère"></div><figcaption class="fx-cap"><b>Étagère d'angle</b><span>Gain de place</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 21 -->
+  <section>
+    <div class="head"><span class="num">21</span><h2>Rideau qui se lève</h2></div>
+    <p class="note">Un volet sombre se lève sur chaque photo, l'une après l'autre, quand la section arrive à l'écran. Solennel, comme un dévoilement.</p>
+    <div class="fx-grid fx-curtain">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/lit-en-bois-clair-sculpte-avec-tete-de-lit-ouvragee.webp" alt="Lit sculpté"></div><figcaption class="fx-cap"><b>Lit sculpté</b><span>Tête ouvragée</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet vitré"></div><figcaption class="fx-cap"><b>Buffet vitré</b><span>Salle à manger</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/placard-mural-portes-vitrees.webp" alt="Placard mural"></div><figcaption class="fx-cap"><b>Placard mural</b><span>Portes vitrées</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 22 -->
+  <section>
+    <div class="head"><span class="num">22</span><h2>Compteur animé</h2></div>
+    <p class="note">Les chiffres montent depuis zéro quand la section apparaît. Pour les repères qui rassurent : années de métier, pièces livrées, délai moyen.</p>
+    <div class="fx-count">
+      <div><b data-to="12" data-suffix=" ans"></b><span>de métier</span></div>
+      <div><b data-to="340" data-suffix="+"></b><span>pièces livrées</span></div>
+      <div><b data-to="100" data-suffix=" %"></b><span>sur mesure</span></div>
+      <div><b data-to="3" data-suffix=" sem."></b><span>délai moyen</span></div>
+    </div>
+  </section>
+
+  <!-- 23 -->
+  <section>
+    <div class="head"><span class="num">23</span><h2>Bouton magnétique</h2></div>
+    <p class="note">Le bouton vient à la rencontre du curseur, comme attiré. Approchez-vous sans cliquer. Fait beaucoup pour un bouton « Demander un devis ».</p>
+    <p style="margin:0 0 18px;"><a class="fx-magnet" href="#" data-strength="0.34">Demander un devis →</a></p>
+  </section>
+
+  <!-- 24 -->
+  <section>
+    <div class="head"><span class="num">24</span><h2>Bichromie au survol</h2></div>
+    <p class="note">Les photos s'affichent teintées dans vos couleurs — cuivre et brun — et reprennent leurs vraies couleurs au survol. Unifie un catalogue dont les photos ont des lumières très différentes.</p>
+    <div class="fx-grid fx-duotone">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/banc-coffre-de-rangement-en-bois.webp" alt="Banc coffre"></div><figcaption class="fx-cap"><b>Banc coffre</b><span>Rangement</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-entree-portemanteau.webp" alt="Meuble d'entrée"></div><figcaption class="fx-cap"><b>Meuble d'entrée</b><span>Portemanteau</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/casier-rangement-bois.webp" alt="Casier"></div><figcaption class="fx-cap"><b>Casier de rangement</b><span>Atelier</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 25 -->
+  <section>
+    <div class="head"><span class="num">25</span><h2>Révélation en mosaïque</h2></div>
+    <p class="note">La photo se découvre par petits carrés, en vague diagonale. Un peu spectaculaire — à réserver à une section mise en avant.</p>
+    <div class="fx-grid fx-mosaic">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/bureau-enfant-chaise-orange.webp" alt="Bureau enfant"></div><figcaption class="fx-cap"><b>Bureau enfant</b><span>Chaise assortie</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/lit-bebe-barreaux-bois.webp" alt="Lit bébé"></div><figcaption class="fx-cap"><b>Lit bébé</b><span>Barreaux bois</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-de-chevet-en-bois-clair-avec-tiroir.webp" alt="Table de chevet"></div><figcaption class="fx-cap"><b>Table de chevet</b><span>Bois clair</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 26 -->
+  <section>
+    <div class="head"><span class="num">26</span><h2>Machine à écrire</h2></div>
+    <p class="note">Une phrase s'écrit, s'efface et laisse place à la suivante, en boucle. Pour annoncer tout ce que vous fabriquez sans faire une liste.</p>
+    <p class="fx-typed" data-type="Nous fabriquons vos lits.|Nous fabriquons vos portes.|Nous fabriquons vos cuisines.|Nous fabriquons votre sur-mesure."
+       style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin:0 0 10px;"></p>
+  </section>
+
+  <!-- 27 -->
+  <section>
+    <div class="head"><span class="num">27</span><h2>Lamelles qui s'ouvrent</h2></div>
+    <p class="note">La photo est masquée par des lamelles verticales, comme un store, qui s'ouvrent au survol. Net et mécanique — un clin d'œil au travail du bois.</p>
+    <div class="fx-grid fx-blinds">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine"></div><figcaption class="fx-cap"><b>Vitrine blanche</b><span>Étagères</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/buffet-bas-tv-bois-clair.webp" alt="Buffet bas"></div><figcaption class="fx-cap"><b>Buffet bas TV</b><span>Bois clair</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier"></div><figcaption class="fx-cap"><b>Meuble sous évier</b><span>Évier inox</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 28 -->
+  <section>
+    <div class="head"><span class="num">28</span><h2>Bandeau de texte défilant</h2></div>
+    <p class="note">Une ligne de mots qui traverse la page sans fin. Se pose entre deux sections pour rappeler ce que vous faites, sans occuper d'espace.</p>
+    <div class="fx-ticker" data-speed="24">
+      <span style="font-family:'Cormorant Garamond',serif;">Lits · Tables · Portes · Cuisines · Armoires · Meubles TV · Bibliothèques · Agencement sur mesure ·&nbsp;</span>
+    </div>
+  </section>
+
+  <!-- 29 -->
+  <section>
+    <div class="head"><span class="num">29</span><h2>Dézoom au défilement</h2></div>
+    <p class="note">L'image arrive très rapprochée et s'ouvre peu à peu à mesure que vous descendez. Excellent pour une grande photo en pleine largeur.</p>
+    <div class="fx-zoomout">
+      <img src="images/lit-avec-deux-tables-de-chevet-exterieur.webp" alt="Lit et chevets présentés en extérieur">
+    </div>
+  </section>
+
+  <!-- 30 -->
+  <section>
+    <div class="head"><span class="num">30</span><h2>Apparition en cascade</h2></div>
+    <p class="note">Les cartes montent une à une quand la grille arrive à l'écran. Le plus sobre de tous — c'est celui qui vieillit le mieux sur un catalogue entier.</p>
+    <div class="fx-grid fx-stagger">
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-ronde-avec-quatre-chaises-assorties.webp" alt="Table ronde"></div><figcaption class="fx-cap"><b>Table ronde</b><span>Quatre chaises</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-carree-en-bois-fonce-avec-etagere.webp" alt="Table basse carrée"></div><figcaption class="fx-cap"><b>Table basse carrée</b><span>Bois foncé</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/armoire-deux-portes-deux-tiroirs.webp" alt="Armoire"></div><figcaption class="fx-cap"><b>Armoire</b><span>Deux portes, deux tiroirs</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/petite-table-ronde-pied-tripode-bicolore.webp" alt="Petite table ronde"></div><figcaption class="fx-cap"><b>Table tripode</b><span>Bicolore</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-tv-roulettes-porte-coulissante.webp" alt="Meuble TV à roulettes"></div><figcaption class="fx-cap"><b>Meuble TV mobile</b><span>Porte coulissante</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-tiroir-gueridon-verre.webp" alt="Table basse et guéridon"></div><figcaption class="fx-cap"><b>Table basse à tiroir</b><span>Guéridon verre</span></figcaption></figure>
     </div>
   </section>
 

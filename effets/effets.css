@@ -1,6 +1,6 @@
 /* ============================================================
    BIBLIOTHÈQUE D'EFFETS — Kin Bois Création
-   13 effets réutilisables, CSS natif, sans dépendance.
+   30 effets réutilisables, CSS natif, sans dépendance.
 
    Utilisation :
      <link rel="stylesheet" href="effets/effets.css">
@@ -26,7 +26,9 @@
 
 /* --- Base commune aux cartes --------------------------------- */
 .fx-card{
-  position:relative;background:var(--fx-panel);
+  /* margin:0 — les <figure> portent une marge par défaut du navigateur
+     (1em 40px) qui décalerait chaque carte dans sa grille. */
+  position:relative;margin:0;background:var(--fx-panel);
   border-radius:var(--fx-radius);overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,.07);
 }
@@ -247,12 +249,265 @@
 }
 .fx-cut.seen + .fx-rule,.fx-cut.seen .fx-rule{transform:scaleX(1);}
 
+/* ═══ 14 · COMPARATEUR AVANT / APRÈS ═════════════════════════
+   JS requis. Classe : .fx-compare
+   Structure : img.fx-before + img.fx-after
+   Libellés par data-before="Brut" data-after="Verni"           */
+.fx-compare{
+  --cut:50%;
+  position:relative;aspect-ratio:16/10;overflow:hidden;
+  border-radius:var(--fx-radius);box-shadow:0 2px 12px rgba(0,0,0,.1);
+  cursor:ew-resize;touch-action:none;user-select:none;
+}
+.fx-compare img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;pointer-events:none;
+}
+.fx-compare .fx-after{clip-path:inset(0 0 0 var(--cut));}
+.fx-compare .fx-handle{
+  position:absolute;top:0;bottom:0;left:var(--cut);width:2px;z-index:3;
+  background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.18);pointer-events:none;
+}
+.fx-compare .fx-handle::before{
+  content:"";position:absolute;top:50%;left:50%;
+  width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;
+  background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.34);
+}
+.fx-compare .fx-handle::after{
+  content:"‹ ›";position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);font-size:.92rem;letter-spacing:.05em;
+  color:var(--fx-ink);white-space:nowrap;   /* la poignée ne fait que 2 px */
+}
+.fx-compare::before,.fx-compare::after{
+  position:absolute;bottom:14px;z-index:2;padding:5px 12px;border-radius:99px;
+  font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;
+  background:rgba(24,14,8,.6);color:#F7F1E8;backdrop-filter:blur(4px);
+}
+.fx-compare::before{content:attr(data-before);left:14px;}
+.fx-compare::after{content:attr(data-after);right:14px;}
+.fx-compare:not([data-before])::before,
+.fx-compare:not([data-after])::after{display:none;}
+.fx-compare:focus-visible{outline:2px solid var(--fx-accent);outline-offset:3px;}
+
+/* ═══ 15 · BANDE DÉFILANTE DE PHOTOS ═════════════════════════
+   JS requis (duplique le contenu). Classe : .fx-marquee
+   Vitesse : data-speed="38" (secondes) · sens : data-direction="reverse" */
+.fx-marquee{
+  overflow:hidden;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.fx-marquee .fx-track{display:flex;width:max-content;animation:fx-slide var(--fx-dur,38s) linear infinite;}
+.fx-marquee .fx-set{display:flex;gap:20px;padding-right:20px;}
+.fx-marquee[data-direction="reverse"] .fx-track{animation-direction:reverse;}
+.fx-marquee:hover .fx-track{animation-play-state:paused;}
+.fx-marquee .fx-card{width:250px;flex:none;}
+.fx-marquee .fx-frame{aspect-ratio:4/3;}
+@keyframes fx-slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ═══ 16 · LOUPE SUR LE GRAIN DU BOIS ════════════════════════
+   JS requis. Classe : .fx-loupe > img · zoom : data-zoom="2.4"  */
+.fx-loupe{
+  position:relative;aspect-ratio:4/3;overflow:hidden;
+  border-radius:var(--fx-radius);cursor:crosshair;
+}
+.fx-loupe img{width:100%;height:100%;object-fit:cover;display:block;}
+.fx-loupe .fx-lens{
+  position:absolute;left:var(--mx,50%);top:var(--my,50%);
+  width:180px;height:180px;margin:-90px 0 0 -90px;border-radius:50%;
+  background-repeat:no-repeat;background-position:var(--mx,50%) var(--my,50%);
+  box-shadow:0 0 0 2px rgba(255,255,255,.85),0 14px 34px rgba(0,0,0,.38);
+  opacity:0;transition:opacity .25s;pointer-events:none;
+}
+.fx-loupe:hover .fx-lens{opacity:1;}
+
+/* ═══ 17 · EMPILEMENT AU DÉFILEMENT ══════════════════════════
+   Classe : .fx-stack > .fx-sticky > .fx-card (CSS seul)         */
+.fx-stack{display:flex;flex-direction:column;gap:26px;}
+.fx-stack .fx-sticky{position:sticky;top:90px;}
+.fx-stack .fx-sticky:nth-child(2){top:106px;}
+.fx-stack .fx-sticky:nth-child(3){top:122px;}
+.fx-stack .fx-sticky:nth-child(4){top:138px;}
+.fx-stack .fx-sticky:nth-child(5){top:154px;}
+.fx-stack .fx-sticky:nth-child(6){top:170px;}
+.fx-stack .fx-card{box-shadow:0 -4px 34px var(--fx-shadow);}
+.fx-stack .fx-frame{aspect-ratio:16/9;}
+
+/* ═══ 18 · RAIL HORIZONTAL ═══════════════════════════════════
+   JS requis (glisser à la souris). Classe : .fx-rail            */
+.fx-rail{
+  display:flex;gap:20px;overflow-x:auto;padding:6px 2px 18px;
+  scroll-snap-type:x mandatory;cursor:grab;overscroll-behavior-x:contain;
+  scrollbar-width:thin;scrollbar-color:var(--fx-accent) transparent;
+}
+.fx-rail::-webkit-scrollbar{height:6px;}
+.fx-rail::-webkit-scrollbar-thumb{background:var(--fx-accent);border-radius:99px;}
+.fx-rail .fx-card{flex:none;width:clamp(210px,26vw,290px);scroll-snap-align:center;}
+.fx-rail .fx-frame{aspect-ratio:3/4;}
+.fx-rail.fx-drag{cursor:grabbing;scroll-snap-type:none;}
+.fx-rail.fx-drag *{pointer-events:none;}
+
+/* ═══ 19 · KEN BURNS (zoom lent continu) ═════════════════════
+   Classe : .fx-kenburns (CSS seul)                              */
+.fx-kenburns .fx-frame img{animation:fx-kb 22s ease-in-out infinite alternate;}
+@keyframes fx-kb{
+  from{transform:scale(1.03) translate(0,0);}
+  to{transform:scale(1.2) translate(-2.6%,-2%);}
+}
+
+/* ═══ 20 · INCLINAISON 3D ════════════════════════════════════
+   JS requis (--px / --py). Classe : .fx-tilt                    */
+.fx-tilt .fx-card{transition:transform .5s cubic-bezier(.16,.8,.24,1),box-shadow .5s;}
+.fx-tilt .fx-card:hover{
+  transform:rotateX(calc(var(--py,0)*-11deg)) rotateY(calc(var(--px,0)*15deg)) scale(1.03);
+  box-shadow:0 26px 52px var(--fx-shadow);
+  transition:transform .12s linear,box-shadow .5s;
+}
+.fx-tilt .fx-card::before{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),
+    rgba(255,255,255,.34),transparent 58%);
+  opacity:0;transition:opacity .4s;
+}
+.fx-tilt .fx-card:hover::before{opacity:1;}
+
+/* ═══ 21 · RIDEAU QUI SE LÈVE ════════════════════════════════
+   JS requis (.seen). Classe : .fx-curtain sur la grille         */
+.fx-curtain .fx-frame::after{
+  content:"";position:absolute;inset:0;z-index:2;background:var(--fx-ink);
+  transform:scaleY(1);transform-origin:bottom;
+  transition:transform 1s cubic-bezier(.76,0,.24,1);
+  transition-delay:calc(var(--si,0)*130ms);
+}
+.fx-curtain.seen .fx-frame::after{transform:scaleY(0);}
+.fx-curtain .fx-frame img{
+  transform:scale(1.22);
+  transition:transform 1.4s cubic-bezier(.22,.9,.28,1);
+  transition-delay:calc(var(--si,0)*130ms);
+}
+.fx-curtain.seen .fx-frame img{transform:scale(1);}
+
+/* ═══ 22 · COMPTEUR ANIMÉ ════════════════════════════════════
+   JS requis. Classe : .fx-count · <b data-to="250" data-suffix="+"> */
+.fx-count{display:flex;flex-wrap:wrap;gap:34px 48px;}
+.fx-count > div{flex:1 1 130px;min-width:0;}
+.fx-count b{
+  display:block;font-size:clamp(2rem,5vw,2.7rem);font-weight:700;line-height:1;
+  color:var(--fx-accent);font-variant-numeric:tabular-nums;
+}
+.fx-count span{
+  display:block;margin-top:7px;font-size:.71rem;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--fx-faint);
+}
+
+/* ═══ 23 · BOUTON MAGNÉTIQUE ═════════════════════════════════
+   JS requis. Classe : .fx-magnet · force : data-strength="0.32"  */
+.fx-magnet{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:15px 32px;border-radius:99px;border:1px solid var(--fx-accent);
+  background:var(--fx-accent);color:#fff;text-decoration:none;
+  font:inherit;font-weight:500;cursor:pointer;will-change:transform;
+  transition:transform .4s cubic-bezier(.22,.9,.28,1),box-shadow .35s;
+}
+.fx-magnet:hover{box-shadow:0 14px 32px var(--fx-shadow);}
+.fx-magnet.fx-pull{transition:transform .12s linear,box-shadow .35s;}
+
+/* ═══ 24 · BICHROMIE AU SURVOL ═══════════════════════════════
+   Classe : .fx-duotone (CSS seul)                               */
+.fx-duotone .fx-frame::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(140deg,var(--fx-ink),var(--fx-accent));
+  mix-blend-mode:color;opacity:.92;transition:opacity .55s;
+}
+.fx-duotone .fx-frame img{
+  filter:contrast(1.1) saturate(.25);
+  transition:filter .55s,transform 1s cubic-bezier(.16,.8,.24,1);
+}
+.fx-duotone .fx-card:hover .fx-frame::after{opacity:0;}
+.fx-duotone .fx-card:hover .fx-frame img{filter:none;transform:scale(1.05);}
+
+/* ═══ 25 · RÉVÉLATION EN MOSAÏQUE ════════════════════════════
+   JS requis (construit les tuiles + .seen). Classe : .fx-mosaic  */
+.fx-mosaic .fx-tiles{
+  position:absolute;inset:0;z-index:2;display:grid;pointer-events:none;
+  grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);
+}
+.fx-mosaic .fx-tiles i{
+  background:var(--fx-panel);
+  transition:opacity .55s ease,transform .55s ease;
+  transition-delay:calc(var(--ti,0)*42ms);
+}
+.fx-mosaic.seen .fx-tiles i{opacity:0;transform:scale(.55);}
+
+/* ═══ 26 · MACHINE À ÉCRIRE ══════════════════════════════════
+   JS requis. <p class="fx-typed" data-type="Lits|Tables|Portes"> */
+.fx-typed{font-variant-ligatures:none;}
+.fx-typed .fx-caret{
+  display:inline-block;width:2px;height:1em;margin-left:4px;
+  vertical-align:-.13em;background:var(--fx-accent);
+  animation:fx-blink .9s steps(1) infinite;
+}
+@keyframes fx-blink{50%{opacity:0;}}
+
+/* ═══ 27 · LAMELLES QUI S'OUVRENT ════════════════════════════
+   Classe : .fx-blinds (CSS seul)                                */
+@property --fx-blind{ syntax:'<percentage>'; inherits:false; initial-value:76%; }
+.fx-blinds .fx-frame::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  /* 76 % : les lamelles restent entrouvertes au repos, sinon l'image
+     n'est qu'un voile uniforme et l'effet ne se lit pas. */
+  --fx-blind:76%;
+  background-image:linear-gradient(90deg,
+    rgba(30,18,10,.88) 0 var(--fx-blind),transparent var(--fx-blind));
+  background-size:16.666% 100%;
+  transition:--fx-blind .75s cubic-bezier(.22,.9,.28,1);
+}
+.fx-blinds .fx-card:hover .fx-frame::after{--fx-blind:0%;}
+
+/* ═══ 28 · BANDEAU DE TEXTE DÉFILANT ═════════════════════════
+   JS requis (duplique le contenu). Classe : .fx-ticker          */
+.fx-ticker{
+  overflow:hidden;border-block:1px solid var(--fx-faint);
+  font-family:inherit;
+}
+.fx-ticker .fx-track{display:flex;width:max-content;animation:fx-slide var(--fx-dur,26s) linear infinite;}
+.fx-ticker .fx-set{display:flex;gap:0;padding-right:40px;}
+.fx-ticker .fx-set > *{
+  padding:15px 0;white-space:nowrap;
+  font-size:clamp(1rem,2.4vw,1.5rem);color:var(--fx-ink);
+}
+.fx-ticker:hover .fx-track{animation-play-state:paused;}
+
+/* ═══ 29 · DÉZOOM AU DÉFILEMENT ══════════════════════════════
+   JS requis (--fx-z). Classe : .fx-zoomout > img                */
+.fx-zoomout{overflow:hidden;border-radius:var(--fx-radius);box-shadow:0 16px 40px var(--fx-shadow);}
+.fx-zoomout img{
+  width:100%;height:clamp(240px,46vh,460px);object-fit:cover;display:block;
+  transform:scale(var(--fx-z,1.28));will-change:transform;
+}
+
+/* ═══ 30 · APPARITION EN CASCADE ═════════════════════════════
+   JS requis (.seen + --si). Classe : .fx-stagger sur la grille  */
+.fx-stagger .fx-card{
+  opacity:0;transform:translateY(26px) scale(.97);
+  transition:opacity .7s cubic-bezier(.22,.9,.28,1),transform .7s cubic-bezier(.22,.9,.28,1);
+  transition-delay:calc(var(--si,0)*95ms);
+}
+.fx-stagger.seen .fx-card{opacity:1;transform:none;}
+
 /* --- Accessibilité : respecte le réglage système -------------- */
 @media(prefers-reduced-motion:reduce){
-  .fx-card,.fx-frame,.fx-frame img,.fx-cap,.fx-col,.fx-unfurl,.fx-flip-inner{
+  .fx-card,.fx-frame,.fx-frame img,.fx-cap,.fx-col,.fx-unfurl,.fx-flip-inner,
+  .fx-magnet,.fx-zoomout img,.fx-track{
     transition:none !important;animation:none !important;transform:none !important;
   }
   .fx-card::before,.fx-card::after{display:none !important;}
   .fx-words .fx-w i,.fx-cut span{transform:none !important;clip-path:none !important;}
   .fx-unfurl{width:100% !important;border-radius:12px !important;}
+  /* rien ne doit rester masqué si les animations sont coupées */
+  .fx-curtain .fx-frame::after,.fx-mosaic .fx-tiles{display:none !important;}
+  .fx-stagger .fx-card{opacity:1 !important;}
+  .fx-blinds .fx-frame::after{--fx-blind:0% !important;transition:none !important;}
+  .fx-typed .fx-caret{animation:none !important;}
+  .fx-marquee .fx-track,.fx-ticker .fx-track{width:auto !important;}
 }
