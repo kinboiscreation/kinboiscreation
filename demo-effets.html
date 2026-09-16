@@ -201,6 +201,70 @@
     font-size:.98rem;margin-top:3px;
   }
 
+  /* ═══ 10 · TITRE RÉVÉLÉ MOT À MOT ═══ */
+  .fx10 .big{
+    font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4.2vw,3rem);
+    font-weight:600;line-height:1.22;margin:0 0 6px;max-width:15ch;
+  }
+  .fx10 .w{display:inline-block;overflow:hidden;vertical-align:bottom;}
+  .fx10 .w i{
+    display:inline-block;font-style:normal;transform:translateY(105%);
+    transition:transform .8s cubic-bezier(.22,.9,.28,1);
+    transition-delay:calc(var(--wi,0)*70ms);
+  }
+  .fx10.seen .w i{transform:translateY(0);}
+  .fx10 .sub{color:var(--faint);max-width:52ch;line-height:1.6;margin:14px 0 0;
+    opacity:0;transform:translateY(14px);transition:opacity .7s .5s,transform .7s .5s;}
+  .fx10.seen .sub{opacity:1;transform:none;}
+
+  /* ═══ 11 · IMAGE QUI SE DÉPLOIE AU SCROLL ═══ */
+  .fx11-wrap{display:flex;justify-content:center;}
+  .fx11{
+    width:52%;border-radius:120px;overflow:hidden;
+    box-shadow:0 18px 44px rgba(74,46,28,.2);
+    transition:width 1s cubic-bezier(.22,.9,.28,1),border-radius 1s cubic-bezier(.22,.9,.28,1);
+  }
+  .fx11.seen{width:100%;border-radius:12px;}
+  .fx11 img{width:100%;height:clamp(230px,38vh,400px);object-fit:cover;display:block;
+    transform:scale(1.22);transition:transform 1.2s cubic-bezier(.22,.9,.28,1);}
+  .fx11.seen img{transform:scale(1);}
+
+  /* ═══ 12 · PROJECTEUR AU CURSEUR ═══ */
+  .fx12{
+    position:relative;border-radius:12px;overflow:hidden;cursor:crosshair;
+    height:clamp(250px,42vh,420px);background:var(--ink);
+  }
+  .fx12 .layer{position:absolute;inset:0;}
+  .fx12 .layer img{width:100%;height:100%;object-fit:cover;display:block;}
+  .fx12 .under{
+    display:grid;place-content:center;text-align:center;padding:30px;color:#F3E9DC;
+    background:linear-gradient(135deg,#3A2416,#1D120A);
+  }
+  .fx12 .under b{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,2rem);font-weight:600;}
+  .fx12 .under span{display:block;margin-top:9px;font-size:.84rem;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.75;}
+  .fx12 .over{
+    -webkit-mask:radial-gradient(circle 150px at var(--mx,50%) var(--my,50%),transparent 0 96%,#000 100%);
+    mask:radial-gradient(circle 150px at var(--mx,50%) var(--my,50%),transparent 0 96%,#000 100%);
+  }
+
+  /* ═══ 13 · DÉCOUPE VERTICALE ═══ */
+  .fx13 .cut{
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(1.3rem,3vw,2.1rem);
+    font-weight:700;line-height:1.3;margin:0;
+  }
+  .fx13 .cut span{
+    display:inline-block;
+    clip-path:inset(0 0 100% 0);
+    transition:clip-path .7s cubic-bezier(.22,.9,.28,1),transform .7s cubic-bezier(.22,.9,.28,1);
+    transform:translateY(12px);
+    transition-delay:calc(var(--ci,0)*55ms);
+  }
+  .fx13.seen .cut span{clip-path:inset(0 0 0 0);transform:none;}
+  .fx13 .rule{height:1px;background:var(--line);margin:22px 0 0;
+    transform:scaleX(0);transform-origin:left;transition:transform 1s .35s cubic-bezier(.22,.9,.28,1);}
+  .fx13.seen .rule{transform:scaleX(1);}
+
   footer{padding:66px 0 80px;color:var(--faint);font-size:.92rem;line-height:1.6;}
   footer b{color:var(--ink);}
 </style>
@@ -345,6 +409,45 @@
     </div>
   </section>
 
+  <!-- 10 -->
+  <section>
+    <div class="head"><span class="num">10</span><h2>Titre révélé mot à mot</h2></div>
+    <p class="note">Chaque mot du titre monte depuis un masque, l'un après l'autre. Pour les en-têtes de vos catégories — donne tout de suite une impression de soin.</p>
+    <div class="fx10">
+      <p class="big" data-reveal="D'une bûche à une pièce qui reste"></p>
+      <p class="sub">Chaque meuble est pensé pour durer, façonné à la main dans l'atelier de Kinshasa.</p>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section>
+    <div class="head"><span class="num">11</span><h2>Image qui se déploie</h2></div>
+    <p class="note">La photo arrive étroite aux bords très arrondis, puis s'élargit sur toute la largeur en se dézoomant. Idéal pour présenter une réalisation phare.</p>
+    <div class="fx11-wrap">
+      <div class="fx11"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine bois doré"></div>
+    </div>
+  </section>
+
+  <!-- 12 -->
+  <section>
+    <div class="head"><span class="num">12</span><h2>Projecteur au curseur</h2></div>
+    <p class="note">Promenez la souris sur le bloc : votre curseur agit comme une lampe qui découvre la photo par-dessous. Effet fort pour une bannière « sur mesure ».</p>
+    <div class="fx12">
+      <div class="layer under"><div><b>Fabriqué à la main, à Kinshasa</b><span>Promenez le curseur</span></div></div>
+      <div class="layer over"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit en bois massif"></div>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section>
+    <div class="head"><span class="num">13</span><h2>Découpe verticale</h2></div>
+    <p class="note">Le texte se dévoile ligne par ligne par un volet qui s'ouvre vers le bas, suivi d'un filet qui se trace. Sobre, net, typographique.</p>
+    <div class="fx13">
+      <p class="cut" data-cut="Lits · Tables · Portes|Rangements · Cuisines|Agencement sur mesure"></p>
+      <div class="rule"></div>
+    </div>
+  </section>
+
   <footer>
     <b>Comment répondre :</b> donnez-moi simplement le numéro qui vous plaît (par exemple « le 3 »).<br>
     Vous pouvez aussi en choisir plusieurs, un par catégorie du catalogue.
@@ -425,6 +528,42 @@
     addEventListener('scroll',()=>{ if(!raf) raf=requestAnimationFrame(tick); },{passive:true});
     tick();
   })();
+
+  // Titre mot a mot (10)
+  document.querySelectorAll('[data-reveal]').forEach(el=>{
+    el.innerHTML = el.dataset.reveal.split(' ').map((w,i)=>
+      '<span class="w" style="--wi:'+i+'"><i>'+w+'</i></span>').join(' ');
+  });
+
+  // Decoupe verticale (13)
+  document.querySelectorAll('[data-cut]').forEach(el=>{
+    el.innerHTML = el.dataset.cut.split('|').map((l,i)=>
+      '<span style="--ci:'+i+'">'+l+'</span>').join('<br>');
+  });
+
+  // Declencheur commun au scroll (10, 11, 13)
+  (function(){
+    const targets=[...document.querySelectorAll('.fx10,.fx11,.fx13')];
+    if(!targets.length) return;
+    const io=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target);} });
+    },{threshold:.25});
+    targets.forEach(t=>io.observe(t));
+    setTimeout(()=>targets.forEach(t=>t.classList.add('seen')),2500); // filet de securite
+  })();
+
+  // Projecteur au curseur (12)
+  document.querySelectorAll('.fx12').forEach(box=>{
+    let raf=null;
+    box.addEventListener('mousemove',e=>{
+      const r=box.getBoundingClientRect();
+      if(raf) cancelAnimationFrame(raf);
+      raf=requestAnimationFrame(()=>{
+        box.style.setProperty('--mx',(((e.clientX-r.left)/r.width)*100)+'%');
+        box.style.setProperty('--my',(((e.clientY-r.top)/r.height)*100)+'%');
+      });
+    });
+  });
 </script>
 </body>
 </html>
