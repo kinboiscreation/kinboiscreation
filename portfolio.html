@@ -29,12 +29,12 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f9f7f4;
+            color: #3e2723;
+            background-color: #faf8f6;
         }
 
         header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, #5d4037 0%, #6d4c41 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -49,7 +49,7 @@
 
         header .tagline {
             font-size: 1.1rem;
-            color: #ecf0f1;
+            color: #efebe9;
             margin-bottom: 1rem;
         }
 
@@ -59,7 +59,7 @@
         }
 
         header .contact-info a {
-            color: #f39c12;
+            color: #d7ccc8;
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s;
@@ -70,7 +70,7 @@
         }
 
         nav {
-            background-color: #34495e;
+            background-color: #6d4c41;
             padding: 1rem 2rem;
             position: sticky;
             top: 0;
@@ -96,8 +96,8 @@
         }
 
         nav a:hover {
-            background-color: #f39c12;
-            color: #2c3e50;
+            background-color: #a1887f;
+            color: white;
         }
 
         .hero {
@@ -163,10 +163,10 @@
         }
 
         .about-section h2 {
-            color: #2c3e50;
+            color: #5d4037;
             margin-bottom: 1rem;
             font-size: 2rem;
-            border-bottom: 3px solid #f39c12;
+            border-bottom: 3px solid #a1887f;
             padding-bottom: 1rem;
         }
 
@@ -178,16 +178,16 @@
         }
 
         .ads-section {
-            background: #fff3cd;
+            background: #ffe0b2;
             padding: 2rem;
             margin: 2rem auto;
             max-width: 1200px;
-            border-left: 4px solid #f39c12;
+            border-left: 4px solid #a1887f;
             border-radius: 4px;
         }
 
         .ads-section h3 {
-            color: #2c3e50;
+            color: #5d4037;
             margin-bottom: 1rem;
         }
 
@@ -199,7 +199,7 @@
         }
 
         .ads-item strong {
-            color: #f39c12;
+            color: #6d4c41;
         }
 
         .container {
@@ -213,12 +213,20 @@
         }
 
         .category-section h2 {
-            color: #2c3e50;
+            color: #5d4037;
             font-size: 2rem;
             margin-bottom: 2rem;
-            border-bottom: 3px solid #f39c12;
+            border-bottom: 3px solid #a1887f;
             padding-bottom: 1rem;
             text-align: center;
+        }
+
+        .category-number {
+            font-size: 0.9rem;
+            color: #a1887f;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
         }
 
         .gallery {
@@ -254,7 +262,7 @@
         }
 
         .gallery-item-info h3 {
-            color: #2c3e50;
+            color: #5d4037;
             font-size: 1rem;
             margin-bottom: 0.5rem;
         }
@@ -302,17 +310,17 @@
             top: 10px;
             font-size: 2rem;
             font-weight: bold;
-            color: #2c3e50;
+            color: #5d4037;
             cursor: pointer;
             transition: color 0.3s;
         }
 
         .close:hover {
-            color: #f39c12;
+            color: #a1887f;
         }
 
         footer {
-            background: #2c3e50;
+            background: #5d4037;
             color: white;
             text-align: center;
             padding: 2rem;
@@ -328,7 +336,7 @@
         }
 
         footer a {
-            color: #f39c12;
+            color: #d7ccc8;
             text-decoration: none;
             margin: 0 1rem;
         }
@@ -337,19 +345,7 @@
             text-decoration: underline;
         }
 
-        footer .about-section {
-            grid-template-columns: 1fr;
-        }
-
         @media (max-width: 768px) {
-            .about-section {
-                grid-template-columns: 1fr;
-            }
-
-            .about-image {
-                grid-column: 1;
-            }
-
             header h1 {
                 font-size: 1.8rem;
             }
@@ -389,6 +385,14 @@
             }
 
             .about-section {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image {
+                grid-column: 1;
+            }
+
+            .about-section {
                 padding: 2rem 1rem;
             }
 
@@ -411,11 +415,11 @@
     <nav>
         <ul>
             <li><a href="#about">À Propos</a></li>
-            <li><a href="#lits">Lits</a></li>
+            <li><a href="#chambre">Chambre</a></li>
+            <li><a href="#salon">Salon</a></li>
             <li><a href="#tables">Tables</a></li>
             <li><a href="#portes">Portes</a></li>
-            <li><a href="#rangements">Rangements</a></li>
-            <li><a href="#agencement">Agencement</a></li>
+            <li><a href="#cuisine">Cuisine</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -433,7 +437,7 @@
                 <h2>À Propos de Kin Bois Création</h2>
                 <p>Je fabrique seul, à Kinshasa, des meubles en bois massif pensés pour durer : lits, tables, portes, rangements, et agencement de bureaux et d'espaces commerciaux.</p>
                 <p>Chaque pièce est créée avec attention au détail, utilisant des bois de qualité et des techniques artisanales éprouvées. Mon engagement est de fournir des meubles robustes et esthétiques qui résistent au temps.</p>
-                <p><strong>Contactez-moi pour discuter de votre projet :</strong> <a href="tel:+243836002274" style="color: #f39c12;">+243 836 002 274</a></p>
+                <p><strong>Contactez-moi pour discuter de votre projet :</strong> <a href="tel:+243836002274" style="color: #a1887f;">+243 836 002 274</a></p>
             </div>
             <div class="about-image">
                 <img src="images/artisan-jeantim.webp" alt="Artisan Kin Bois Création">
@@ -456,9 +460,10 @@
             </div>
         </section>
 
-        <!-- LITS -->
-        <section id="lits" class="category-section">
-            <h2>🛏️ Lits</h2>
+        <!-- CHAMBRE: LITS & CHEVETS -->
+        <section id="chambre" class="category-section">
+            <div class="category-number">01</div>
+            <h2>🛏️ Chambre: Lits & Chevets</h2>
             <div class="gallery">
                 <div class="gallery-item" onclick="openModal(this)">
                     <img src="images/lit-avec-deux-tables-de-chevet-exterieur.webp" alt="Lit avec tables de chevet">
@@ -508,12 +513,63 @@
                         <h3>Lit Tête Sculptée</h3>
                     </div>
                 </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-de-chevet-en-bois-clair-avec-tiroir.webp" alt="Table de chevet bois clair">
+                    <div class="gallery-item-info">
+                        <h3>Table Chevet Bois Clair</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-chevet-tiroir-etageres-chene.webp" alt="Table de chevet">
+                    <div class="gallery-item-info">
+                        <h3>Table de Chevet</h3>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- TABLES -->
+        <!-- SALON & SÉJOUR -->
+        <section id="salon" class="category-section">
+            <div class="category-number">02</div>
+            <h2>🛋️ Salon & Séjour</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/canape-d-angle-beige-avec-pouf-orange.webp" alt="Canapé angle">
+                    <div class="gallery-item-info">
+                        <h3>Canapé d'Angle</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/canape-angle-beige-pouf-orange-2.webp" alt="Canapé angle pouf">
+                    <div class="gallery-item-info">
+                        <h3>Canapé d'Angle Pouf</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-tv-flottant-moderne.webp" alt="Meuble TV flottant">
+                    <div class="gallery-item-info">
+                        <h3>Meuble TV Flottant</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petit-meuble-tv-appoint.webp" alt="Petit meuble TV">
+                    <div class="gallery-item-info">
+                        <h3>Petit Meuble TV</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-entree-portemanteau.webp" alt="Meuble entrée portemanteau">
+                    <div class="gallery-item-info">
+                        <h3>Meuble Entrée Portemanteau</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABLES & SALLE À MANGER -->
         <section id="tables" class="category-section">
-            <h2>🪑 Tables</h2>
+            <div class="category-number">03</div>
+            <h2>🪑 Tables & Salle à Manger</h2>
             <div class="gallery">
                 <div class="gallery-item" onclick="openModal(this)">
                     <img src="images/table-a-manger-avec-quatre-chaises-plateau-noir.webp" alt="Table à manger noir">
@@ -543,18 +599,6 @@
                     <img src="images/table-basse-carree-en-bois-fonce-avec-etagere.webp" alt="Table basse avec étagère">
                     <div class="gallery-item-info">
                         <h3>Table Basse avec Étagère</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/table-chevet-tiroir-etageres-chene.webp" alt="Table de chevet">
-                    <div class="gallery-item-info">
-                        <h3>Table de Chevet</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/table-de-chevet-en-bois-clair-avec-tiroir.webp" alt="Table de chevet bois clair">
-                    <div class="gallery-item-info">
-                        <h3>Table Chevet Bois Clair</h3>
                     </div>
                 </div>
                 <div class="gallery-item" onclick="openModal(this)">
@@ -602,9 +646,10 @@
             </div>
         </section>
 
-        <!-- PORTES -->
+        <!-- PORTES SUR MESURE -->
         <section id="portes" class="category-section">
-            <h2>🚪 Portes</h2>
+            <div class="category-number">04</div>
+            <h2>🚪 Portes sur Mesure</h2>
             <div class="gallery">
                 <div class="gallery-item" onclick="openModal(this)">
                     <img src="images/porte-double-acajou-fonce.webp" alt="Porte double acajou">
@@ -657,10 +702,29 @@
             </div>
         </section>
 
-        <!-- RANGEMENTS -->
-        <section id="rangements" class="category-section">
-            <h2>📦 Rangements</h2>
+        <!-- CUISINE -->
+        <section id="cuisine" class="category-section">
+            <div class="category-number">05</div>
+            <h2>👨‍🍳 Cuisine</h2>
             <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine bois">
+                    <div class="gallery-item-info">
+                        <h3>Cuisine Bois Doré</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/cuisine-plan-granit-armoires-vitrees.webp" alt="Cuisine granit">
+                    <div class="gallery-item-info">
+                        <h3>Cuisine Granit & Bois</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier">
+                    <div class="gallery-item-info">
+                        <h3>Meuble Sous Évier</h3>
+                    </div>
+                </div>
                 <div class="gallery-item" onclick="openModal(this)">
                     <img src="images/armoire-vernie-porte-miroir.webp" alt="Armoire avec miroir">
                     <div class="gallery-item-info">
@@ -671,12 +735,6 @@
                     <img src="images/armoire-vernie-portes-ouvertes.webp" alt="Armoire portes ouvertes">
                     <div class="gallery-item-info">
                         <h3>Armoire Portes Ouvertes</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/banc-coffre-de-rangement-en-bois.webp" alt="Banc coffre">
-                    <div class="gallery-item-info">
-                        <h3>Banc Coffre</h3>
                     </div>
                 </div>
                 <div class="gallery-item" onclick="openModal(this)">
@@ -710,71 +768,16 @@
                     </div>
                 </div>
                 <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/meuble-entree-portemanteau.webp" alt="Meuble entrée portemanteau">
+                    <img src="images/banc-coffre-de-rangement-en-bois.webp" alt="Banc coffre">
                     <div class="gallery-item-info">
-                        <h3>Meuble Entrée Portemanteau</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier">
-                    <div class="gallery-item-info">
-                        <h3>Meuble Sous Évier</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/meuble-tv-flottant-moderne.webp" alt="Meuble TV flottant">
-                    <div class="gallery-item-info">
-                        <h3>Meuble TV Flottant</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/petit-meuble-tv-appoint.webp" alt="Petit meuble TV">
-                    <div class="gallery-item-info">
-                        <h3>Petit Meuble TV</h3>
+                        <h3>Banc Coffre</h3>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- AGENCEMENT -->
-        <section id="agencement" class="category-section">
-            <h2>🏢 Agencement & Espaces</h2>
-            <div class="gallery">
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/bureau-enfant-chaise-orange.webp" alt="Bureau enfant">
-                    <div class="gallery-item-info">
-                        <h3>Bureau Enfant</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine bois">
-                    <div class="gallery-item-info">
-                        <h3>Cuisine Bois Doré</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/cuisine-plan-granit-armoires-vitrees.webp" alt="Cuisine granit">
-                    <div class="gallery-item-info">
-                        <h3>Cuisine Granit & Bois</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/canape-d-angle-beige-avec-pouf-orange.webp" alt="Canapé angle">
-                    <div class="gallery-item-info">
-                        <h3>Canapé d'Angle</h3>
-                    </div>
-                </div>
-                <div class="gallery-item" onclick="openModal(this)">
-                    <img src="images/canape-angle-beige-pouf-orange-2.webp" alt="Canapé angle pouf">
-                    <div class="gallery-item-info">
-                        <h3>Canapé d'Angle Pouf</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="about-section text-only" style="background: #f39c12; color: white;">
-            <h2 style="color: white; border-bottom-color: white;">Contactez-moi</h2>
+        <section id="contact" class="about-section text-only" style="background: #6d4c41; color: white;">
+            <h2 style="color: white; border-bottom-color: #d7ccc8;">Contactez-moi</h2>
             <p style="color: white; font-size: 1.2rem;">
                 <strong>Téléphone :</strong> <a href="tel:+243836002274" style="color: white; text-decoration: underline;">+243 836 002 274</a>
             </p>
