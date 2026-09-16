@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kin Bois — Démonstration d'effets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  @property --halo{syntax:'<angle>';inherits:false;initial-value:0deg;}
+
+  :root{
+    --bg:#FAF8F5; --panel:#FFF; --ink:#4A2E1C; --faint:rgba(74,46,28,.62);
+    --brass:#B87333; --gold:#C9A961; --line:rgba(120,73,43,.3);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Space Grotesk',sans-serif;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  header{padding:54px 0 12px;}
+  header h1{font-family:'Cormorant Garamond',serif;font-size:2.4rem;margin:0 0 10px;font-weight:600;}
+  header p{color:var(--faint);margin:0;max-width:620px;line-height:1.6;}
+
+  section{padding:46px 0 10px;border-top:1px solid var(--line);margin-top:44px;}
+  .head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;}
+  .num{
+    font-size:2.1rem;font-weight:700;color:var(--brass);line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .head h2{font-size:1.32rem;margin:0;font-weight:700;}
+  .note{color:var(--faint);font-size:.93rem;margin:0 0 30px;line-height:1.55;max-width:660px;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;perspective:1600px;}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr;}}
+
+  .card{
+    position:relative;background:var(--panel);border-radius:10px;overflow:hidden;
+    box-shadow:0 2px 10px rgba(74,46,28,.08);
+  }
+  .frame{position:relative;aspect-ratio:4/3;overflow:hidden;background:#eee;}
+  .frame img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cap{padding:15px 17px 18px;}
+  .cap b{display:block;font-size:.97rem;font-weight:600;}
+  .cap span{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);}
+
+  /* ═══ 1 · PARALLAXE 3D ═══ */
+  .fx1 .card{transition:transform .5s cubic-bezier(.16,.8,.24,1),box-shadow .5s;}
+  .fx1 .card:hover{box-shadow:0 22px 46px rgba(74,46,28,.22);}
+  .fx1 .frame img{
+    transform:scale(1.14) translate(calc(var(--px,0)*-14px),calc(var(--py,0)*-14px));
+    transition:transform .35s ease-out;
+  }
+
+  /* ═══ 2 · EXPANSION (les voisines se rétractent) ═══ */
+  .fx2{display:flex;gap:14px;height:330px;}
+  .fx2 .card{flex:1;transition:flex .65s cubic-bezier(.22,.9,.28,1);min-width:0;}
+  .fx2:hover .card{flex:.62;}
+  .fx2 .card:hover{flex:2.5;}
+  .fx2 .frame{aspect-ratio:auto;height:100%;}
+  .fx2 .cap{
+    position:absolute;left:0;right:0;bottom:0;padding:16px;
+    background:linear-gradient(transparent,rgba(30,18,10,.85));color:#fff;
+  }
+  .fx2 .cap span{color:rgba(255,255,255,.75);}
+
+  /* ═══ 3 · RÉVÉLATION DE LÉGENDE ═══ */
+  .fx3 .card{transition:transform .5s cubic-bezier(.16,.8,.24,1),box-shadow .5s;}
+  .fx3 .card:hover{transform:translateY(-8px);box-shadow:0 20px 42px rgba(74,46,28,.22);}
+  .fx3 .frame img{transition:transform 1.1s cubic-bezier(.16,.8,.24,1);}
+  .fx3 .card:hover .frame img{transform:scale(1.09);}
+  .fx3 .cap{
+    position:absolute;left:0;right:0;bottom:0;padding:22px 18px 18px;color:#fff;
+    background:linear-gradient(transparent,rgba(30,18,10,.9));
+    transform:translateY(101%);transition:transform .55s cubic-bezier(.22,.9,.28,1);
+  }
+  .fx3 .card:hover .cap{transform:translateY(0);}
+  .fx3 .cap span{color:rgba(255,255,255,.75);}
+  .fx3 .frame{aspect-ratio:4/5;}
+
+  /* ═══ 4 · VITRE & HALO DORÉ ═══ */
+  .fx4 .card{transition:transform .5s cubic-bezier(.16,.8,.24,1),box-shadow .5s;}
+  .fx4 .card:hover{transform:translateY(-7px) scale(1.015);box-shadow:0 22px 48px rgba(74,46,28,.24);}
+  .fx4 .card::before{
+    content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.4),rgba(255,255,255,.08) 36%,transparent 62%);
+    opacity:0;transition:opacity .4s;
+  }
+  .fx4 .card:hover::before{opacity:1;}
+  .fx4 .card::after{
+    content:"";position:absolute;inset:0;z-index:4;pointer-events:none;
+    border-radius:10px;padding:1.6px;
+    background:conic-gradient(from var(--halo),var(--gold),rgba(201,169,97,.1) 30%,var(--brass) 55%,rgba(201,169,97,.1) 80%,var(--gold));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    mask-composite:exclude;opacity:0;transition:opacity .4s;
+  }
+  .fx4 .card:hover::after{opacity:1;animation:spin 4s linear infinite;}
+  @keyframes spin{to{--halo:360deg;}}
+
+  /* ═══ 5 · COVERFLOW 3D ═══ */
+  .fx5{display:flex;gap:0;justify-content:center;perspective:1500px;padding:18px 0 8px;}
+  .fx5 .card{
+    width:215px;flex:none;margin-left:-38px;
+    transform:rotateY(34deg) translateZ(-40px);
+    transform-origin:center center;
+    transition:transform .6s cubic-bezier(.22,.9,.28,1),box-shadow .5s,margin .6s;
+    box-shadow:-14px 12px 34px rgba(74,46,28,.22);
+  }
+  .fx5 .card:first-child{margin-left:0;}
+  .fx5 .card:hover{
+    transform:rotateY(0deg) translateZ(70px) scale(1.04);
+    box-shadow:0 26px 54px rgba(74,46,28,.3);z-index:5;
+  }
+  .fx5 .frame{aspect-ratio:3/4;}
+  @media(max-width:760px){.fx5{flex-wrap:wrap;}.fx5 .card{margin-left:0;transform:none;}}
+
+  /* ═══ 6 · RETOURNEMENT 3D ═══ */
+  .fx6 .flip{perspective:1400px;background:none;box-shadow:none;overflow:visible;}
+  .fx6 .inner{
+    position:relative;width:100%;aspect-ratio:4/3;
+    transform-style:preserve-3d;transition:transform .75s cubic-bezier(.22,.9,.28,1);
+  }
+  .fx6 .flip:hover .inner{transform:rotateY(180deg);}
+  .fx6 .face{
+    position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;overflow:hidden;
+    box-shadow:0 2px 12px rgba(74,46,28,.14);
+  }
+  .fx6 .face img{width:100%;height:100%;object-fit:cover;display:block;}
+  .fx6 .back{
+    transform:rotateY(180deg);background:var(--ink);color:#F7F1E8;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:9px;text-align:center;padding:22px;
+  }
+  .fx6 .back b{font-size:1.06rem;}
+  .fx6 .back span{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;opacity:.72;}
+  .fx6 .back em{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
+    opacity:.85;margin-top:5px;
+  }
+
+  footer{padding:66px 0 80px;color:var(--faint);font-size:.92rem;line-height:1.6;}
+  footer b{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Six effets, vos vraies photos</h1>
+    <p>Passez la souris sur les images de chaque section. Repérez celui que vous préférez et donnez-moi son numéro — je l'applique au catalogue du site. Tout est en CSS natif : aucun coût, aucune dépendance.</p>
+  </header>
+
+  <!-- 1 -->
+  <section>
+    <div class="head"><span class="num">1</span><h2>Parallaxe 3D</h2></div>
+    <p class="note">L'image glisse dans son cadre en suivant votre curseur, comme si le meuble avait de la profondeur. Discret et haut de gamme.</p>
+    <div class="grid fx1">
+      <figure class="card"><div class="frame"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit"></div><figcaption class="cap"><b>Lit complet + chevets</b><span>Bois massif</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet"></div><figcaption class="cap"><b>Buffet vitré</b><span>Salle à manger</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/table-a-manger-chene-clair-quatre-chaises.webp" alt="Table"></div><figcaption class="cap"><b>Table à manger chêne</b><span>4 chaises</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section>
+    <div class="head"><span class="num">2</span><h2>Expansion</h2></div>
+    <p class="note">La photo survolée s'élargit, les voisines se rétractent. Met une pièce en vedette sans quitter la page.</p>
+    <div class="fx2">
+      <figure class="card"><div class="frame"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine"></div><figcaption class="cap"><b>Cuisine bois doré</b><span>Sur mesure</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/meuble-tv-long-blanc-plateau-noir.webp" alt="Meuble TV"></div><figcaption class="cap"><b>Meuble TV long</b><span>Plateau noir</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte"></div><figcaption class="cap"><b>Porte double</b><span>Acajou verni</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine"></div><figcaption class="cap"><b>Vitrine blanche</b><span>Étagères vitrées</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section>
+    <div class="head"><span class="num">3</span><h2>Révélation de légende</h2></div>
+    <p class="note">La photo occupe tout le cadre ; le nom de la pièce remonte par-dessus au survol. Laisse le meuble parler en premier.</p>
+    <div class="grid fx3">
+      <figure class="card"><div class="frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte"></div><figcaption class="cap"><b>Porte double</b><span>Acajou verni</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine"></div><figcaption class="cap"><b>Vitrine blanche</b><span>Étagères vitrées</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit"></div><figcaption class="cap"><b>Lit + chevets</b><span>Bois massif</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section>
+    <div class="head"><span class="num">4</span><h2>Vitre & halo doré</h2></div>
+    <p class="note">Un reflet suit le curseur sur la carte et un liseré doré tourne autour du cadre. L'effet actuellement sur la catégorie Salon.</p>
+    <div class="grid fx4">
+      <figure class="card"><div class="frame"><img src="images/table-basse-tiroir-gueridon-verre.webp" alt="Table basse"></div><figcaption class="cap"><b>Table basse &amp; guéridon</b><span>Plateau verre</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine"></div><figcaption class="cap"><b>Cuisine bois doré</b><span>Moulures</span></figcaption></figure>
+      <figure class="card"><div class="frame"><img src="images/meuble-tv-long-blanc-plateau-noir.webp" alt="Meuble TV"></div><figcaption class="cap"><b>Meuble TV long</b><span>Plateau noir</span></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section>
+    <div class="head"><span class="num">5</span><h2>Coverflow 3D</h2></div>
+    <p class="note">Les photos sont inclinées en enfilade ; celle que vous survolez se redresse et avance vers vous. Spectaculaire pour une sélection de pièces.</p>
+    <div class="fx5">
+      <figure class="card"><div class="frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte"></div></figure>
+      <figure class="card"><div class="frame"><img src="images/vitrine-blanche-etageres.webp" alt="Vitrine"></div></figure>
+      <figure class="card"><div class="frame"><img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit"></div></figure>
+      <figure class="card"><div class="frame"><img src="images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet"></div></figure>
+      <figure class="card"><div class="frame"><img src="images/table-a-manger-chene-clair-quatre-chaises.webp" alt="Table"></div></figure>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section>
+    <div class="head"><span class="num">6</span><h2>Retournement</h2></div>
+    <p class="note">La carte pivote et montre son verso : nom, finition, et invitation à vous contacter. Pratique pour donner un détail sans surcharger la photo.</p>
+    <div class="grid fx6">
+      <div class="card flip"><div class="inner">
+        <div class="face"><img src="images/table-a-manger-chene-clair-quatre-chaises.webp" alt="Table"></div>
+        <div class="face back"><b>Table à manger chêne</b><span>4 chaises assorties</span><em>Ajustable en taille et finition</em></div>
+      </div></div>
+      <div class="card flip"><div class="inner">
+        <div class="face"><img src="images/meuble-tv-long-blanc-plateau-noir.webp" alt="Meuble TV"></div>
+        <div class="face back"><b>Meuble TV long</b><span>Plateau noir, 3 portes</span><em>Sur mesure à vos dimensions</em></div>
+      </div></div>
+      <div class="card flip"><div class="inner">
+        <div class="face"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine"></div>
+        <div class="face back"><b>Cuisine bois doré</b><span>Moulures travaillées</span><em>Étude et pose comprises</em></div>
+      </div></div>
+    </div>
+  </section>
+
+  <footer>
+    <b>Comment répondre :</b> donnez-moi simplement le numéro qui vous plaît (par exemple « le 3 »).<br>
+    Vous pouvez aussi en choisir plusieurs, un par catégorie du catalogue.
+  </footer>
+</div>
+
+<script>
+  // Parallaxe (1) et reflet (4) : position du curseur
+  document.querySelectorAll('.fx1 .card, .fx4 .card').forEach(card=>{
+    let raf=null;
+    card.addEventListener('mousemove', e=>{
+      const r=card.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+      if(raf) cancelAnimationFrame(raf);
+      raf=requestAnimationFrame(()=>{
+        card.style.setProperty('--px',(px-0.5).toFixed(3));
+        card.style.setProperty('--py',(py-0.5).toFixed(3));
+        card.style.setProperty('--mx',(px*100)+'%');
+        card.style.setProperty('--my',(py*100)+'%');
+      });
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.setProperty('--px','0'); card.style.setProperty('--py','0');
+    });
+  });
+</script>
+</body>
+</html>
