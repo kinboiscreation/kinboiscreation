@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kin Bois Création - Meubles en bois massif artisanaux. Lits, tables, portes, rangements et agencement de bureaux et espaces commerciaux à Kinshasa.">
+    <meta name="keywords" content="meubles bois, artisan, Kinshasa, RDC, mobilier massif, design intérieur">
+    <meta name="author" content="Kin Bois Création">
+    <meta property="og:title" content="Kin Bois Création - Meubles en Bois Massif">
+    <meta property="og:description" content="Fabrication artisanale de meubles en bois massif à Kinshasa. Qualité durable, designs personnalisés.">
+    <meta property="og:image" content="images/hero.webp">
+    <meta property="og:type" content="business.business">
+    <title>Kin Bois Création - Meubles en Bois Massif Artisanaux</title>
+    <link rel="canonical" href="https://kinboiscreation.github.io/portfolio.html">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DF0VLPV7S6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DF0VLPV7S6');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f7f4;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header .tagline {
+            font-size: 1.1rem;
+            color: #ecf0f1;
+            margin-bottom: 1rem;
+        }
+
+        header .contact-info {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        header .contact-info a {
+            color: #f39c12;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header .contact-info a:hover {
+            color: #fff;
+        }
+
+        nav {
+            background-color: #34495e;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #f39c12;
+            color: #2c3e50;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('images/hero.webp') center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(0,0,0,0.6);
+            border-radius: 8px;
+        }
+
+        .hero-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-section {
+            background: white;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .about-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 1rem;
+        }
+
+        .about-section p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .ads-section {
+            background: #fff3cd;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            border-left: 4px solid #f39c12;
+            border-radius: 4px;
+        }
+
+        .ads-section h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .ads-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .ads-item strong {
+            color: #f39c12;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .category-section {
+            margin: 3rem 0;
+        }
+
+        .category-section h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #f39c12;
+            padding-bottom: 1rem;
+            text-align: center;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item-info {
+            padding: 1rem;
+        }
+
+        .gallery-item-info h3 {
+            color: #2c3e50;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow: auto;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 8px;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #f39c12;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        footer .footer-links {
+            margin-top: 1rem;
+        }
+
+        footer a {
+            color: #f39c12;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero {
+                height: 250px;
+            }
+
+            .hero-content {
+                padding: 1rem;
+            }
+
+            .hero-content h2 {
+                font-size: 1.3rem;
+            }
+
+            .hero-content p {
+                font-size: 0.9rem;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+            }
+
+            nav a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+
+            .gallery-item img {
+                height: 150px;
+            }
+
+            .about-section {
+                padding: 2rem 1rem;
+            }
+
+            .about-section p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🪵 Kin Bois Création</h1>
+        <p class="tagline">Meubles en Bois Massif Artisanaux - Qualité Durable</p>
+        <div class="contact-info">
+            <p>📱 <a href="tel:+243836002274">+243 836 002 274</a></p>
+            <p>📍 Kinshasa, République Démocratique du Congo</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">À Propos</a></li>
+            <li><a href="#lits">Lits</a></li>
+            <li><a href="#tables">Tables</a></li>
+            <li><a href="#portes">Portes</a></li>
+            <li><a href="#rangements">Rangements</a></li>
+            <li><a href="#agencement">Agencement</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h2>Créations en Bois Massif</h2>
+            <p>Fabrication artisanale de meubles durables pour votre intérieur et vos espaces commerciaux</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <section id="about" class="about-section">
+            <h2>À Propos de Kin Bois Création</h2>
+            <p>Je fabrique seul, à Kinshasa, des meubles en bois massif pensés pour durer : lits, tables, portes, rangements, et agencement de bureaux et d'espaces commerciaux.</p>
+            <p>Chaque pièce est créée avec attention au détail, utilisant des bois de qualité et des techniques artisanales éprouvées. Mon engagement est de fournir des meubles robustes et esthétiques qui résistent au temps.</p>
+            <p><strong>Contactez-moi pour discuter de votre projet :</strong> <a href="tel:+243836002274" style="color: #f39c12;">+243 836 002 274</a></p>
+        </section>
+
+        <section class="ads-section">
+            <h3>📢 Campagne Marketing - Google Ads</h3>
+            <div class="ads-item">
+                <strong>Titre :</strong> Meubles en Bois Massif - Qualité Artisanale à Kinshasa<br>
+                <strong>Description :</strong> Meubles durables et sur mesure. Lits, tables, portes, rangements pour maisons et bureaux. Production artisanale à Kinshasa.
+            </div>
+            <div class="ads-item">
+                <strong>Titre :</strong> Mobilier Bois - Fabrication Personnalisée - Kinshasa<br>
+                <strong>Description :</strong> Création de meubles massifs artisanaux. Agencement de bureaux, espaces commerciaux et résidentiels. Qualité garantie.
+            </div>
+            <div class="ads-item">
+                <strong>Titre :</strong> Meubles Bois Massif Kinshasa - Artisan Qualifié<br>
+                <strong>Description :</strong> Fabrication sur mesure : lits, tables, portes en bois massif. Devis gratuit. Livrables partout à Kinshasa et environs.
+            </div>
+        </section>
+
+        <!-- LITS -->
+        <section id="lits" class="category-section">
+            <h2>🛏️ Lits</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-avec-deux-tables-de-chevet-exterieur.webp" alt="Lit avec tables de chevet">
+                    <div class="gallery-item-info">
+                        <h3>Lit avec Tables de Chevet</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-brut-avec-sommier-a-lattes-en-bois.webp" alt="Lit brut avec sommier">
+                    <div class="gallery-item-info">
+                        <h3>Lit avec Sommier à Lattes</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-brut-en-bois-clair-avec-deux-tables-de-chevet.webp" alt="Lit bois clair">
+                    <div class="gallery-item-info">
+                        <h3>Lit Bois Clair</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-brut-non-fini.webp" alt="Lit brut non fini">
+                    <div class="gallery-item-info">
+                        <h3>Lit Brut Non Fini</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-en-bois-clair-sculpte-avec-tete-de-lit-ouvragee.webp" alt="Lit avec tête ouvragée">
+                    <div class="gallery-item-info">
+                        <h3>Lit Tête Ouvragée</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-en-bois-massif-avec-deux-tables-de-chevet-assorties.webp" alt="Lit massif avec chevets">
+                    <div class="gallery-item-info">
+                        <h3>Lit Massif Complet</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-tete-arrondie-deux-chevets.webp" alt="Lit tête arrondie">
+                    <div class="gallery-item-info">
+                        <h3>Lit Tête Arrondie</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/lit-tete-de-lit-sculptee-showroom.webp" alt="Lit tête sculptée">
+                    <div class="gallery-item-info">
+                        <h3>Lit Tête Sculptée</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TABLES -->
+        <section id="tables" class="category-section">
+            <h2>🪑 Tables</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-a-manger-avec-quatre-chaises-plateau-noir.webp" alt="Table à manger noir">
+                    <div class="gallery-item-info">
+                        <h3>Table à Manger - Plateau Noir</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-a-manger-chaises-noires-redmi.webp" alt="Table à manger chaises noires">
+                    <div class="gallery-item-info">
+                        <h3>Table à Manger Chaises Noires</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-appoint-pieds-galbes-brut.webp" alt="Table d'appoint">
+                    <div class="gallery-item-info">
+                        <h3>Table d'Appoint Galbes</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-basse-carree-bois-fonce-2.webp" alt="Table basse carrée">
+                    <div class="gallery-item-info">
+                        <h3>Table Basse Carrée</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-basse-carree-en-bois-fonce-avec-etagere.webp" alt="Table basse avec étagère">
+                    <div class="gallery-item-info">
+                        <h3>Table Basse avec Étagère</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-chevet-tiroir-etageres-chene.webp" alt="Table de chevet">
+                    <div class="gallery-item-info">
+                        <h3>Table de Chevet</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-de-chevet-en-bois-clair-avec-tiroir.webp" alt="Table de chevet bois clair">
+                    <div class="gallery-item-info">
+                        <h3>Table Chevet Bois Clair</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-ronde-avec-quatre-chaises-assorties.webp" alt="Table ronde avec chaises">
+                    <div class="gallery-item-info">
+                        <h3>Table Ronde avec Chaises</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/table-ronde-quatre-chaises-fond-blanc.webp" alt="Table ronde classique">
+                    <div class="gallery-item-info">
+                        <h3>Table Ronde Classique</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petite-table-basse-en-bois-brut-aux-pieds-galbes.webp" alt="Petite table basse">
+                    <div class="gallery-item-info">
+                        <h3>Petite Table Basse Galbes</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petite-table-ronde-blanche-laquee-2.webp" alt="Petite table ronde blanche">
+                    <div class="gallery-item-info">
+                        <h3>Petite Table Ronde Blanche</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petite-table-ronde-en-bois-sur-pied-tripode.webp" alt="Table ronde pied tripode">
+                    <div class="gallery-item-info">
+                        <h3>Table Ronde Pied Tripode</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petite-table-ronde-laquee-blanche.webp" alt="Table ronde laquée">
+                    <div class="gallery-item-info">
+                        <h3>Table Ronde Laquée Blanche</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petite-table-ronde-pied-tripode-bicolore.webp" alt="Table ronde bicolore">
+                    <div class="gallery-item-info">
+                        <h3>Table Ronde Bicolore</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTES -->
+        <section id="portes" class="category-section">
+            <h2>🚪 Portes</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/porte-double-acajou-fonce.webp" alt="Porte double acajou">
+                    <div class="gallery-item-info">
+                        <h3>Porte Double Acajou</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/porte-double-en-bois-acajou-avec-poignee-metallique.webp" alt="Porte double acajou">
+                    <div class="gallery-item-info">
+                        <h3>Porte Double Acajou Métallique</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/porte-en-bois-brut-a-trois-panneaux-prete-a-vernir.webp" alt="Porte trois panneaux">
+                    <div class="gallery-item-info">
+                        <h3>Porte Trois Panneaux Brut</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/porte-en-bois-clair-a-deux-panneaux-avec-poignee-noire.webp" alt="Porte deux panneaux">
+                    <div class="gallery-item-info">
+                        <h3>Porte Deux Panneaux Bois Clair</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/porte-installee-poignee-noire.webp" alt="Porte installée">
+                    <div class="gallery-item-info">
+                        <h3>Porte Installée</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/porte-trois-panneaux-fond-bleu.webp" alt="Porte trois panneaux bleu">
+                    <div class="gallery-item-info">
+                        <h3>Porte Trois Panneaux</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/trois-portes-alignees-exterieur.webp" alt="Trois portes alignées">
+                    <div class="gallery-item-info">
+                        <h3>Ensemble de Portes</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/trois-portes-en-bois-verni-appuyees-contre-un-mur.webp" alt="Portes vernies">
+                    <div class="gallery-item-info">
+                        <h3>Portes Vernies</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RANGEMENTS -->
+        <section id="rangements" class="category-section">
+            <h2>📦 Rangements</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/armoire-vernie-porte-miroir.webp" alt="Armoire avec miroir">
+                    <div class="gallery-item-info">
+                        <h3>Armoire avec Miroir</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/armoire-vernie-portes-ouvertes.webp" alt="Armoire portes ouvertes">
+                    <div class="gallery-item-info">
+                        <h3>Armoire Portes Ouvertes</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/banc-coffre-de-rangement-en-bois.webp" alt="Banc coffre">
+                    <div class="gallery-item-info">
+                        <h3>Banc Coffre</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/buffet-vernis-fond-bleu.webp" alt="Buffet verni">
+                    <div class="gallery-item-info">
+                        <h3>Buffet Verni</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/buffet-vitre-atelier.webp" alt="Buffet vitré atelier">
+                    <div class="gallery-item-info">
+                        <h3>Buffet Vitré</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/buffet-vitre-en-bois-avec-portes-vitrees-et-tiroirs.webp" alt="Buffet complet">
+                    <div class="gallery-item-info">
+                        <h3>Buffet Complet Vitré</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/caisson-meuble-rangement-vitre.webp" alt="Caisson rangement">
+                    <div class="gallery-item-info">
+                        <h3>Caisson Rangement Vitré</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/coffre-rangement-double.webp" alt="Coffre rangement">
+                    <div class="gallery-item-info">
+                        <h3>Coffre Rangement Double</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-entree-portemanteau.webp" alt="Meuble entrée portemanteau">
+                    <div class="gallery-item-info">
+                        <h3>Meuble Entrée Portemanteau</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Meuble sous évier">
+                    <div class="gallery-item-info">
+                        <h3>Meuble Sous Évier</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-tv-flottant-moderne.webp" alt="Meuble TV flottant">
+                    <div class="gallery-item-info">
+                        <h3>Meuble TV Flottant</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/meuble-tv-mural-en-bois-avec-claustra-et-niches.webp" alt="Meuble TV mural">
+                    <div class="gallery-item-info">
+                        <h3>Meuble TV Mural Design</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/petit-meuble-tv-appoint.webp" alt="Petit meuble TV">
+                    <div class="gallery-item-info">
+                        <h3>Petit Meuble TV</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AGENCEMENT -->
+        <section id="agencement" class="category-section">
+            <h2>🏢 Agencement & Espaces</h2>
+            <div class="gallery">
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/bureau-enfant-chaise-orange.webp" alt="Bureau enfant">
+                    <div class="gallery-item-info">
+                        <h3>Bureau Enfant</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine bois">
+                    <div class="gallery-item-info">
+                        <h3>Cuisine Bois Doré</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/cuisine-plan-granit-armoires-vitrees.webp" alt="Cuisine granit">
+                    <div class="gallery-item-info">
+                        <h3>Cuisine Granit & Bois</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/canape-d-angle-beige-avec-pouf-orange.webp" alt="Canapé angle">
+                    <div class="gallery-item-info">
+                        <h3>Canapé d'Angle</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openModal(this)">
+                    <img src="images/canape-angle-beige-pouf-orange-2.webp" alt="Canapé angle pouf">
+                    <div class="gallery-item-info">
+                        <h3>Canapé d'Angle Pouf</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="about-section" style="background: #f39c12; color: white;">
+            <h2 style="color: white; border-bottom-color: white;">Contactez-moi</h2>
+            <p style="color: white; font-size: 1.2rem;">
+                <strong>Téléphone :</strong> <a href="tel:+243836002274" style="color: white; text-decoration: underline;">+243 836 002 274</a>
+            </p>
+            <p style="color: white;">
+                <strong>Localisation :</strong> Kinshasa, République Démocratique du Congo
+            </p>
+            <p style="color: white; margin-top: 1rem;">
+                Je propose des créations sur mesure adaptées à vos besoins. Contactez-moi pour un devis gratuit ou pour discuter de votre projet.
+            </p>
+        </section>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Image agrandie">
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Kin Bois Création. Tous droits réservés.</p>
+        <p>Meubles artisanaux en bois massif - Kinshasa, RDC</p>
+        <div class="footer-links">
+            <a href="tel:+243836002274">Appeler</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </footer>
+
+    <script>
+        function openModal(element) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const imageSrc = element.querySelector('img').src;
+            modalImage.src = imageSrc;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
