@@ -611,25 +611,66 @@
     display:grid;
     grid-template-columns:repeat(4, 1fr);
     gap:28px;
+    perspective:1600px;
   }
   @media(max-width:1080px){
     .grid{grid-template-columns:repeat(3, 1fr);gap:22px;}
   }
 
   .card{
+    position:relative;
     cursor:default;
     background:var(--lt-panel);
     border-radius:10px;
     overflow:hidden;
     box-shadow:0 2px 10px rgba(74,46,28,0.07);
     display:flex;flex-direction:column;
-    transition:transform .4s cubic-bezier(.16,.8,.24,1), box-shadow .4s ease;
+    will-change:transform;
+    transition:transform .55s cubic-bezier(.16,.8,.24,1), box-shadow .45s ease;
   }
   .card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 12px 28px rgba(74,46,28,0.14);
+    box-shadow:0 22px 46px rgba(74,46,28,0.22);
   }
   .card:focus-within{outline:none;box-shadow:0 0 0 2px var(--brass);}
+
+  /* Reflet lumineux qui suit le curseur */
+  .card::before{
+    content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:radial-gradient(400px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,0.38), rgba(255,255,255,0.10) 34%, transparent 62%);
+    opacity:0;transition:opacity .45s ease;
+  }
+  .card:hover::before{opacity:1;}
+
+  /* Liseré lumineux dynamique sur le bord */
+  .card::after{
+    content:"";position:absolute;inset:0;z-index:4;pointer-events:none;
+    border-radius:10px;padding:1.5px;
+    background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),
+      var(--brass), rgba(184,115,51,0.25) 45%, transparent 68%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite:exclude;
+    opacity:0;transition:opacity .45s ease;
+  }
+  .card:hover::after{opacity:1;}
+
+  /* Entrée 3D en cascade des cartes */
+  .grid .card.reveal{
+    transform:perspective(1400px) translateY(34px) translateZ(-70px) rotateX(14deg) scale(0.94);
+    transition:opacity .8s cubic-bezier(.16,.8,.24,1), transform .8s cubic-bezier(.16,.8,.24,1);
+    transition-delay:calc(var(--i, 0) * 55ms);
+  }
+  .grid .card.reveal.in{
+    transform:perspective(1400px) translateY(0) translateZ(0) rotateX(0deg) scale(1);
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .card{transition:box-shadow .3s ease;}
+    .card::before,.card::after{display:none;}
+    .grid .card.reveal,.grid .card.reveal.in{transform:none;transition:opacity .4s ease;}
+  }
   .card .panel-frame{
     aspect-ratio:4/3;
     background:var(--lt-panel);
@@ -1896,23 +1937,32 @@
     btn.addEventListener('mouseleave', ()=>{ btn.style.transform = 'translate(0,0)'; });
   });
 
-  // 4. Tilt 3D dynamique au survol
-  document.querySelectorAll('.card').forEach(el=>{
-    el.classList.add('tilt');
-    el.addEventListener('mousemove', (e)=>{
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const xPercent = (x / rect.width) - 0.5;
-      const yPercent = (y / rect.height) - 0.5;
-      const rotX = -yPercent * 8;
-      const rotY = xPercent * 8;
-      el.style.transform = `perspective(1200px) translateY(-8px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.02)`;
+  // 4. Tilt 3D dynamique au survol — la carte s'incline vers le curseur
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(!reduceMotion && finePointer){
+    document.querySelectorAll('.card').forEach(el=>{
+      let raf = null;
+      el.addEventListener('mousemove', (e)=>{
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        if(raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(()=>{
+          el.style.setProperty('--mx', (px*100)+'%');
+          el.style.setProperty('--my', (py*100)+'%');
+          el.style.transition = 'transform .12s ease-out, box-shadow .45s ease';
+          el.style.transform =
+            `translateY(-10px) rotateX(${(0.5-py)*11}deg) rotateY(${(px-0.5)*13}deg) scale(1.035)`;
+        });
+      });
+      el.addEventListener('mouseleave', ()=>{
+        if(raf) cancelAnimationFrame(raf);
+        el.style.transition = 'transform .65s cubic-bezier(.16,.8,.24,1), box-shadow .45s ease';
+        el.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg) scale(1)';
+      });
     });
-    el.addEventListener('mouseleave', ()=>{
-      el.style.transform = 'perspective(1200px) translateY(0) rotateX(0) rotateY(0) scale(1)';
-    });
-  });
+  }
 
 
   // 5bis. Signature : lumière naturelle qui balaie la matière sous le curseur
