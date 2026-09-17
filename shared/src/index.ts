@@ -227,6 +227,50 @@ export const ACTIVITY_NAMES: Record<ActivityType, string> = {
   spécial: 'Programmes spéciaux'
 };
 
+/**
+ * Programme du ministère : les huit activités du §1, plus les veillées qui
+ * disposent de leur propre rubrique. Sert de clé stable pour regrouper les
+ * chiffres quelle que soit leur source de saisie.
+ */
+export type ProgramKey = ActivityType | 'veillee';
+
+export const PROGRAM_NAMES: Record<ProgramKey, string> = {
+  matinale: 'Matinaux de Prière',
+  nocturne: 'Nocturnes de Prière',
+  atmosphère: 'Atmosphère de Prière',
+  langues_feu: 'Langues de Feu',
+  nuit_culte: 'Nuit de Prière de préparation au culte',
+  mère_nation: 'Comme une Mère dans la Nation',
+  femmes_pieds: 'Femmes aux Pieds du Maître',
+  spécial: 'Programmes spéciaux',
+  veillee: 'Veillées de Prière'
+};
+
+/** Libellé court, pour les axes de graphiques et les cartes compactes. */
+export const PROGRAM_SHORT_NAMES: Record<ProgramKey, string> = {
+  matinale: 'Matinaux',
+  nocturne: 'Nocturnes',
+  atmosphère: 'Atmosphère',
+  langues_feu: 'Langues de Feu',
+  nuit_culte: 'Nuit de Prière',
+  mère_nation: 'Mère dans la Nation',
+  femmes_pieds: 'Femmes aux Pieds',
+  spécial: 'Programmes spéciaux',
+  veillee: 'Veillées'
+};
+
+export const PROGRAM_ORDER: ProgramKey[] = [
+  'matinale',
+  'nocturne',
+  'atmosphère',
+  'langues_feu',
+  'nuit_culte',
+  'veillee',
+  'mère_nation',
+  'femmes_pieds',
+  'spécial'
+];
+
 export const PRAYER_SLOTS = [
   '00h00 - 01h00',
   '01h00 - 02h00',
