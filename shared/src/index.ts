@@ -310,6 +310,128 @@ export interface WomenProgram {
   remarks?: string;
 }
 
+// ============= Réunions (§8) =============
+export type AttendanceStatus = 'present' | 'justified' | 'absent';
+
+export const ATTENDANCE_LABELS: Record<AttendanceStatus, string> = {
+  present: 'Présent',
+  justified: 'Absence justifiée',
+  absent: 'Non présent'
+};
+
+export interface MeetingAttendance {
+  name: string;
+  status: AttendanceStatus;
+  reason?: string;
+}
+
+export interface MeetingRecord {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  location: 'église' | 'zoom';
+  zoomLink?: string;
+  agenda?: string;
+  remarks?: string;
+  attendees: MeetingAttendance[];
+  reminderEnabled: boolean;
+}
+
+// ============= Conducteurs et planning hebdomadaire =============
+export interface ConductorRecord {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  role: 'conductor' | 'assistant';
+  status: 'active' | 'inactive';
+  joinDate: string;
+}
+
+/** Issue d'une assignation : le rapport mensuel s'appuie dessus. */
+export type ScheduleOutcome = 'pending' | 'conducted' | 'absent' | 'late';
+
+export const SCHEDULE_OUTCOME_LABELS: Record<ScheduleOutcome, string> = {
+  pending: 'À venir',
+  conducted: 'A conduit',
+  absent: 'Absent',
+  late: 'En retard'
+};
+
+export interface ScheduleEntry {
+  id: string;
+  conductorId: string;
+  conductorName: string;
+  activityType: ActivityType;
+  date: string;
+  outcome: ScheduleOutcome;
+  absenceReason?: string;
+  lateMinutes?: number;
+}
+
+export interface ConductorMonthlyStat {
+  conductorId: string;
+  conductorName: string;
+  planned: number;
+  conducted: number;
+  absent: number;
+  late: number;
+  totalLateMinutes: number;
+  absenceReasons: string[];
+  reliability: number;
+}
+
+/** Rapport mensuel exigé au §9, calculé à partir des assignations. */
+export function buildConductorReport(
+  entries: ScheduleEntry[],
+  month: number,
+  year: number
+): ConductorMonthlyStat[] {
+  const inMonth = entries.filter(entry => {
+    const date = new Date(entry.date);
+    return date.getMonth() + 1 === month && date.getFullYear() === year;
+  });
+
+  const byConductor = new Map<string, ConductorMonthlyStat>();
+
+  inMonth.forEach(entry => {
+    const stat = byConductor.get(entry.conductorId) ?? {
+      conductorId: entry.conductorId,
+      conductorName: entry.conductorName,
+      planned: 0,
+      conducted: 0,
+      absent: 0,
+      late: 0,
+      totalLateMinutes: 0,
+      absenceReasons: [],
+      reliability: 0
+    };
+
+    stat.planned += 1;
+    if (entry.outcome === 'conducted') stat.conducted += 1;
+    if (entry.outcome === 'late') {
+      stat.late += 1;
+      stat.conducted += 1;
+      stat.totalLateMinutes += entry.lateMinutes || 0;
+    }
+    if (entry.outcome === 'absent') {
+      stat.absent += 1;
+      if (entry.absenceReason) stat.absenceReasons.push(entry.absenceReason);
+    }
+
+    byConductor.set(entry.conductorId, stat);
+  });
+
+  return [...byConductor.values()]
+    .map(stat => ({
+      ...stat,
+      reliability: stat.planned > 0 ? Math.round((stat.conducted / stat.planned) * 100) : 0
+    }))
+    .sort((a, b) => b.planned - a.planned);
+}
+
 // ============= Planning intercession (§14) =============
 export interface IntercessionPlanning {
   id: string;
