@@ -188,6 +188,33 @@ export const ROLE_PERMISSIONS: Record<UserRole, UserPermission[]> = {
   ]
 };
 
+export const ROLE_LABELS: Record<UserRole, string> = {
+  admin_senior: 'Administrateur senior',
+  admin: 'Administrateur',
+  member: 'Membre',
+  reader: 'Lecteur'
+};
+
+export const ROLE_DESCRIPTIONS: Record<UserRole, string> = {
+  admin_senior:
+    "Accès à toutes les fonctionnalités, peut modifier et ajouter tout dans l'application.",
+  admin: "Accès à toutes les fonctionnalités, sans pouvoir modifier l'application.",
+  member: 'Peut uniquement saisir les chiffres de participants et le nombre de séances.',
+  reader: 'Consultation seule, aucune modification possible.'
+};
+
+export const PERMISSION_LABELS: Record<UserPermission, string> = {
+  [UserPermission.VIEW_DASHBOARD]: 'Consulter le tableau de bord',
+  [UserPermission.CREATE_ACTIVITY]: 'Saisir une activité',
+  [UserPermission.EDIT_ACTIVITY]: 'Modifier une activité',
+  [UserPermission.DELETE_ACTIVITY]: 'Supprimer une activité',
+  [UserPermission.CREATE_ANNOUNCEMENT]: 'Créer une annonce',
+  [UserPermission.EDIT_ANNOUNCEMENT]: 'Modifier une annonce',
+  [UserPermission.MANAGE_USERS]: 'Gérer les utilisateurs',
+  [UserPermission.VIEW_REPORTS]: 'Consulter les rapports',
+  [UserPermission.GENERATE_POWERPOINT]: 'Générer les présentations'
+};
+
 // ============= Constants =============
 export const ACTIVITY_NAMES: Record<ActivityType, string> = {
   matinale: 'Matinaux de Prière',
