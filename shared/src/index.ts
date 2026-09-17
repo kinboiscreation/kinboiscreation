@@ -232,3 +232,126 @@ export function getMonthName(month: number, lang: 'fr' | 'en' = 'fr'): string {
   const months_en = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   return lang === 'fr' ? months_fr[month - 1] : months_en[month - 1];
 }
+
+// ============= Créneaux horaires (Nuit de culte / Langues de Feu) =============
+export type SlotSessionType = 'nuit_culte' | 'langues_feu';
+
+export interface SlotAttendance {
+  slot: string;
+  total: number;
+  men: number;
+  women: number;
+}
+
+export interface SlotSession {
+  id: string;
+  type: SlotSessionType;
+  date: string;
+  conductorName?: string;
+  slots: SlotAttendance[];
+  remarks?: string;
+}
+
+export function createEmptySlots(): SlotAttendance[] {
+  return PRAYER_SLOTS.map(slot => ({ slot, total: 0, men: 0, women: 0 }));
+}
+
+export function sumSlots(slots: SlotAttendance[]): SlotAttendance {
+  return slots.reduce(
+    (acc, s) => ({
+      slot: 'Total',
+      total: acc.total + (s.total || 0),
+      men: acc.men + (s.men || 0),
+      women: acc.women + (s.women || 0)
+    }),
+    { slot: 'Total', total: 0, men: 0, women: 0 }
+  );
+}
+
+// ============= Sessions à thème (ADP / Veillées) =============
+export type ThemedSessionKind = 'adp' | 'veillee';
+
+export interface ThemedSession {
+  id: string;
+  kind: ThemedSessionKind;
+  theme: string;
+  date: string;
+  time?: string;
+  announcement?: string;
+  remarks?: string;
+  documentName?: string;
+  documentUrl?: string;
+  totalParticipants: number;
+  menCount: number;
+  womenCount: number;
+  reminderEnabled?: boolean;
+}
+
+// ============= Programmes des femmes =============
+export type WomenProgramType = 'mère_nation' | 'femmes_pieds' | 'spécial_femmes';
+
+export const WOMEN_PROGRAM_NAMES: Record<WomenProgramType, string> = {
+  mère_nation: 'Comme une Mère dans la Nation',
+  femmes_pieds: 'Femmes aux Pieds du Maître',
+  spécial_femmes: 'Programmes spéciaux des femmes'
+};
+
+export interface WomenProgram {
+  id: string;
+  programType: WomenProgramType;
+  theme: string;
+  date: string;
+  conductors: string;
+  mode: 'zoom' | 'présentiel';
+  zoomLink?: string;
+  totalParticipants: number;
+  menCount: number;
+  womenCount: number;
+  remarks?: string;
+}
+
+// ============= Planning intercession (§14) =============
+export interface IntercessionPlanning {
+  id: string;
+  weekStart: string;
+  conductorName: string;
+  directives?: string;
+  revelations?: string;
+  createdAt: string;
+}
+
+// ============= Rappels / alarmes =============
+export type ReminderSource = 'announcement' | 'meeting' | 'veillee' | 'event' | 'custom';
+
+export interface Reminder {
+  id: string;
+  title: string;
+  message?: string;
+  dueAt: string;
+  recurrence: 'none' | 'weekly';
+  weekday?: number;
+  sourceType: ReminderSource;
+  sourceId?: string;
+  acknowledged: boolean;
+}
+
+// ============= Calendrier fiscal (août → juillet) =============
+export const FISCAL_MONTH_ORDER: number[] = [8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
+
+export function getFiscalYearLabel(fiscalYear: number): string {
+  return `${fiscalYear} - ${fiscalYear + 1}`;
+}
+
+export function getCalendarYearForFiscalMonth(month: number, fiscalYear: number): number {
+  return month >= FISCAL_YEAR_START_MONTH ? fiscalYear : fiscalYear + 1;
+}
+
+export function monthlySummary(entries: Array<{ totalParticipants: number }>) {
+  const sessionCount = entries.length;
+  const totalParticipants = entries.reduce((sum, e) => sum + (e.totalParticipants || 0), 0);
+  return {
+    sessionCount,
+    totalParticipants,
+    average: calculateMonthlyAverage(totalParticipants, sessionCount)
+  };
+}

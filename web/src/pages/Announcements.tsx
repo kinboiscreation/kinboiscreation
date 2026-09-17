@@ -1,4 +1,4 @@
-import { Megaphone, Plus, Trash2, Edit, Send } from 'lucide-react';
+import { Megaphone, Plus, Trash2, Send } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface Announcement {

@@ -1,4 +1,4 @@
-import { Users, Plus, Trash2, Edit, Calendar } from 'lucide-react';
+import { Users, Plus, Trash2, Calendar } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface Conductor {
@@ -80,7 +80,7 @@ export default function Conductors() {
   };
 
   const handleToggleStatus = (id: string) => {
-    const updated = conductors.map(c =>
+    const updated: Conductor[] = conductors.map(c =>
       c.id === id ? { ...c, status: c.status === 'active' ? 'inactive' : 'active' } : c
     );
     setConductors(updated);

@@ -5,55 +5,66 @@ interface LogoProps {
   animated?: boolean;
 }
 
+const sizeClasses = {
+  small: 'h-9 w-9',
+  medium: 'h-11 w-11',
+  large: 'h-20 w-20'
+};
+
+const glyphSizes = {
+  small: 'text-base',
+  medium: 'text-xl',
+  large: 'text-4xl'
+};
+
+const textSizes = {
+  small: 'text-base',
+  medium: 'text-xl',
+  large: 'text-4xl'
+};
+
+const subtextSizes = {
+  small: 'text-[10px]',
+  medium: 'text-xs',
+  large: 'text-sm'
+};
+
 export default function Logo({
   size = 'medium',
   showText = true,
   showSubtext = true,
   animated = false
 }: LogoProps) {
-  const sizeClasses = {
-    small: 'h-8 w-8',
-    medium: 'h-12 w-12',
-    large: 'h-20 w-20'
-  };
-
-  const textSizes = {
-    small: 'text-lg',
-    medium: 'text-2xl',
-    large: 'text-4xl'
-  };
-
-  const subtextSizes = {
-    small: 'text-xs',
-    medium: 'text-sm',
-    large: 'text-base'
-  };
-
   return (
     <div className="flex items-center gap-3">
-      {/* Logo Icon */}
       <div
-        className={`
-          ${sizeClasses[size]} rounded-xl
-          bg-gradient-to-br from-amber-500 to-orange-600
-          flex items-center justify-center
-          shadow-lg shadow-amber-500/50
-          ${animated ? 'animate-pulse' : ''}
-        `}
+        className={`${sizeClasses[size]} rounded-xl flex items-center justify-center shrink-0 ${
+          animated ? 'animate-pulse-glow' : ''
+        }`}
+        style={{
+          background: 'linear-gradient(140deg, var(--royal-deep) 0%, var(--midnight) 45%, var(--gold-deep) 100%)',
+          border: '1px solid var(--gold-border)',
+          boxShadow: 'var(--shadow-glow)'
+        }}
       >
-        <span className={`${size === 'small' ? 'text-sm' : size === 'medium' ? 'text-xl' : 'text-4xl'}`}>
-          🙏
-        </span>
+        <span className={glyphSizes[size]}>🙏</span>
       </div>
 
-      {/* Text */}
       {showText && (
-        <div>
-          <p className={`${textSizes[size]} font-bold text-white leading-tight`}>
+        <div className="min-w-0">
+          <p
+            className={`${textSizes[size]} font-bold leading-tight tracking-tight`}
+            style={{
+              background: 'linear-gradient(100deg, var(--gold-bright), var(--gold), var(--gold-bright))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
             MIDP
           </p>
           {showSubtext && (
-            <p className={`${subtextSizes[size]} text-slate-400 leading-tight`}>
+            <p className={`${subtextSizes[size]} leading-tight truncate`} style={{ color: 'var(--text-muted)' }}>
               Ministère d'Intercession
             </p>
           )}

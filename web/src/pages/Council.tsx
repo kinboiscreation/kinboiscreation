@@ -1,4 +1,4 @@
-import { BarChart3, Download, TrendingUp, FileJson, FileText } from 'lucide-react';
+import { BarChart3, Download, FileJson, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Activity, ACTIVITY_NAMES } from '@midp/shared';
 import { generateCSV, downloadCSV, generateJSON, downloadJSON, generateHTMLReport, exportToPDF } from '../utils/export';
@@ -18,7 +18,6 @@ export default function Council() {
       const response = await fetch('/api/activities?limit=500');
       const data = await response.json();
 
-      const currentYear = new Date().getFullYear();
       const months = [
         [1, 2, 3],
         [4, 5, 6],
@@ -83,13 +82,12 @@ export default function Council() {
   };
 
   const handleExportPDF = () => {
-    const filename = `MIDP_Rapport_Q${quarter}_${year}.pdf`;
     const html = generateHTMLReport({
       title: `Rapport Trimestriel Q${quarter} ${year} - MIDP`,
       activities,
       stats
     });
-    exportToPDF(html, filename);
+    exportToPDF(html);
   };
 
   const totalParticipants = Object.values(stats || {}).reduce(

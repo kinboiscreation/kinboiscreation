@@ -121,13 +121,12 @@ export default function Activities() {
 
   const handleExportPDF = () => {
     const now = new Date();
-    const filename = `MIDP_Activites_${now.getMonth() + 1}_${now.getFullYear()}.pdf`;
     const html = generateHTMLReport({
       title: `Liste des Activités - ${now.toLocaleDateString('fr-FR')}`,
       activities,
       stats
     });
-    exportToPDF(html, filename);
+    exportToPDF(html);
   };
 
   return (

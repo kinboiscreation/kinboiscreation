@@ -70,7 +70,7 @@ export default function UserManagement() {
   };
 
   const handleToggleStatus = (id: string) => {
-    const updated = users.map(u =>
+    const updated: User[] = users.map(u =>
       u.id === id ? { ...u, status: u.status === 'active' ? 'inactive' : 'active' } : u
     );
     setUsers(updated);

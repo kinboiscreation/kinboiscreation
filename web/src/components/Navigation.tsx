@@ -1,49 +1,86 @@
-import { Menu, LogOut, Settings, Bell } from 'lucide-react';
+import { Menu, LogOut, Bell, Sun, Moon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Logo from './logo';
+import { useTheme } from '../contexts/theme-context';
 
 interface NavigationProps {
   onMenuClick: () => void;
 }
 
 export default function Navigation({ onMenuClick }: NavigationProps) {
+  const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (window.confirm('Se déconnecter ?')) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userEmail');
+      window.location.reload();
+    }
+  };
+
+  const userEmail = localStorage.getItem('userEmail') || 'admin@midp.fr';
+
   return (
-    <nav className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700/50 backdrop-blur-md sticky top-0 z-50">
-      <div className="px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo & Title */}
+    <nav
+      className="sticky top-0 z-50 backdrop-blur-xl"
+      style={{
+        background: 'var(--bg-surface)',
+        borderBottom: '1px solid var(--border)'
+      }}
+    >
+      <div className="px-4 sm:px-6 lg:px-8 py-3">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <button
-              onClick={onMenuClick}
-              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors duration-200 md:hidden"
-            >
-              <Menu className="h-6 w-6 text-amber-500" />
+            <button onClick={onMenuClick} className="icon-btn md:hidden" aria-label="Ouvrir le menu">
+              <Menu className="h-6 w-6" />
             </button>
-            <Logo size="medium" showText={true} showSubtext={true} />
+            <Logo size="medium" showText showSubtext />
           </div>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors duration-200 relative group">
-              <Bell className="h-5 w-5 text-slate-300 group-hover:text-amber-500" />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="icon-btn"
+              aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+              title={theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
 
-            <button className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors duration-200">
-              <Settings className="h-5 w-5 text-slate-300 hover:text-amber-500" />
+            <button className="icon-btn relative" aria-label="Notifications">
+              <Bell className="h-5 w-5" />
+              <span
+                className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full animate-pulse-glow"
+                style={{ background: 'var(--danger)' }}
+              />
             </button>
 
-            <div className="hidden sm:flex items-center gap-3 pl-4 border-l border-slate-700/50">
+            <div
+              className="hidden sm:flex items-center gap-3 pl-3 ml-1"
+              style={{ borderLeft: '1px solid var(--border)' }}
+            >
               <div className="text-right">
-                <p className="text-sm font-medium text-white">Admin</p>
-                <p className="text-xs text-slate-400">Super Admin</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                  Administrateur
+                </p>
+                <p className="text-xs text-dim">{userEmail}</p>
               </div>
-              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold">
+              <button
+                onClick={() => navigate('/settings')}
+                className="h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm"
+                style={{
+                  background: 'linear-gradient(135deg, var(--gold-deep), var(--gold-bright))',
+                  color: '#10131f'
+                }}
+                aria-label="Profil"
+              >
                 A
-              </div>
+              </button>
             </div>
 
-            <button className="p-2 hover:bg-red-500/20 rounded-lg transition-colors duration-200">
-              <LogOut className="h-5 w-5 text-red-400 hover:text-red-300" />
+            <button onClick={handleLogout} className="icon-btn icon-btn-danger" aria-label="Déconnexion">
+              <LogOut className="h-5 w-5" />
             </button>
           </div>
         </div>

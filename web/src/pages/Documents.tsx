@@ -1,4 +1,4 @@
-import { FileText, Plus, Download, Trash2, Calendar } from 'lucide-react';
+import { FileText, Plus, Download, Trash2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface Document {

@@ -24,13 +24,9 @@ export default function Dashboard() {
       const activitiesRes = await fetch('/api/activities?limit=500');
       const activitiesData = await activitiesRes.json();
 
-      const statsRes = await fetch(`/api/stats/monthly/${year}/${month}`);
-      const statsData = await statsRes.json();
-
       // Calculate this week and this month stats
       const today = new Date();
       const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-      const startOfMonth = new Date(year, month - 1, 1);
 
       const weekActivities = activitiesData.activities.filter((a: any) => {
         const actDate = new Date(a.date);
@@ -227,7 +223,7 @@ export default function Dashboard() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {weeklyStats.activities.slice(0, 5).map((entry: any, index: number) => (
+                {weeklyStats.activities.slice(0, 5).map((_: unknown, index: number) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

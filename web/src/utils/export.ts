@@ -184,7 +184,7 @@ export function generateHTMLReport(options: ExportOptions): string {
 /**
  * Export to PDF using browser print functionality
  */
-export function exportToPDF(html: string, filename: string): void {
+export function exportToPDF(html: string): void {
   const printWindow = window.open('', '', 'height=600,width=800');
   if (printWindow) {
     printWindow.document.write(html);

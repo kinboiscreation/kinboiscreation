@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { ThemeProvider } from './contexts/theme-context';
 import Layout from './components/Layout';
 import SplashScreen from './components/splash-screen';
 import Dashboard from './pages/Dashboard';
@@ -12,8 +13,14 @@ import Documents from './pages/Documents';
 import Council from './pages/Council';
 import Settings from './pages/Settings';
 import PrayerSubjects from './pages/PrayerSubjects';
-import Login from './pages/Login';
 import UserManagement from './pages/UserManagement';
+import AtmospherePrayer from './pages/AtmospherePrayer';
+import Vigils from './pages/Vigils';
+import NightPrayer from './pages/NightPrayer';
+import TonguesOfFire from './pages/TonguesOfFire';
+import WomenPrograms from './pages/WomenPrograms';
+import Intercession from './pages/Intercession';
+import Login from './pages/Login';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,24 +28,14 @@ function App() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulate loading progress
     const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 85) return prev;
-        return prev + Math.random() * 25;
-      });
+      setProgress(prev => (prev >= 85 ? prev : prev + Math.random() * 25));
     }, 200);
 
-    // Check authentication status
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          setIsAuthenticated(true);
-        }
+        if (localStorage.getItem('authToken')) setIsAuthenticated(true);
         setProgress(95);
-
-        // Final delay for smooth transition
         await new Promise(resolve => setTimeout(resolve, 500));
         setProgress(100);
       } catch (error) {
@@ -49,36 +46,51 @@ function App() {
     };
 
     checkAuth();
-
     return () => clearInterval(progressInterval);
   }, []);
 
   if (isLoading) {
-    return <SplashScreen message="Initialisation de l'application..." progress={progress} />;
+    return (
+      <ThemeProvider>
+        <SplashScreen message="Initialisation de l'application..." progress={progress} />
+      </ThemeProvider>
+    );
   }
 
   if (!isAuthenticated) {
-    return <Login onLogin={() => setIsAuthenticated(true)} />;
+    return (
+      <ThemeProvider>
+        <Login onLogin={() => setIsAuthenticated(true)} />
+      </ThemeProvider>
+    );
   }
 
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/activities" element={<Activities />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/announcements" element={<Announcements />} />
-          <Route path="/conductors" element={<Conductors />} />
-          <Route path="/meetings" element={<Meetings />} />
-          <Route path="/documents" element={<Documents />} />
-          <Route path="/council" element={<Council />} />
-          <Route path="/prayer-subjects" element={<PrayerSubjects />} />
-          <Route path="/users" element={<UserManagement />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/activities" element={<Activities />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/atmosphere" element={<AtmospherePrayer />} />
+            <Route path="/vigils" element={<Vigils />} />
+            <Route path="/night-prayer" element={<NightPrayer />} />
+            <Route path="/tongues-of-fire" element={<TonguesOfFire />} />
+            <Route path="/women-programs" element={<WomenPrograms />} />
+            <Route path="/intercession" element={<Intercession />} />
+            <Route path="/announcements" element={<Announcements />} />
+            <Route path="/conductors" element={<Conductors />} />
+            <Route path="/meetings" element={<Meetings />} />
+            <Route path="/documents" element={<Documents />} />
+            <Route path="/prayer-subjects" element={<PrayerSubjects />} />
+            <Route path="/council" element={<Council />} />
+            <Route path="/users" element={<UserManagement />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </ThemeProvider>
   );
 }
 

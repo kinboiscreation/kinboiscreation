@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import Navigation from './Navigation';
 import Sidebar from './Sidebar';
 
@@ -8,23 +7,17 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 flex flex-col">
-      {/* Navigation */}
+    <div className="min-h-screen flex flex-col">
       <Navigation onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
+      <div className="flex flex-1">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        {/* Main Content */}
-        <main className="flex-1 overflow-auto">
-          <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
-            {children}
-          </div>
+        <main className="flex-1 min-w-0">
+          <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8 max-w-7xl">{children}</div>
         </main>
       </div>
     </div>

@@ -54,7 +54,7 @@ export default function PrayerSubjects() {
   };
 
   const handleMarkAnswered = (id: string) => {
-    const updated = subjects.map(s =>
+    const updated: PrayerSubject[] = subjects.map(s =>
       s.id === id ? { ...s, status: 'answered' } : s
     );
     setSubjects(updated);
