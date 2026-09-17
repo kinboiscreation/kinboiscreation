@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from './contexts/theme-context';
 import Layout from './components/Layout';
+import ErrorBoundary from './components/error-boundary';
 import SplashScreen from './components/splash-screen';
 import Dashboard from './pages/Dashboard';
 import Activities from './pages/Activities';
@@ -69,7 +70,8 @@ function App() {
     <ThemeProvider>
       <Router>
         <Layout>
-          <Routes>
+          <ErrorBoundary>
+            <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/activities" element={<Activities />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -86,8 +88,9 @@ function App() {
             <Route path="/prayer-subjects" element={<PrayerSubjects />} />
             <Route path="/council" element={<Council />} />
             <Route path="/users" element={<UserManagement />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+          </ErrorBoundary>
         </Layout>
       </Router>
     </ThemeProvider>

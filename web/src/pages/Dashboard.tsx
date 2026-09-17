@@ -1,301 +1,415 @@
-import { useEffect, useState } from 'react';
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Users, Activity, Calendar, BarChart3 } from 'lucide-react';
-import { ACTIVITY_NAMES } from '@midp/shared';
+import { useMemo } from 'react';
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
+import {
+  LayoutDashboard,
+  Users,
+  Activity as ActivityIcon,
+  TrendingUp,
+  CalendarDays,
+  BellRing,
+  Megaphone
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { getMonthName, getCurrentFiscalYear, getFiscalYearLabel, FISCAL_MONTH_ORDER, getCalendarYearForFiscalMonth } from '@midp/shared';
+import { useParticipation, summarizeMonth } from '../hooks/use-participation';
+import { useCollection } from '../hooks/use-collection';
+import { useReminders } from '../hooks/use-reminders';
+
+const PALETTE = ['#d4af37', '#a78bfa', '#34d399', '#60a5fa', '#f0c75e', '#7c3aed', '#f87171'];
+
+interface CalendarEvent {
+  id: string;
+  title: string;
+  date: string;
+  kind: 'activité' | 'annonce';
+  alarm: boolean;
+}
 
 export default function Dashboard() {
-  const [weeklyStats, setWeeklyStats] = useState<any>(null);
-  const [monthlyStats, setMonthlyStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { entries, loading } = useParticipation();
+  const { items: events } = useCollection<CalendarEvent>('midp-calendar-events');
+  const { due, upcoming } = useReminders();
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const fiscalYear = getCurrentFiscalYear();
 
-  const fetchDashboardData = async () => {
-    try {
-      setIsLoading(true);
+  /* --- Semaine en cours (lundi → aujourd'hui) --- */
+  const week = useMemo(() => {
+    const start = new Date(today);
+    const offset = (start.getDay() + 6) % 7;
+    start.setDate(start.getDate() - offset);
+    start.setHours(0, 0, 0, 0);
 
-      // Fetch current month activities
-      const now = new Date();
-      const month = now.getMonth() + 1;
-      const year = now.getFullYear();
+    const inWeek = entries.filter(entry => new Date(entry.date) >= start);
+    const participants = inWeek.reduce((sum, entry) => sum + entry.participants, 0);
+    const sessions = inWeek.length;
 
-      const activitiesRes = await fetch('/api/activities?limit=500');
-      const activitiesData = await activitiesRes.json();
+    return {
+      participants,
+      sessions,
+      menAverage: sessions > 0 ? Math.round(inWeek.reduce((s, e) => s + e.men, 0) / sessions) : 0,
+      womenAverage: sessions > 0 ? Math.round(inWeek.reduce((s, e) => s + e.women, 0) / sessions) : 0,
+      entries: inWeek
+    };
+  }, [entries]);
 
-      // Calculate this week and this month stats
-      const today = new Date();
-      const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+  const monthSummary = useMemo(
+    () => summarizeMonth(entries, month, year),
+    [entries, month, year]
+  );
 
-      const weekActivities = activitiesData.activities.filter((a: any) => {
-        const actDate = new Date(a.date);
-        return actDate >= startOfWeek && actDate <= new Date();
+  /* --- Répartition par programme sur le mois --- */
+  const distribution = useMemo(() => {
+    const grouped = new Map<string, number>();
+    monthSummary.entries.forEach(entry => {
+      grouped.set(entry.label, (grouped.get(entry.label) || 0) + entry.participants);
+    });
+    return [...grouped.entries()]
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+  }, [monthSummary.entries]);
+
+  /* --- Tendance hebdomadaire du mois --- */
+  const trend = useMemo(() => {
+    const weeks = new Map<number, { participants: number; sessions: number }>();
+    monthSummary.entries.forEach(entry => {
+      const weekIndex = Math.ceil(new Date(entry.date).getDate() / 7);
+      const current = weeks.get(weekIndex) || { participants: 0, sessions: 0 };
+      current.participants += entry.participants;
+      current.sessions += 1;
+      weeks.set(weekIndex, current);
+    });
+
+    return [1, 2, 3, 4, 5]
+      .filter(index => weeks.has(index))
+      .map(index => {
+        const value = weeks.get(index)!;
+        return {
+          week: `S${index}`,
+          participants: value.participants,
+          moyenne: value.sessions > 0 ? Math.round(value.participants / value.sessions) : 0
+        };
       });
+  }, [monthSummary.entries]);
 
-      const monthActivities = activitiesData.activities.filter((a: any) => {
-        const actDate = new Date(a.date);
-        return actDate.getMonth() === month - 1 && actDate.getFullYear() === year;
-      });
+  /* --- Statistiques annuelles (année fiscale août → juillet) --- */
+  const annual = useMemo(() => {
+    let participants = 0;
+    let sessions = 0;
+    FISCAL_MONTH_ORDER.forEach(fiscalMonth => {
+      const calendarYear = getCalendarYearForFiscalMonth(fiscalMonth, fiscalYear);
+      const summary = summarizeMonth(entries, fiscalMonth, calendarYear);
+      participants += summary.participants;
+      sessions += summary.sessions;
+    });
+    return {
+      participants,
+      sessions,
+      average: sessions > 0 ? Math.round(participants / sessions) : 0
+    };
+  }, [entries, fiscalYear]);
 
-      // Group activities by type for distribution
-      const activityDistribution: any = {};
-      weekActivities.forEach((a: any) => {
-        if (!activityDistribution[a.type]) {
-          activityDistribution[a.type] = 0;
-        }
-        activityDistribution[a.type] += a.totalParticipants || 0;
-      });
+  const topPrograms = distribution.slice(0, 5);
 
-      const activitiesArray = Object.entries(activityDistribution).map(([type, value]) => ({
-        name: ACTIVITY_NAMES[type as keyof typeof ACTIVITY_NAMES] || type,
-        value
-      }));
+  const upcomingEvents = [...events]
+    .filter(event => new Date(event.date) >= new Date(today.toDateString()))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 5);
 
-      // Calculate week totals
-      const weekTotal = weekActivities.reduce((sum: number, a: any) => sum + (a.totalParticipants || 0), 0);
-      const weekMen = weekActivities.reduce((sum: number, a: any) => sum + (a.menCount || 0), 0);
-      const weekWomen = weekActivities.reduce((sum: number, a: any) => sum + (a.womenCount || 0), 0);
-      const weekSessions = weekActivities.length;
-
-      setWeeklyStats({
-        total: weekTotal,
-        sessions: weekSessions,
-        menAvg: weekSessions > 0 ? Math.round(weekMen / weekSessions) : 0,
-        womenAvg: weekSessions > 0 ? Math.round(weekWomen / weekSessions) : 0,
-        activities: activitiesArray.length > 0 ? activitiesArray : [
-          { name: 'Matinaux', value: 85 },
-          { name: 'Nocturnes', value: 120 }
-        ]
-      });
-
-      // Calculate monthly trend (simplified to weeks)
-      const trend = [];
-      const weeksInMonth = Math.ceil((new Date(year, month, 0).getDate()) / 7);
-      for (let week = 1; week <= weeksInMonth; week++) {
-        const weekStart = new Date(year, month - 1, (week - 1) * 7 + 1);
-        const weekEnd = new Date(year, month - 1, week * 7);
-        const weekData = monthActivities.filter((a: any) => {
-          const actDate = new Date(a.date);
-          return actDate >= weekStart && actDate <= weekEnd;
-        });
-        const weekParticipants = weekData.reduce((sum: number, a: any) => sum + (a.totalParticipants || 0), 0);
-        trend.push({
-          week: `S${week}`,
-          participants: weekParticipants,
-          avg: weekData.length > 0 ? Math.round(weekParticipants / weekData.length) : 0
-        });
-      }
-
-      // Top activities
-      const activityStats: any = {};
-      monthActivities.forEach((a: any) => {
-        if (!activityStats[a.type]) {
-          activityStats[a.type] = { sessions: 0, total: 0 };
-        }
-        activityStats[a.type].sessions += 1;
-        activityStats[a.type].total += a.totalParticipants || 0;
-      });
-
-      const topActivities = Object.entries(activityStats)
-        .map(([type, data]: [string, any]) => ({
-          name: ACTIVITY_NAMES[type as keyof typeof ACTIVITY_NAMES] || type,
-          sessions: data.sessions,
-          avg: data.sessions > 0 ? Math.round(data.total / data.sessions) : 0
-        }))
-        .sort((a, b) => b.sessions - a.sessions)
-        .slice(0, 3);
-
-      setMonthlyStats({
-        trend: trend.length > 0 ? trend : [
-          { week: 'S1', participants: 245, avg: 81 },
-          { week: 'S2', participants: 310, avg: 103 }
-        ],
-        topActivities: topActivities.length > 0 ? topActivities : [
-          { name: 'Nuit Culte', sessions: 4, avg: 50 }
-        ]
-      });
-
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      setIsLoading(false);
-    }
+  const tooltipStyle = {
+    backgroundColor: 'var(--bg-elevated)',
+    border: '1px solid var(--border-strong)',
+    borderRadius: '10px',
+    color: 'var(--text-primary)'
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin">
-          <div className="h-12 w-12 border-4 border-amber-500 border-t-transparent rounded-full"></div>
-        </div>
+      <div className="flex items-center justify-center py-24">
+        <div className="spinner" />
       </div>
     );
   }
 
-  const COLORS = ['#f59e0b', '#f97316', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4'];
+  const hasData = entries.length > 0;
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Header */}
       <div>
         <h1 className="section-title">
-          <BarChart3 className="h-8 w-8 text-amber-500" />
-          Tableau de Bord Intelligent
+          <LayoutDashboard className="h-8 w-8 text-gold" />
+          Tableau de Bord
         </h1>
-        <p className="text-slate-400">
-          Bienvenue ! Voici un aperçu de vos activités de cette semaine
+        <p className="text-dim text-sm mt-2">
+          {getMonthName(month)} {year} · Année {getFiscalYearLabel(fiscalYear)}
         </p>
       </div>
 
-      {/* Key Statistics */}
+      {/* Rappels échus */}
+      {due.length > 0 && (
+        <div className="card-gold flex items-start gap-3">
+          <BellRing className="h-5 w-5 text-gold shrink-0 mt-0.5" />
+          <div className="min-w-0">
+            <p className="section-subtitle">
+              {due.length} rappel{due.length > 1 ? 's' : ''} à traiter
+            </p>
+            <p className="text-dim text-sm mt-1">
+              {due
+                .slice(0, 3)
+                .map(reminder => reminder.title)
+                .join(' · ')}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Indicateurs de la semaine */}
       <div className="grid-4">
         <div className="stat-box">
-          <Users className="h-8 w-8 text-amber-500" />
-          <div className="stat-number">{weeklyStats.total}</div>
-          <div className="stat-label">Participants</div>
-          <div className="text-xs text-emerald-400 mt-2">↑ 12% cette semaine</div>
+          <Users className="h-5 w-5 text-gold" />
+          <span className="stat-number">{week.participants}</span>
+          <span className="stat-label">Participants cette semaine</span>
         </div>
-
         <div className="stat-box">
-          <Activity className="h-8 w-8 text-amber-500" />
-          <div className="stat-number">{weeklyStats.sessions}</div>
-          <div className="stat-label">Séances</div>
-          <div className="text-xs text-emerald-400 mt-2">Tous en cours</div>
+          <ActivityIcon className="h-5 w-5 text-gold" />
+          <span className="stat-number">{week.sessions}</span>
+          <span className="stat-label">Séances cette semaine</span>
         </div>
-
         <div className="stat-box">
-          <Users className="h-8 w-8 text-blue-400" />
-          <div className="stat-number">{weeklyStats.menAvg}</div>
-          <div className="stat-label">Hommes (moy)</div>
-          <div className="text-xs text-slate-400 mt-2">par séance</div>
+          <Users className="h-5 w-5" style={{ color: 'var(--info)' }} />
+          <span className="stat-number-royal">{week.menAverage}</span>
+          <span className="stat-label">Hommes par séance</span>
         </div>
-
         <div className="stat-box">
-          <Users className="h-8 w-8 text-pink-400" />
-          <div className="stat-number">{weeklyStats.womenAvg}</div>
-          <div className="stat-label">Femmes (moy)</div>
-          <div className="text-xs text-slate-400 mt-2">par séance</div>
+          <Users className="h-5 w-5" style={{ color: 'var(--royal-bright)' }} />
+          <span className="stat-number-royal">{week.womenAverage}</span>
+          <span className="stat-label">Femmes par séance</span>
         </div>
       </div>
 
-      {/* Charts Section */}
-      <div className="grid-2">
-        {/* Activities Distribution */}
-        <div className="card">
-          <h2 className="section-subtitle flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-amber-500" />
-            Distribution des Activités
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={weeklyStats.activities}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis dataKey="name" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#1e293b',
-                  border: '1px solid #475569',
-                  borderRadius: '8px',
-                  color: '#f1f5f9'
-                }}
-              />
-              <Bar dataKey="value" fill="#f59e0b" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+      {/* Indicateurs du mois et de l'année */}
+      <div className="grid-4">
+        <div className="stat-box">
+          <span className="stat-label">Participants du mois</span>
+          <span className="stat-number">{monthSummary.participants}</span>
         </div>
-
-        {/* Pie Chart */}
-        <div className="card">
-          <h2 className="section-subtitle flex items-center gap-2">
-            <Activity className="h-5 w-5 text-amber-500" />
-            Répartition par Activité
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={weeklyStats.activities.slice(0, 5)}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, value }) => `${name}: ${value}`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {weeklyStats.activities.slice(0, 5).map((_: unknown, index: number) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#1e293b',
-                  border: '1px solid #475569',
-                  borderRadius: '8px',
-                  color: '#f1f5f9'
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="stat-box">
+          <span className="stat-label">Séances du mois</span>
+          <span className="stat-number">{monthSummary.sessions}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Moyenne du mois</span>
+          <span className="stat-number-royal">{monthSummary.average}</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-label">Participants sur l'année</span>
+          <span className="stat-number-royal">{annual.participants}</span>
         </div>
       </div>
 
-      {/* Trend Chart */}
-      <div className="card">
-        <h2 className="section-subtitle flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-amber-500" />
-          Tendance du Mois
-        </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={monthlyStats.trend}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis dataKey="week" stroke="#94a3b8" />
-            <YAxis stroke="#94a3b8" />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: '#1e293b',
-                border: '1px solid #475569',
-                borderRadius: '8px',
-                color: '#f1f5f9'
-              }}
-            />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="participants"
-              stroke="#f59e0b"
-              strokeWidth={2}
-              dot={{ fill: '#f59e0b', r: 4 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="avg"
-              stroke="#10b981"
-              strokeWidth={2}
-              dot={{ fill: '#10b981', r: 4 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      {!hasData && (
+        <div className="empty-state space-y-3">
+          <p>Aucune donnée de participation enregistrée pour le moment.</p>
+          <p className="text-sm">
+            Commencez par saisir une séance depuis les pages des programmes — les statistiques,
+            graphiques et synthèses se calculent ensuite automatiquement.
+          </p>
+          <div className="flex flex-wrap gap-2 justify-center pt-2">
+            <Link to="/activities" className="btn btn-primary">
+              Saisir une activité
+            </Link>
+            <Link to="/atmosphere" className="btn btn-secondary">
+              Atmosphère de Prière
+            </Link>
+            <Link to="/night-prayer" className="btn btn-secondary">
+              Nuit de Prière
+            </Link>
+          </div>
+        </div>
+      )}
 
-      {/* Top Activities */}
-      <div className="card">
-        <h2 className="section-subtitle">Top Activités du Mois</h2>
-        <div className="space-y-3">
-          {monthlyStats.topActivities.map((activity: any, index: number) => (
-            <div key={index} className="flex items-center justify-between p-4 bg-slate-800/30 rounded-lg border border-slate-700/30">
-              <div className="flex items-center gap-3">
-                <div className="h-3 w-3 rounded-full" style={{ backgroundColor: COLORS[index] }}></div>
-                <span className="font-medium">{activity.name}</span>
-              </div>
-              <div className="text-right">
-                <div className="text-amber-400 font-bold">{activity.avg}</div>
-                <div className="text-xs text-slate-400">{activity.sessions} séances</div>
-              </div>
+      {hasData && (
+        <>
+          <div className="grid-2">
+            <div className="card">
+              <h2 className="section-subtitle mb-4 flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-gold" />
+                Participation par programme — {getMonthName(month)}
+              </h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={distribution.slice(0, 7)}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis
+                    dataKey="name"
+                    stroke="var(--text-muted)"
+                    fontSize={10}
+                    tickFormatter={(value: string) => value.slice(0, 12)}
+                  />
+                  <YAxis stroke="var(--text-muted)" fontSize={12} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'var(--gold-soft)' }} />
+                  <Bar dataKey="value" name="Participants" fill={PALETTE[0]} radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-          ))}
+
+            <div className="card">
+              <h2 className="section-subtitle mb-4 flex items-center gap-2">
+                <ActivityIcon className="h-5 w-5 text-gold" />
+                Répartition
+              </h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart>
+                  <Pie
+                    data={topPrograms}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={92}
+                    dataKey="value"
+                    label={({ percent }: any) => `${Math.round((percent || 0) * 100)}%`}
+                    labelLine={false}
+                  >
+                    {topPrograms.map((_, index) => (
+                      <Cell key={index} fill={PALETTE[index % PALETTE.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip contentStyle={tooltipStyle} />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {trend.length > 0 && (
+            <div className="card">
+              <h2 className="section-subtitle mb-4 flex items-center gap-2">
+                <CalendarDays className="h-5 w-5 text-gold" />
+                Tendance du mois
+              </h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <LineChart data={trend}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="week" stroke="var(--text-muted)" fontSize={12} />
+                  <YAxis stroke="var(--text-muted)" fontSize={12} />
+                  <Tooltip contentStyle={tooltipStyle} />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Line
+                    type="monotone"
+                    dataKey="participants"
+                    name="Participants"
+                    stroke={PALETTE[0]}
+                    strokeWidth={2.5}
+                    dot={{ fill: PALETTE[0], r: 4 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="moyenne"
+                    name="Moyenne par séance"
+                    stroke={PALETTE[1]}
+                    strokeWidth={2.5}
+                    dot={{ fill: PALETTE[1], r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+
+          <div className="space-y-3">
+            <h2 className="section-subtitle">Programmes du mois</h2>
+            <div className="table-wrap">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Programme</th>
+                    <th className="num">Participants</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {distribution.map((program, index) => (
+                    <tr key={program.name}>
+                      <td style={{ color: 'var(--text-primary)' }}>
+                        <span
+                          className="inline-block h-2.5 w-2.5 rounded-full mr-2"
+                          style={{ background: PALETTE[index % PALETTE.length] }}
+                        />
+                        {program.name}
+                      </td>
+                      <td className="num text-gold" style={{ fontWeight: 600 }}>
+                        {program.value}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Activités à venir et rappels */}
+      {(upcomingEvents.length > 0 || upcoming.length > 0) && (
+        <div className="grid-2">
+          {upcomingEvents.length > 0 && (
+            <div className="card space-y-3">
+              <h2 className="section-subtitle flex items-center gap-2">
+                <CalendarDays className="h-5 w-5 text-gold" />
+                À venir
+              </h2>
+              {upcomingEvents.map(event => (
+                <div key={event.id} className="flex items-center gap-2 flex-wrap">
+                  <span className={event.kind === 'annonce' ? 'badge-primary' : 'badge-royal'}>
+                    {event.kind === 'annonce' ? (
+                      <Megaphone className="h-3 w-3" />
+                    ) : (
+                      <CalendarDays className="h-3 w-3" />
+                    )}
+                    {new Date(event.date).toLocaleDateString('fr-FR', {
+                      day: 'numeric',
+                      month: 'short'
+                    })}
+                  </span>
+                  <span className="text-soft text-sm">{event.title}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {upcoming.length > 0 && (
+            <div className="card space-y-3">
+              <h2 className="section-subtitle flex items-center gap-2">
+                <BellRing className="h-5 w-5 text-gold" />
+                Prochains rappels
+              </h2>
+              {upcoming.slice(0, 5).map(reminder => (
+                <div key={reminder.id} className="flex items-center gap-2 flex-wrap">
+                  <span className="badge-neutral">
+                    {new Date(reminder.dueAt).toLocaleDateString('fr-FR', {
+                      day: 'numeric',
+                      month: 'short'
+                    })}
+                  </span>
+                  <span className="text-soft text-sm">{reminder.title}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 }

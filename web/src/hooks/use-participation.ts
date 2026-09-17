@@ -37,7 +37,7 @@ export function useParticipation() {
     let cancelled = false;
 
     fetch('/api/activities?limit=500')
-      .then(response => response.json())
+      .then(response => (response.ok ? response.json() : { activities: [] }))
       .then(data => {
         if (!cancelled) setApiActivities(data.activities || []);
       })
