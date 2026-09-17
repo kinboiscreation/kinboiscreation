@@ -20,31 +20,15 @@ import {
   FileDown,
   Loader2
 } from 'lucide-react';
-import {
-  ACTIVITY_NAMES,
-  WOMEN_PROGRAM_NAMES,
-  ActivityType,
-  ThemedSession,
-  SlotSession,
-  WomenProgram,
-  getMonthName,
-  sumSlots
-} from '@midp/shared';
+import { getMonthName } from '@midp/shared';
 import { useCollection } from '../hooks/use-collection';
+import { useParticipation } from '../hooks/use-participation';
 import { generateCSV, downloadCSV } from '../utils/export';
 
 interface CouncilDate {
   id: string;
   date: string;
   note?: string;
-}
-
-interface AggregatedEntry {
-  date: string;
-  label: string;
-  participants: number;
-  men: number;
-  women: number;
 }
 
 const CHART_GOLD = '#d4af37';
@@ -62,13 +46,8 @@ export default function Council() {
   const { items: councilDates, add: addCouncilDate, remove: removeCouncilDate } =
     useCollection<CouncilDate>('midp-council-dates');
 
-  const { items: adp } = useCollection<ThemedSession>('midp-adp-themes');
-  const { items: vigils } = useCollection<ThemedSession>('midp-veillees');
-  const { items: nightPrayer } = useCollection<SlotSession>('midp-nuit-culte');
-  const { items: tongues } = useCollection<SlotSession>('midp-langues-feu');
-  const { items: womenPrograms } = useCollection<WomenProgram>('midp-women-programs');
+  const { entries: allEntries, apiActivities } = useParticipation();
 
-  const [apiActivities, setApiActivities] = useState<any[]>([]);
   const [remarks, setRemarks] = useState(() => localStorage.getItem('midp-council-remarks') || '');
   const [keywords, setKeywords] = useState(() => localStorage.getItem('midp-council-keywords') || '');
   const [conclusion, setConclusion] = useState(
@@ -79,13 +58,6 @@ export default function Council() {
   const [generating, setGenerating] = useState(false);
 
   useEffect(() => {
-    fetch('/api/activities?limit=500')
-      .then(response => response.json())
-      .then(data => setApiActivities(data.activities || []))
-      .catch(() => setApiActivities([]));
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem('midp-council-remarks', remarks);
   }, [remarks]);
   useEffect(() => {
@@ -94,54 +66,6 @@ export default function Council() {
   useEffect(() => {
     localStorage.setItem('midp-council-conclusion', conclusion);
   }, [conclusion]);
-
-  /** Toutes les sources de participation réunies. */
-  const allEntries = useMemo<AggregatedEntry[]>(() => {
-    const entries: AggregatedEntry[] = [];
-
-    apiActivities.forEach(activity => {
-      entries.push({
-        date: activity.date,
-        label: ACTIVITY_NAMES[activity.type as ActivityType] || activity.type,
-        participants: activity.totalParticipants || 0,
-        men: activity.menCount || 0,
-        women: activity.womenCount || 0
-      });
-    });
-
-    [...adp, ...vigils].forEach(session => {
-      entries.push({
-        date: session.date,
-        label: session.kind === 'adp' ? 'Atmosphère de Prière' : 'Veillées de Prière',
-        participants: session.totalParticipants || 0,
-        men: session.menCount || 0,
-        women: session.womenCount || 0
-      });
-    });
-
-    [...nightPrayer, ...tongues].forEach(session => {
-      const totals = sumSlots(session.slots);
-      entries.push({
-        date: session.date,
-        label: session.type === 'nuit_culte' ? 'Nuit de Prière' : 'Langues de Feu',
-        participants: totals.total,
-        men: totals.men,
-        women: totals.women
-      });
-    });
-
-    womenPrograms.forEach(program => {
-      entries.push({
-        date: program.date,
-        label: WOMEN_PROGRAM_NAMES[program.programType],
-        participants: program.totalParticipants || 0,
-        men: program.menCount || 0,
-        women: program.womenCount || 0
-      });
-    });
-
-    return entries.filter(entry => !Number.isNaN(new Date(entry.date).getTime()));
-  }, [apiActivities, adp, vigils, nightPrayer, tongues, womenPrograms]);
 
   const months = lastThreeMonths();
 

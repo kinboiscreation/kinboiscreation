@@ -1,5 +1,6 @@
 import { Settings as SettingsIcon, LogOut, Bell, Lock, User } from 'lucide-react';
 import { useState } from 'react';
+import { useTheme } from '../contexts/theme-context';
 
 export default function Settings() {
   const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || 'admin@midp.fr');
@@ -9,7 +10,7 @@ export default function Settings() {
     tuesdayAnnouncements: true,
     weeklyReport: true
   });
-  const [darkMode, setDarkMode] = useState(true);
+  const { theme, setTheme } = useTheme();
 
   const handleLogout = () => {
     if (window.confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
@@ -134,15 +135,20 @@ export default function Settings() {
       <div className="card p-8">
         <h2 className="text-xl font-semibold text-white mb-6">Apparence</h2>
 
-        <label className="flex items-center gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={(e) => setDarkMode(e.target.checked)}
-            className="w-4 h-4 rounded bg-slate-800 border border-slate-600 cursor-pointer accent-amber-500"
-          />
-          <span className="text-slate-300">Mode sombre</span>
-        </label>
+        <div className="tab-bar">
+          <button
+            onClick={() => setTheme('dark')}
+            className={`tab ${theme === 'dark' ? 'tab-active' : ''}`}
+          >
+            Mode sombre
+          </button>
+          <button
+            onClick={() => setTheme('light')}
+            className={`tab ${theme === 'light' ? 'tab-active' : ''}`}
+          >
+            Mode clair
+          </button>
+        </div>
       </div>
 
       {/* Security Settings */}
