@@ -1,6 +1,6 @@
 /* ============================================================
    BIBLIOTHÈQUE D'EFFETS — Kin Bois Création
-   69 effets réutilisables, CSS natif, sans dépendance.
+   84 effets réutilisables, CSS natif, sans dépendance.
 
    Utilisation :
      <link rel="stylesheet" href="effets/effets.css">
@@ -1158,6 +1158,301 @@ dialog.fx-modal[open]{animation:fx-modal-in .35s cubic-bezier(.22,.9,.28,1);}
   background:var(--fx-accent);color:#fff;
 }
 
+/* ═══ 70 · BASCULE CLAIR / SOMBRE ════════════════════════════
+   JS requis (pose data-theme). Classe : .fx-theme sur le bouton
+   Les couleurs se choisissent avec `light-dark()` : une seule
+   déclaration par variable au lieu de deux jeux de règles.      */
+:root{color-scheme:light dark;}
+:root[data-theme="light"]{color-scheme:light;}
+:root[data-theme="dark"] {color-scheme:dark;}
+@supports (color:light-dark(#fff,#000)){
+  :root{
+    --fx-panel:light-dark(#FFFFFF,#241811);
+    --fx-ink:light-dark(#4A2E1C,#F0E4D8);
+    --fx-faint:light-dark(rgba(74,46,28,.62),rgba(240,228,216,.58));
+    --fx-shadow:light-dark(rgba(74,46,28,.22),rgba(0,0,0,.5));
+  }
+}
+.fx-theme{
+  padding:9px 17px;border-radius:99px;cursor:pointer;font:inherit;
+  border:1px solid var(--fx-faint);background:transparent;color:var(--fx-ink);
+  transition:border-color .25s,color .25s;
+}
+.fx-theme:hover{border-color:var(--fx-accent);color:var(--fx-accent);}
+
+/* ═══ 71 · NUANCIER DE FINITIONS ═════════════════════════════
+   JS requis. Classe : .fx-swatch                                */
+.fx-swatch-puces{display:flex;flex-wrap:wrap;gap:11px;margin-bottom:18px;}
+.fx-swatch-puces button{
+  width:44px;height:44px;border-radius:50%;cursor:pointer;padding:0;
+  border:2px solid transparent;outline-offset:3px;
+  background:var(--fx-teinte-puce);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);
+  transition:border-color .25s,scale .25s;
+}
+.fx-swatch-puces button[aria-pressed="true"]{
+  border-color:var(--fx-accent);scale:1.12;
+}
+.fx-swatch-apercu{
+  --fx-teinte:#B87333;
+  height:clamp(140px,26vh,220px);border-radius:var(--fx-radius);
+  background:var(--fx-teinte);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.22);
+  transition:background .5s ease;
+}
+.fx-swatch-nom{
+  margin:11px 0 0;font-size:.74rem;text-transform:uppercase;
+  letter-spacing:.09em;color:var(--fx-faint);
+}
+
+/* ═══ 72 · TABLEAU QUI DEVIENT DES FICHES ════════════════════
+   CSS seul. Classe : .fx-table                                  */
+.fx-table{width:100%;border-collapse:collapse;font-size:.92rem;}
+.fx-table :is(th,td){
+  padding:12px 14px;text-align:left;
+  border-bottom:1px solid color-mix(in srgb,var(--fx-faint) 40%,transparent);
+}
+.fx-table th{
+  font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--fx-faint);font-weight:600;
+}
+@media(max-width:620px){
+  /* chaque ligne devient une fiche, l'en-tête passe en étiquette */
+  .fx-table,.fx-table tbody,.fx-table tr,.fx-table td{display:block;width:100%;}
+  .fx-table thead{display:none;}
+  .fx-table tr{
+    margin-bottom:14px;padding:6px 0;border:1px solid var(--fx-faint);
+    border-radius:10px;
+  }
+  .fx-table td{display:flex;justify-content:space-between;gap:16px;border:0;}
+  .fx-table td::before{
+    content:attr(data-libelle);font-size:.7rem;text-transform:uppercase;
+    letter-spacing:.07em;color:var(--fx-faint);
+  }
+}
+
+/* ═══ 73 · PAGINATION ════════════════════════════════════════
+   JS requis. Classe : .fx-pager                                 */
+.fx-pager-liste{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:26px;}
+.fx-pager-liste button{
+  min-width:40px;height:40px;border-radius:9px;cursor:pointer;font:inherit;
+  border:1px solid var(--fx-faint);background:transparent;color:var(--fx-faint);
+  transition:background .25s,color .25s,border-color .25s;
+}
+.fx-pager-liste button[aria-current="true"]{
+  background:var(--fx-accent);border-color:var(--fx-accent);color:#fff;
+}
+
+/* ═══ 74 · RECHERCHE INSTANTANÉE ═════════════════════════════
+   JS requis. Classe : .fx-search                                */
+.fx-search-champ{
+  display:flex;align-items:center;gap:11px;margin-bottom:8px;
+  padding:12px 17px;border-radius:99px;
+  border:1px solid var(--fx-faint);background:var(--fx-panel);
+  transition:border-color .25s,box-shadow .25s;
+}
+.fx-search-champ:focus-within{
+  border-color:var(--fx-accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--fx-accent) 16%,transparent);
+}
+.fx-search-champ input{
+  flex:1;border:0;background:none;font:inherit;color:var(--fx-ink);outline:none;
+}
+.fx-search-compte{
+  margin:0 0 20px;font-size:.76rem;color:var(--fx-faint);min-height:1.2em;
+}
+
+/* ═══ 75 · ÉTIQUETTE SUR UNE CARTE ═══════════════════════════
+   CSS seul. Classe : .fx-badge, texte dans data-badge           */
+.fx-badge{position:relative;}
+.fx-badge::before{
+  content:attr(data-badge);position:absolute;top:12px;left:12px;z-index:4;
+  padding:5px 12px;border-radius:99px;
+  background:var(--fx-accent);color:#fff;
+  font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;
+  box-shadow:0 3px 10px rgba(0,0,0,.2);
+}
+.fx-badge[data-ton="or"]::before{background:var(--fx-accent-2);color:var(--fx-ink);}
+.fx-badge[data-ton="sombre"]::before{background:var(--fx-ink);color:#F7F1E8;}
+
+/* ═══ 76 · GROUPE D'AVATARS ══════════════════════════════════
+   CSS seul. Classe : .fx-avatars                                */
+.fx-avatars{display:flex;align-items:center;}
+.fx-avatars img,.fx-avatars span{
+  width:42px;height:42px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--fx-panel);margin-left:-13px;
+  transition:translate .3s cubic-bezier(.22,.9,.28,1);
+}
+.fx-avatars > :first-child{margin-left:0;}
+.fx-avatars:hover img,.fx-avatars:hover span{translate:0 -4px;}
+.fx-avatars span{
+  display:grid;place-content:center;background:var(--fx-accent);color:#fff;
+  font-size:.74rem;font-weight:600;
+}
+
+/* ═══ 77 · COMPTE À REBOURS ══════════════════════════════════
+   JS requis. Classe : .fx-countdown, échéance dans data-fin     */
+.fx-countdown{display:flex;gap:14px;flex-wrap:wrap;}
+.fx-countdown > div{
+  min-width:74px;padding:14px 10px;border-radius:10px;text-align:center;
+  background:color-mix(in srgb,var(--fx-accent) 10%,transparent);
+}
+.fx-countdown b{
+  display:block;font-size:1.8rem;line-height:1;color:var(--fx-accent);
+  font-variant-numeric:tabular-nums;
+}
+.fx-countdown span{
+  display:block;margin-top:6px;font-size:.64rem;
+  text-transform:uppercase;letter-spacing:.09em;color:var(--fx-faint);
+}
+
+/* ═══ 78 · VIDÉO EN FOND ═════════════════════════════════════
+   CSS seul. Classe : .fx-video                                  */
+.fx-video{position:relative;overflow:hidden;border-radius:var(--fx-radius);}
+.fx-video video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;pointer-events:none;
+}
+.fx-video::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(24,14,8,.82),rgba(24,14,8,.28));
+}
+.fx-video > *{position:relative;z-index:2;}
+
+/* ═══ 79 · PARTAGE NATIF ═════════════════════════════════════
+   JS requis. Classe : .fx-share                                 */
+.fx-share{
+  padding:10px 20px;border-radius:99px;cursor:pointer;font:inherit;
+  border:1px solid var(--fx-faint);background:transparent;color:var(--fx-ink);
+  transition:border-color .25s,color .25s;
+}
+.fx-share:hover{border-color:var(--fx-accent);color:var(--fx-accent);}
+
+/* ═══ 80 · CHARGEMENT EN CONTINU ═════════════════════════════
+   JS requis. Classe : .fx-infinite                              */
+.fx-infinite-fin{
+  margin:26px 0 0;text-align:center;font-size:.78rem;color:var(--fx-faint);
+}
+
+/* ═══ 81 · SÉLECTEUR DE QUANTITÉ ═════════════════════════════
+   JS requis. Classe : .fx-qty                                   */
+.fx-qty{
+  display:inline-flex;align-items:center;
+  border:1px solid var(--fx-faint);border-radius:99px;overflow:hidden;
+}
+.fx-qty button{
+  width:42px;height:42px;border:0;cursor:pointer;font:inherit;font-size:1.1rem;
+  background:transparent;color:var(--fx-ink);transition:background .2s;
+}
+.fx-qty button:hover:not(:disabled){background:color-mix(in srgb,var(--fx-accent) 12%,transparent);}
+.fx-qty button:disabled{opacity:.34;cursor:not-allowed;}
+.fx-qty input{
+  width:52px;border:0;background:none;text-align:center;font:inherit;
+  color:var(--fx-ink);font-variant-numeric:tabular-nums;
+  -moz-appearance:textfield;appearance:textfield;
+}
+.fx-qty input::-webkit-outer-spin-button,
+.fx-qty input::-webkit-inner-spin-button{appearance:none;margin:0;}
+
+/* ═══ 82 · MISE EN PAGE À L'IMPRESSION ═══════════════════════
+   CSS seul. Classe : .fx-print sur ce qu'il faut imprimer       */
+@media print{
+  body{background:#fff;color:#000;}
+  .fx-print-cacher,.fx-top,.fx-bar,.fx-cookie,.fx-toast-pile,
+  .fx-cur-dot,.fx-cur-ring,.fx-progress{display:none !important;}
+  .fx-print{break-inside:avoid;}
+  .fx-print a[href^="http"]::after{
+    content:" (" attr(href) ")";font-size:.8em;color:#555;
+  }
+  .fx-card,.fx-frame img{box-shadow:none !important;}
+}
+
+/* ═══ 83 · ICÔNE QUI SE TRANSFORME ═══════════════════════════
+   JS requis. Classe : .fx-morph sur le bouton                   */
+.fx-morph{
+  width:46px;height:46px;border:0;background:none;cursor:pointer;
+  display:grid;place-content:center;gap:6px;padding:0;
+}
+.fx-morph i{
+  display:block;width:24px;height:2px;background:var(--fx-ink);
+  transition:translate .35s cubic-bezier(.22,.9,.28,1),
+             rotate .35s cubic-bezier(.22,.9,.28,1),opacity .2s;
+}
+.fx-morph.fx-croix i:nth-child(1){translate:0 8px;rotate:45deg;}
+.fx-morph.fx-croix i:nth-child(2){opacity:0;}
+.fx-morph.fx-croix i:nth-child(3){translate:0 -8px;rotate:-45deg;}
+
+/* ═══ 84 · SOMMAIRE QUI SUIT LA LECTURE ══════════════════════
+   JS requis. Classe : .fx-anchor sur le <nav>                   */
+.fx-anchor{position:sticky;top:96px;}
+.fx-anchor a{
+  display:block;padding:7px 0 7px 15px;text-decoration:none;
+  border-left:2px solid color-mix(in srgb,var(--fx-faint) 40%,transparent);
+  color:var(--fx-faint);font-size:.88rem;
+  transition:color .25s,border-color .25s,padding-left .25s;
+}
+.fx-anchor a[aria-current="true"]{
+  color:var(--fx-accent);border-left-color:var(--fx-accent);padding-left:20px;
+}
+
+/* ═══ NOUVEAUTÉS CSS ═════════════════════════════════════════
+   Chacune est entourée d'un @supports : là où le navigateur ne
+   les connaît pas encore, l'effet garde sa version précédente.  */
+
+/* Apparition depuis `display:none` — la façon correcte d'animer
+   l'arrivée d'une notification ou d'un bandeau. */
+@supports at-rule(@starting-style){
+  @starting-style{
+    .fx-toast{opacity:0;translate:0 14px;}
+    .fx-cookie{opacity:0;translate:0 18px;}
+    dialog.fx-modal[open]{opacity:0;transform:translateY(14px) scale(.97);}
+  }
+}
+
+/* En-tête condensé sans une ligne de JavaScript : le conteneur
+   sait lui-même qu'il est collé en haut. */
+@supports (container-type: scroll-state){
+  .fx-shrink{container-type:scroll-state;}
+  @container scroll-state(stuck: top){
+    .fx-shrink{
+      padding:12px 0;box-shadow:0 6px 24px rgba(0,0,0,.09);
+      background:color-mix(in srgb,var(--fx-panel) 86%,transparent);
+      backdrop-filter:blur(10px);
+    }
+    .fx-shrink .fx-marque{font-size:1.1rem;}
+  }
+}
+
+/* Infobulle ancrée : le navigateur la replace tout seul quand
+   elle dépasserait du bord de l'écran. */
+@supports (anchor-name: --a){
+  .fx-tip{anchor-name:--fx-tip;}
+  .fx-tip::after{
+    position-anchor:--fx-tip;
+    position-area:top center;
+    position-try-fallbacks:bottom center,top span-right,top span-left;
+    bottom:auto;left:auto;translate:0 4px;
+  }
+  .fx-tip:hover::after,.fx-tip:focus-visible::after{translate:0 0;}
+}
+
+/* Cartes qui s'adaptent à la largeur qu'on leur donne, et non à
+   celle de l'écran. */
+@supports (container-type: inline-size){
+  .fx-card{container-type:inline-size;}
+  @container (max-width: 210px){
+    .fx-cap{padding:11px 12px 13px;}
+    .fx-cap b{font-size:.86rem;}
+    .fx-cap span{font-size:.62rem;}
+  }
+}
+
+/* Césure et équilibre des titres : moins de lignes orphelines. */
+@supports (text-wrap: pretty){
+  .fx-cap b,.fx-modal-corps h3,.fx-timeline b{text-wrap:balance;}
+  .fx-cap span,.fx-modal-corps p,.fx-timeline span{text-wrap:pretty;}
+}
+
 /* --- Accessibilité : respecte le réglage système -------------- */
 @media(prefers-reduced-motion:reduce){
   .fx-card,.fx-frame,.fx-frame img,.fx-cap,.fx-col,.fx-unfurl,.fx-flip-inner,
@@ -1198,4 +1493,9 @@ dialog.fx-modal[open]{animation:fx-modal-in .35s cubic-bezier(.22,.9,.28,1);}
   .fx-blur img{filter:none !important;scale:1 !important;transition:none !important;}
   .fx-snap{scroll-snap-type:none !important;}
   .fx-toast,.fx-cookie{opacity:1 !important;translate:none !important;}
+  /* dernières familles */
+  .fx-swatch-apercu,.fx-avatars img,.fx-avatars span,.fx-morph i,
+  .fx-anchor a,.fx-theme{transition:none !important;}
+  .fx-swatch-puces button[aria-pressed="true"]{scale:1 !important;}
+  .fx-video video{display:none !important;}
 }

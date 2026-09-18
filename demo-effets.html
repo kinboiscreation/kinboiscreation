@@ -278,9 +278,9 @@
 
 <div class="wrap">
   <header>
-    <h1>Soixante-neuf effets, vos vraies photos</h1>
+    <h1>Quatre-vingt-quatre effets, vos vraies photos</h1>
     <p>Passez la souris sur les images, et faites défiler lentement : certains effets se déclenchent au scroll. Repérez ceux que vous préférez et donnez-moi leurs numéros — je les applique au site. Tout est en CSS et JavaScript natifs : aucun coût, aucune dépendance, rien à installer.</p>
-    <p style="color:var(--faint);margin:14px 0 0;font-size:.9rem;">Les effets 1 à 13 portent sur les cartes du catalogue, 14 à 30 sur les images et le texte, 31 à 47 sur l'habillage du site (curseur, navigation, fonds, panneaux), 48 à 69 sur les formulaires, l'attente et le contenu.</p>
+    <p style="color:var(--faint);margin:14px 0 0;font-size:.9rem;">Les effets 1 à 13 portent sur les cartes du catalogue, 14 à 30 sur les images et le texte, 31 à 47 sur l'habillage du site (curseur, navigation, fonds, panneaux), 48 à 69 sur les formulaires, l'attente et le contenu, 70 à 84 sur le confort d'usage : thème, nuancier, recherche, tableaux, impression.</p>
   </header>
 
   <!-- 1 -->
@@ -1066,6 +1066,196 @@
     <div class="head"><span class="num">69</span><h2>Bandeau de consentement</h2></div>
     <p class="note">Le bandeau légal, qui ne revient plus une fois accepté. Le choix est retenu dans le navigateur du visiteur, et rien ne casse s'il refuse cette mémoire.</p>
     <p style="margin:0 0 18px;"><button class="fx-magnet" id="rejouer-cookie" type="button">Revoir le bandeau</button></p>
+  </section>
+
+  <!-- 70 -->
+  <section>
+    <div class="head"><span class="num">70</span><h2>Bascule clair / sombre</h2></div>
+    <p class="note">Le visiteur choisit son confort de lecture, et son choix est retenu. Les couleurs sont déclarées une seule fois avec <code>light-dark()</code> au lieu de deux jeux de règles.</p>
+    <p style="margin:0 0 18px;"><button class="fx-theme" type="button" aria-pressed="false">☾ Sombre</button></p>
+    <p class="note" style="margin:0;">La démonstration ne change que les blocs de la bibliothèque : la page garde sa charte claire.</p>
+  </section>
+
+  <!-- 71 -->
+  <section>
+    <div class="head"><span class="num">71</span><h2>Nuancier de finitions</h2></div>
+    <p class="note">Le client choisit sa teinte et la voit aussitôt. C'est la question qu'on vous pose le plus souvent — autant y répondre sans échanger un message.</p>
+    <div class="fx-swatch" style="max-width:520px;">
+      <div class="fx-swatch-puces">
+        <button type="button" data-teinte="#8B4513" data-nom="Acajou" style="--fx-teinte-puce:#8B4513" aria-label="Acajou"></button>
+        <button type="button" data-teinte="#C8A165" data-nom="Chêne clair" style="--fx-teinte-puce:#C8A165" aria-label="Chêne clair"></button>
+        <button type="button" data-teinte="#5B3A22" data-nom="Noyer" style="--fx-teinte-puce:#5B3A22" aria-label="Noyer"></button>
+        <button type="button" data-teinte="#E8DCC8" data-nom="Bois naturel" style="--fx-teinte-puce:#E8DCC8" aria-label="Bois naturel"></button>
+        <button type="button" data-teinte="#2B2118" data-nom="Wengé" style="--fx-teinte-puce:#2B2118" aria-label="Wengé"></button>
+      </div>
+      <div class="fx-swatch-apercu"></div>
+      <p class="fx-swatch-nom"></p>
+    </div>
+  </section>
+
+  <!-- 72 -->
+  <section>
+    <div class="head"><span class="num">72</span><h2>Tableau qui devient des fiches</h2></div>
+    <p class="note">Vos dimensions et tarifs en tableau sur ordinateur ; sur téléphone, chaque ligne devient une fiche lisible au lieu d'un tableau à faire glisser. Réduisez la fenêtre sous 620 px.</p>
+    <table class="fx-table">
+      <thead><tr><th>Pièce</th><th>Dimensions</th><th>Délai</th></tr></thead>
+      <tbody>
+        <tr><td data-libelle="Pièce">Lit deux places</td><td data-libelle="Dimensions">160 × 200 cm</td><td data-libelle="Délai">3 semaines</td></tr>
+        <tr><td data-libelle="Pièce">Table à manger</td><td data-libelle="Dimensions">180 × 90 cm</td><td data-libelle="Délai">2 semaines</td></tr>
+        <tr><td data-libelle="Pièce">Porte intérieure</td><td data-libelle="Dimensions">90 × 210 cm</td><td data-libelle="Délai">10 jours</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 73 -->
+  <section>
+    <div class="head"><span class="num">73</span><h2>Pagination</h2></div>
+    <p class="note">Le catalogue est découpé en pages plutôt que de tout charger d'un coup. Les numéros sont construits tout seuls d'après le nombre de cartes.</p>
+    <div class="fx-pager" data-par-page="3">
+      <div class="fx-grid fx-pager-grille">
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-blanche-tiroir.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse</b><span>Tiroir</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/casier-rangement-bois.webp" alt="Casier"></div><figcaption class="fx-cap"><b>Casier</b><span>Rangement</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/etagere-angle-bois.webp" alt="Étagère"></div><figcaption class="fx-cap"><b>Étagère d'angle</b><span>Bois</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-tv-bas-tiroir.webp" alt="Meuble TV"></div><figcaption class="fx-cap"><b>Meuble TV bas</b><span>Tiroir</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/banc-coffre-de-rangement-en-bois.webp" alt="Banc coffre"></div><figcaption class="fx-cap"><b>Banc coffre</b><span>Rangement</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/bureau-enfant-chaise-orange.webp" alt="Bureau"></div><figcaption class="fx-cap"><b>Bureau enfant</b><span>Chaise</span></figcaption></figure>
+      </div>
+      <div class="fx-pager-liste"></div>
+    </div>
+  </section>
+
+  <!-- 74 -->
+  <section>
+    <div class="head"><span class="num">74</span><h2>Recherche instantanée</h2></div>
+    <p class="note">Le catalogue se filtre à mesure qu'on tape, sans recharger. Tapez « porte » ou « table ». Un client qui tape une parenthèse ne casse rien : la saisie est mise à l'abri avant d'être cherchée.</p>
+    <div class="fx-search">
+      <div class="fx-search-champ">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" placeholder="Rechercher une pièce…" aria-label="Rechercher dans le catalogue">
+      </div>
+      <p class="fx-search-compte"></p>
+      <div class="fx-grid fx-search-grille">
+        <figure class="fx-card"><div class="fx-frame"><img src="images/porte-acajou-installee.webp" alt="Porte acajou"></div><figcaption class="fx-cap"><b>Porte acajou</b><span>Installée</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-a-manger-chene-clair-quatre-chaises.webp" alt="Table"></div><figcaption class="fx-cap"><b>Table à manger</b><span>Chêne clair</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/armoire-vernie-porte-miroir.webp" alt="Armoire"></div><figcaption class="fx-cap"><b>Armoire vernie</b><span>Porte miroir</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/porte-double-acajou-fonce.webp" alt="Porte double"></div><figcaption class="fx-cap"><b>Porte double</b><span>Acajou foncé</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-plateau-rouge.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse</b><span>Plateau rouge</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/lit-bebe-barreaux-bois.webp" alt="Lit bébé"></div><figcaption class="fx-cap"><b>Lit bébé</b><span>Barreaux</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 75 / 76 -->
+  <section>
+    <div class="head"><span class="num">75—76</span><h2>Étiquettes et avis clients</h2></div>
+    <p class="note">Une pastille « Nouveau » ou « Sur commande » posée sur la carte (75), et le groupe de visages qui donne confiance (76).</p>
+    <div class="fx-grid" style="margin-bottom:26px;">
+      <figure class="fx-card fx-badge" data-badge="Nouveau"><div class="fx-frame"><img src="images/meuble-tv-mural-claustra-led.webp" alt="Meuble TV"></div><figcaption class="fx-cap"><b>Meuble TV claustra</b><span>Éclairage LED</span></figcaption></figure>
+      <figure class="fx-card fx-badge" data-badge="Sur commande" data-ton="or"><div class="fx-frame"><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine"></div><figcaption class="fx-cap"><b>Cuisine moulurée</b><span>Sur mesure</span></figcaption></figure>
+      <figure class="fx-card fx-badge" data-badge="Pièce unique" data-ton="sombre"><div class="fx-frame"><img src="images/deux-portes-sculptees-bois.webp" alt="Portes sculptées"></div><figcaption class="fx-cap"><b>Portes sculptées</b><span>Fait main</span></figcaption></figure>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="fx-avatars">
+        <img src="images/artisan-jeantim.webp" alt="">
+        <img src="images/lit-sommier-lattes-atelier.webp" alt="">
+        <img src="images/comptoir-bois-massif.webp" alt="">
+        <span>+41</span>
+      </div>
+      <p style="margin:0;color:var(--faint);font-size:.92rem;">44 clients nous ont confié leur intérieur cette année.</p>
+    </div>
+  </section>
+
+  <!-- 77 -->
+  <section>
+    <div class="head"><span class="num">77</span><h2>Compte à rebours</h2></div>
+    <p class="note">Pour une offre qui se termine ou une date de livraison annoncée. Les chiffres descendent seuls, chaque seconde.</p>
+    <div class="fx-countdown" data-fin="2026-12-24T00:00:00">
+      <div><b data-unite="jours">00</b><span>jours</span></div>
+      <div><b data-unite="heures">00</b><span>heures</span></div>
+      <div><b data-unite="minutes">00</b><span>minutes</span></div>
+      <div><b data-unite="secondes">00</b><span>secondes</span></div>
+    </div>
+  </section>
+
+  <!-- 78 -->
+  <section>
+    <div class="head"><span class="num">78</span><h2>Vidéo en fond</h2></div>
+    <p class="note">Une courte vidéo d'atelier derrière le titre d'accueil : le rabot, la sciure, les mains. Rien ne remplace ça pour dire « c'est fait à la main ».</p>
+    <div class="fx-video" style="min-height:280px;display:grid;place-content:center;text-align:center;padding:40px;color:#F7F1E8;">
+      <video autoplay muted loop playsinline poster="images/lit-sommier-lattes-atelier.webp" aria-hidden="true"></video>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin:0 0 8px;">Kin Bois Création</p>
+      <p style="margin:0;opacity:.8;">Ici, la photo d'atelier tient lieu de vidéo pour la démonstration.</p>
+    </div>
+  </section>
+
+  <!-- 79 -->
+  <section>
+    <div class="head"><span class="num">79</span><h2>Partage natif</h2></div>
+    <p class="note">Sur téléphone, ouvre la vraie fenêtre de partage du système — WhatsApp, SMS, e-mail. Sur ordinateur, copie le lien. Un seul bouton pour les deux.</p>
+    <p style="margin:0 0 18px;"><button class="fx-share" type="button" data-titre="Kin Bois Création" data-texte="Regarde ce meuble en bois massif">Partager cette pièce</button></p>
+  </section>
+
+  <!-- 80 -->
+  <section>
+    <div class="head"><span class="num">80</span><h2>Chargement en continu</h2></div>
+    <p class="note">Les pièces suivantes arrivent d'elles-mêmes quand on approche du bas, sans bouton « voir plus ». Faites défiler lentement jusqu'au bout de la grille.</p>
+    <div class="fx-infinite" data-par-lot="3">
+      <div class="fx-grid fx-infinite-grille">
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-ronde-avec-quatre-chaises-assorties.webp" alt="Table ronde"></div><figcaption class="fx-cap"><b>Table ronde</b><span>Quatre chaises</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/petite-table-ronde-laquee-blanche.webp" alt="Petite table"></div><figcaption class="fx-cap"><b>Petite table ronde</b><span>Laquée</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-carree-quatre-chaises-design.webp" alt="Table carrée"></div><figcaption class="fx-cap"><b>Table carrée</b><span>Design</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-appoint-deux-niveaux.webp" alt="Table d'appoint"></div><figcaption class="fx-cap"><b>Table d'appoint</b><span>Deux niveaux</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-bicolore-bois-blanc.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse</b><span>Bicolore</span></figcaption></figure>
+        <figure class="fx-card"><div class="fx-frame"><img src="images/table-appoint-pieds-galbes-brut.webp" alt="Table galbée"></div><figcaption class="fx-cap"><b>Pieds galbés</b><span>Brut</span></figcaption></figure>
+      </div>
+      <p class="fx-infinite-fin">Les pièces suivantes arrivent en approchant du bas…</p>
+    </div>
+  </section>
+
+  <!-- 81 -->
+  <section>
+    <div class="head"><span class="num">81</span><h2>Sélecteur de quantité</h2></div>
+    <p class="note">Combien de chaises, combien de portes. Les boutons se désactivent aux bornes, et le champ reste modifiable au clavier.</p>
+    <div class="fx-qty">
+      <button class="fx-qty-moins" type="button" aria-label="Retirer un">−</button>
+      <input type="number" value="4" min="1" max="12" aria-label="Quantité">
+      <button class="fx-qty-plus" type="button" aria-label="Ajouter un">+</button>
+    </div>
+  </section>
+
+  <!-- 82 -->
+  <section class="fx-print">
+    <div class="head"><span class="num">82</span><h2>Mise en page à l'impression</h2></div>
+    <p class="note">Quand le client imprime son devis, tout le décor disparaît — boutons, bandeaux, ombres — et les adresses des liens s'écrivent en clair. Faites <b>Ctrl+P</b> pour voir la différence.</p>
+    <p class="note" style="margin:0;">Cette section est marquée pour l'impression : elle ne sera pas coupée en deux entre deux pages.</p>
+  </section>
+
+  <!-- 83 -->
+  <section>
+    <div class="head"><span class="num">83</span><h2>Icône qui se transforme</h2></div>
+    <p class="note">Les trois barres du menu deviennent une croix, d'un seul mouvement. Le détail qu'on remarque sans savoir pourquoi le site paraît soigné.</p>
+    <p style="margin:0 0 18px;"><button class="fx-morph" type="button" aria-label="Ouvrir le menu" aria-expanded="false"></button></p>
+  </section>
+
+  <!-- 84 -->
+  <section>
+    <div class="head"><span class="num">84</span><h2>Sommaire qui suit la lecture</h2></div>
+    <p class="note">Sur une page longue, le sommaire surligne tout seul la partie qu'on est en train de lire. Faites défiler : le repère se déplace.</p>
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:30px;align-items:start;">
+      <nav class="fx-anchor" style="position:static;">
+        <a href="#p-relevé">Le relevé</a>
+        <a href="#p-plan">Le plan</a>
+        <a href="#p-atelier">L'atelier</a>
+      </nav>
+      <div>
+        <h3 id="p-relevé" style="margin-top:0;">Le relevé</h3>
+        <p class="note">Nous venons prendre les cotes chez vous, gratuitement, et nous regardons ensemble les contraintes de la pièce.</p>
+        <h3 id="p-plan">Le plan</h3>
+        <p class="note">Un dessin coté vous est envoyé. Rien n'est découpé avant que vous l'ayez validé.</p>
+        <h3 id="p-atelier">L'atelier</h3>
+        <p class="note">Le bois est choisi pièce par pièce, débité, assemblé, poncé puis verni.</p>
+      </div>
+    </div>
   </section>
 
   <footer>

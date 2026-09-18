@@ -1,6 +1,6 @@
 # Bibliothèque d'effets — Kin Bois Création
 
-69 effets visuels réutilisables, en CSS et JavaScript natifs.
+84 effets visuels réutilisables, en CSS et JavaScript natifs.
 **Aucune dépendance** : pas de React, pas de bibliothèque externe, rien à installer.
 
 À réutiliser tel quel sur les prochains sites.
@@ -8,7 +8,7 @@
 ## Ce que fait le navigateur à notre place
 
 La bibliothèque s'appuie sur ce que les navigateurs savent faire aujourd'hui,
-plutôt que de le réécrire en JavaScript. Cinq choix à connaître :
+plutôt que de le réécrire en JavaScript. Les choix à connaître :
 
 - **Animations au défilement en CSS.** Là où `animation-timeline` existe, la
   parallaxe et le dézoom sont faits par le navigateur : c'est plus fluide, et
@@ -22,6 +22,20 @@ plutôt que de le réécrire en JavaScript. Cinq choix à connaître :
   cartes glissent à leur nouvelle place : aucune position n'est calculée.
 - **`:user-valid` / `:user-invalid`.** La validation des formulaires est faite
   en CSS, et ne signale jamais une erreur avant que le visiteur ait saisi.
+- **`light-dark()`.** Le thème clair et le thème sombre tiennent dans une seule
+  déclaration par couleur, au lieu de deux jeux de règles.
+- **`@starting-style`.** Les notifications et les bandeaux s'animent à
+  l'arrivée, ce qui était impossible depuis `display:none`.
+- **`scroll-state(stuck)`.** L'en-tête condensé se passe alors entièrement de
+  JavaScript : le bloc sait tout seul qu'il est collé en haut.
+- **Positionnement d'ancrage.** L'infobulle se replace seule si elle
+  dépasserait du bord de l'écran.
+- **`DisposableStack` (ES2026).** Tout ce qui doit être défait est empilé, puis
+  défait dans l'ordre inverse : c'est ce qui rend `Effets.destroy()` sûr.
+- **`RegExp.escape`, `Promise.withResolvers`, `Object.groupBy`.** La recherche
+  résiste à une parenthèse tapée par le visiteur, l'écran de chargement expose
+  une promesse (`await Effets.pret`), et le filtre compte ses catégories en une
+  ligne.
 
 Quand un navigateur ne connaît pas l'une de ces nouveautés, l'effet concerné
 ne se joue simplement pas : rien ne casse, rien ne disparaît.
@@ -73,7 +87,7 @@ Et une grille de cartes :
 </div>
 ```
 
-## Les 69 effets
+## Les 84 effets
 
 ### Au survol de la souris
 
@@ -193,6 +207,26 @@ Et une grille de cartes :
 | `fx-draw` | Un tracé SVG se dessine au défilement | oui |
 | `fx-copy` | Copier le numéro au clic | oui |
 | `fx-cookie` | Bandeau de consentement, choix mémorisé | oui |
+
+### Confort d'usage
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-theme` | Bascule clair / sombre, choix retenu | oui |
+| `fx-swatch` | Nuancier de finitions du bois | oui |
+| `fx-table` | Tableau qui devient des fiches sur téléphone | non |
+| `fx-pager` | Pagination du catalogue | oui |
+| `fx-search` | Recherche instantanée dans les pièces | oui |
+| `fx-badge` | Étiquette « Nouveau », « Sur commande » | non |
+| `fx-avatars` | Groupe de visages clients | non |
+| `fx-countdown` | Compte à rebours | oui |
+| `fx-video` | Vidéo d'atelier en fond | non |
+| `fx-share` | Partage natif du téléphone | oui |
+| `fx-infinite` | Les pièces suivantes arrivent au défilement | oui |
+| `fx-qty` | Sélecteur de quantité | oui |
+| `fx-print` | Mise en page à l'impression d'un devis | non |
+| `fx-morph` | Les trois barres deviennent une croix | oui |
+| `fx-anchor` | Sommaire qui suit la lecture | oui |
 
 ## Structures particulières
 
@@ -533,6 +567,89 @@ sienne (`--fx-long`), sinon le dessin part déjà commencé :
 </div>
 ```
 
+**`fx-theme`** — un bouton suffit ; le script écrit le thème sur `<html>` et
+la CSS s'en sert. Redéfinissez vos couleurs avec `light-dark(clair, sombre)`.
+
+**`fx-swatch`** — chaque puce porte sa couleur et son nom :
+
+```html
+<div class="fx-swatch">
+  <div class="fx-swatch-puces">
+    <button type="button" data-teinte="#8B4513" data-nom="Acajou"
+            style="--fx-teinte-puce:#8B4513" aria-label="Acajou"></button>
+  </div>
+  <div class="fx-swatch-apercu"></div>
+  <p class="fx-swatch-nom"></p>
+</div>
+```
+
+**`fx-table`** — chaque cellule porte l'intitulé de sa colonne, qui devient
+l'étiquette de la fiche sur téléphone :
+
+```html
+<td data-libelle="Dimensions">160 × 200 cm</td>
+```
+
+**`fx-pager`** et **`fx-infinite`** — le nombre par page ou par lot est dans un
+attribut ; les numéros sont construits tout seuls :
+
+```html
+<div class="fx-pager" data-par-page="6">
+  <div class="fx-grid fx-pager-grille">…</div>
+  <div class="fx-pager-liste"></div>
+</div>
+
+<div class="fx-infinite" data-par-lot="3">
+  <div class="fx-grid fx-infinite-grille">…</div>
+  <p class="fx-infinite-fin">Chargement…</p>
+</div>
+```
+
+**`fx-search`** — la recherche porte sur le texte des cartes :
+
+```html
+<div class="fx-search">
+  <div class="fx-search-champ"><input type="search" aria-label="Rechercher"></div>
+  <p class="fx-search-compte"></p>
+  <div class="fx-grid fx-search-grille">…</div>
+</div>
+```
+
+**`fx-countdown`** — l'échéance se met dans `data-fin`, au format international :
+
+```html
+<div class="fx-countdown" data-fin="2026-12-24T00:00:00">
+  <div><b data-unite="jours">00</b><span>jours</span></div>
+  <div><b data-unite="heures">00</b><span>heures</span></div>
+</div>
+```
+
+**`fx-badge`** — le texte est dans l'attribut, `data-ton` change la couleur
+(`or` ou `sombre`) :
+
+```html
+<figure class="fx-card fx-badge" data-badge="Nouveau">…</figure>
+```
+
+**`fx-share`**, **`fx-qty`**, **`fx-morph`**, **`fx-anchor`** :
+
+```html
+<button class="fx-share" type="button" data-titre="Kin Bois Création">Partager</button>
+
+<div class="fx-qty">
+  <button class="fx-qty-moins" type="button" aria-label="Retirer un">−</button>
+  <input type="number" value="1" min="1" max="12" aria-label="Quantité">
+  <button class="fx-qty-plus" type="button" aria-label="Ajouter un">+</button>
+</div>
+
+<button class="fx-morph" type="button" aria-label="Ouvrir le menu"></button>
+
+<nav class="fx-anchor"><a href="#atelier">L'atelier</a></nav>
+```
+
+**`fx-print`** — posez-la sur ce qui doit s'imprimer proprement, et
+`fx-print-cacher` sur ce qui doit disparaître à l'impression.
+
 **`fx-skeleton`** — posez la classe sur les blocs en attente et retirez-la
 quand le contenu arrive. **`fx-blur`** entoure l'image ; **`fx-masonry`**,
 **`fx-snap`**, **`fx-breadcrumb`**, **`fx-timeline`** et **`fx-choice`** se
@@ -570,5 +687,5 @@ grille, les cartes gardent la structure de base :
 
 ## Démonstration
 
-Les 69 effets appliqués à de vraies photos :
+Les 84 effets appliqués à de vraies photos :
 [demo-effets.html](../demo-effets.html)

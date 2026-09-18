@@ -43,19 +43,32 @@
   const delay = (ms) => new Promise((r) => setTimeout(r, ms));
   const nombreFr = new Intl.NumberFormat('fr-FR');
 
-  /* --- Cycle de vie ------------------------------------------
-     Un seul contrôleur pour tous les écouteurs : `destroy()`
-     les coupe d'un coup, sans retenir chaque fonction.          */
-  let ac = new AbortController();
-  let observers = [];
-  let created = [];
-  let claimed = [];
+  /* --- Cycle de vie (gestion explicite des ressources, ES2026) —
+     `DisposableStack` empile tout ce qui devra être défait et le
+     défait dans l'ordre inverse. Là où le navigateur ne l'a pas
+     encore, on retombe sur une pile maison au comportement
+     identique : le reste du fichier ne voit pas la différence.   */
+  const PileJetable = globalThis.DisposableStack ?? class {
+    #actes = [];
+    defer(fn) { this.#actes.push(fn); }
+    dispose() { while (this.#actes.length) this.#actes.pop()(); }
+    [Symbol.dispose ?? Symbol.for('dispose')]() { this.dispose(); }
+  };
+
+  let pile, ac;
+  const nouveauCycle = () => {
+    pile = new PileJetable();
+    ac = new AbortController();
+    const controleur = ac;
+    pile.defer(() => controleur.abort());
+  };
+  nouveauCycle();
 
   const on = (el, ev, fn, opts = {}) =>
     el.addEventListener(ev, fn, { ...opts, signal: ac.signal });
 
-  const observe = (obs) => { observers.push(obs); return obs; };
-  const born = (el) => { created.push(el); return el; };
+  const observe = (obs) => { pile.defer(() => obs.disconnect()); return obs; };
+  const born = (el) => { pile.defer(() => el.remove()); return el; };
 
   /** Marque un élément comme traité. Renvoie false s'il l'était déjà.
    *  Chaque effet a sa propre clé : un même élément peut donc en
@@ -63,9 +76,22 @@
   const claim = (el, key) => {
     if (el.dataset[key]) return false;
     el.dataset[key] = '1';
-    claimed.push([el, key]);
+    pile.defer(() => { delete el.dataset[key]; });
     return true;
   };
+
+  /* --- Fonctions de 2026, avec repli sur l'ancienne façon ----- */
+  const echapper = RegExp.escape ?? ((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const promesseOuverte = Promise.withResolvers?.bind(Promise) ?? (() => {
+    let resolve, reject;
+    const promise = new Promise((ok, ko) => { resolve = ok; reject = ko; });
+    return { promise, resolve, reject };
+  });
+  const grouperPar = Object.groupBy ?? ((items, cle) => {
+    const out = {};
+    for (const it of items) (out[cle(it)] ??= []).push(it);
+    return out;
+  });
 
   /* Le navigateur sait-il animer au défilement tout seul ? */
   const nativeScroll = CSS.supports('animation-timeline: view()');
@@ -578,10 +604,16 @@
 
     if (reduced()) { box.remove(); return; }
 
+    // `Promise.withResolvers` : la promesse est créée ici et tenue
+    // plus loin, sans emboîter le code dans un `new Promise`.
+    const { promise, resolve } = promesseOuverte();
+    Effets.pret = promise;                    // `await Effets.pret`
+
     const partir = () => {
       box.classList.add('fx-parti');
       on(box, 'transitionend', () => box.remove(), { once: true });
       setTimeout(() => box.remove(), 1200);   // filet de sécurité
+      resolve();
     };
 
     let p = 0;
@@ -591,6 +623,7 @@
       if (p >= 100) { clearInterval(t); setTimeout(partir, 260); }
     }, 130);
     on(window, 'fx-destroy', () => clearInterval(t));
+    pile.defer(() => clearInterval(t));
   };
 
   /* 37 · transition de page — aucun JS : c'est la règle CSS
@@ -870,6 +903,15 @@
         c.style.viewTransitionName = `${prefixe}-${i}`;   // un nom unique par carte
       });
 
+      // `Object.groupBy` : le compte par catégorie, en une ligne
+      const parCategorie = grouperPar([...grille.children], (c) => c.dataset.categorie);
+      for (const b of boutons) {
+        const n = b.dataset.filtre === '*'
+          ? grille.children.length
+          : (parCategorie[b.dataset.filtre]?.length ?? 0);
+        b.dataset.compte = n;
+      }
+
       const appliquer = (cle) => {
         for (const c of grille.children) {
           c.hidden = cle !== '*' && c.dataset.categorie !== cle;
@@ -946,6 +988,270 @@
     });
   };
 
+  /* ── 70 · bascule clair / sombre ──────────────────────────
+     Le thème est écrit sur <html> ; la CSS fait le reste avec
+     `light-dark()`. Le choix est retenu dans le navigateur.   */
+  const initTheme = () => {
+    for (const btn of $$('.fx-theme')) {
+      if (!claim(btn, 'fxTheme')) continue;
+      const cle = 'fx-theme';
+      const poser = (t) => {
+        document.documentElement.dataset.theme = t;
+        document.documentElement.style.colorScheme = t;
+        btn.setAttribute('aria-pressed', String(t === 'dark'));
+        btn.textContent = t === 'dark' ? '☀ Clair' : '☾ Sombre';
+      };
+      let choix = null;
+      try { choix = localStorage.getItem(cle); } catch { /* mode privé */ }
+      poser(choix ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+      on(btn, 'click', () => {
+        const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem(cle, t); } catch { /* mode privé */ }
+        poser(t);
+      });
+    }
+  };
+
+  /* ── 71 · nuancier de finitions ───────────────────────────── */
+  const initSwatch = () => {
+    for (const box of $$('.fx-swatch')) {
+      if (!claim(box, 'fxSwatch')) continue;
+      const puces = $$('[data-teinte]', box);
+      const cible = $('.fx-swatch-apercu', box);
+      const nom   = $('.fx-swatch-nom', box);
+      if (!puces.length || !cible) continue;
+
+      const choisir = (p) => {
+        cible.style.setProperty('--fx-teinte', p.dataset.teinte);
+        if (nom) nom.textContent = p.dataset.nom ?? '';
+        for (const q of puces) q.setAttribute('aria-pressed', String(q === p));
+      };
+      for (const p of puces) on(p, 'click', () => choisir(p));
+      choisir(puces[0]);
+    }
+  };
+
+  /* ── 73 · pagination ──────────────────────────────────────── */
+  const initPager = () => {
+    for (const box of $$('.fx-pager')) {
+      if (!claim(box, 'fxPager')) continue;
+      const grille = $('.fx-pager-grille', box);
+      const liste  = $('.fx-pager-liste', box);
+      if (!grille || !liste) continue;
+
+      const parPage = parseInt(box.dataset.parPage, 10) || 6;
+      const cartes  = [...grille.children];
+      const pages   = Math.ceil(cartes.length / parPage);
+      if (pages < 2) return;
+
+      const aller = (n) => {
+        cartes.forEach((c, i) => {
+          c.hidden = Math.floor(i / parPage) !== n;
+        });
+        [...liste.children].forEach((b, i) => {
+          b.setAttribute('aria-current', String(i === n));
+        });
+      };
+
+      // `born()` : les boutons sont posés dans du balisage existant,
+      // il faut donc les inscrire pour que destroy() les reprenne.
+      liste.replaceChildren();
+      for (let n = 0; n < pages; n++) {
+        const b = born(document.createElement('button'));
+        b.type = 'button';
+        b.textContent = n + 1;
+        b.setAttribute('aria-label', `Page ${n + 1} sur ${pages}`);
+        on(b, 'click', () => aller(n));
+        liste.append(b);
+      }
+      aller(0);
+    }
+  };
+
+  /* ── 74 · recherche instantanée ───────────────────────────
+     `RegExp.escape` met la saisie à l'abri : un client qui tape
+     « ( » ne casse pas la recherche.                           */
+  const initSearch = () => {
+    for (const box of $$('.fx-search')) {
+      if (!claim(box, 'fxSearch')) continue;
+      const champ  = $('input', box);
+      const grille = $('.fx-search-grille', box);
+      const compte = $('.fx-search-compte', box);
+      if (!champ || !grille) continue;
+
+      const cartes = [...grille.children].map((el) => ({
+        el, texte: el.textContent.toLowerCase(),
+      }));
+
+      const filtrer = () => {
+        const q = champ.value.trim().toLowerCase();
+        const re = q ? new RegExp(echapper(q), 'i') : null;
+        let vus = 0;
+        for (const { el, texte } of cartes) {
+          const ok = !re || re.test(texte);
+          el.hidden = !ok;
+          if (ok) vus += 1;
+        }
+        if (compte) {
+          compte.textContent = q
+            ? `${vus} pièce${vus > 1 ? 's' : ''} sur ${cartes.length}`
+            : '';
+        }
+      };
+      on(champ, 'input', filtrer);
+      filtrer();
+    }
+  };
+
+  /* ── 77 · compte à rebours ────────────────────────────────── */
+  const initCountdown = () => {
+    for (const box of $$('.fx-countdown')) {
+      if (!claim(box, 'fxCountdown')) continue;
+      const fin = Date.parse(box.dataset.fin ?? '');
+      if (Number.isNaN(fin)) continue;
+
+      const cases = ['jours', 'heures', 'minutes', 'secondes']
+        .map((u) => $(`[data-unite="${u}"]`, box));
+
+      const maj = () => {
+        let reste = Math.max(0, fin - Date.now()) / 1000 | 0;
+        const vals = [
+          (reste / 86400) | 0,
+          ((reste % 86400) / 3600) | 0,
+          ((reste % 3600) / 60) | 0,
+          reste % 60,
+        ];
+        cases.forEach((c, i) => {
+          if (c) c.textContent = String(vals[i]).padStart(2, '0');
+        });
+      };
+      maj();
+      const t = setInterval(maj, 1000);
+      on(window, 'fx-destroy', () => clearInterval(t));
+      pile.defer(() => clearInterval(t));
+    }
+  };
+
+  /* ── 79 · partage natif ───────────────────────────────────
+     L'API de partage du téléphone (la vraie feuille système).
+     Sur ordinateur, on retombe sur la copie du lien.          */
+  const initShare = () => {
+    for (const btn of $$('.fx-share')) {
+      if (!claim(btn, 'fxShare')) continue;
+      on(btn, 'click', async () => {
+        const donnees = {
+          title: btn.dataset.titre ?? document.title,
+          text:  btn.dataset.texte ?? '',
+          url:   btn.dataset.lien ?? location.href,
+        };
+        try {
+          if (navigator.share) { await navigator.share(donnees); return; }
+          await navigator.clipboard.writeText(donnees.url);
+        } catch {
+          return;                       // partage annulé : on ne dit rien
+        }
+        const avant = btn.textContent;
+        btn.textContent = 'Lien copié ✓';
+        setTimeout(() => { btn.textContent = avant; }, 1800);
+      });
+    }
+  };
+
+  /* ── 80 · chargement en continu ───────────────────────────── */
+  const initInfinite = () => {
+    for (const box of $$('.fx-infinite')) {
+      if (!claim(box, 'fxInfinite')) continue;
+      const grille = $('.fx-infinite-grille', box);
+      const fin    = $('.fx-infinite-fin', box);
+      if (!grille) continue;
+
+      const parLot = parseInt(box.dataset.parLot, 10) || 3;
+      const cartes = [...grille.children];
+      let montres = 0;
+
+      const lot = () => {
+        for (let i = montres; i < Math.min(montres + parLot, cartes.length); i++) {
+          cartes[i].hidden = false;
+        }
+        montres = Math.min(montres + parLot, cartes.length);
+        if (fin) fin.hidden = montres < cartes.length;
+      };
+      for (const c of cartes) c.hidden = true;
+      lot();
+
+      const garde = born(document.createElement('div'));
+      garde.style.cssText = 'height:1px;width:100%;';
+      garde.setAttribute('aria-hidden', 'true');
+      grille.after(garde);
+      observe(new IntersectionObserver(([e]) => {
+        if (e.isIntersecting && montres < cartes.length) lot();
+      }, { rootMargin: '200px' })).observe(garde);
+    }
+  };
+
+  /* ── 81 · sélecteur de quantité ───────────────────────────── */
+  const initQty = () => {
+    for (const box of $$('.fx-qty')) {
+      if (!claim(box, 'fxQty')) continue;
+      const champ = $('input', box);
+      const moins = $('.fx-qty-moins', box);
+      const plus  = $('.fx-qty-plus', box);
+      if (!champ) continue;
+
+      const borner = (v) => {
+        const min = +champ.min || 1;
+        const max = +champ.max || 99;
+        champ.value = Math.min(max, Math.max(min, v));
+        if (moins) moins.disabled = +champ.value <= min;
+        if (plus)  plus.disabled  = +champ.value >= max;
+      };
+      if (moins) on(moins, 'click', () => borner(+champ.value - 1));
+      if (plus)  on(plus,  'click', () => borner(+champ.value + 1));
+      on(champ, 'input', () => borner(+champ.value || 1));
+      borner(+champ.value || 1);
+    }
+  };
+
+  /* ── 83 · icône qui se transforme ─────────────────────────── */
+  const initMorph = () => {
+    for (const btn of $$('.fx-morph')) {
+      if (!claim(btn, 'fxMorph')) continue;
+      if (!$('i', btn)) btn.innerHTML = '<i></i><i></i><i></i>';
+      btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') ?? 'false');
+      on(btn, 'click', () => {
+        const ouvert = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!ouvert));
+        btn.classList.toggle('fx-croix', !ouvert);
+      });
+    }
+  };
+
+  /* ── 84 · sommaire qui suit la lecture ────────────────────── */
+  const initAnchor = () => {
+    for (const nav of $$('.fx-anchor')) {
+      if (!claim(nav, 'fxAnchor')) continue;
+      const liens = $$('a[href^="#"]', nav);
+      if (!liens.length) continue;
+
+      const parId = new Map(
+        liens.map((a) => [a.getAttribute('href').slice(1), a])
+      );
+      const cibles = [...parId.keys()]
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+      if (!cibles.length) continue;
+
+      const io = observe(new IntersectionObserver((entrees) => {
+        for (const e of entrees) {
+          if (!e.isIntersecting) continue;
+          for (const a of liens) a.removeAttribute('aria-current');
+          parId.get(e.target.id)?.setAttribute('aria-current', 'true');
+        }
+      }, { rootMargin: '-45% 0px -50% 0px' }));
+      for (const c of cibles) io.observe(c);
+    }
+  };
+
   const Effets = {
     init() {
       buildWords();
@@ -981,6 +1287,16 @@
       initBlur();
       initCopy();
       initCookie();
+      initTheme();
+      initSwatch();
+      initPager();
+      initSearch();
+      initCountdown();
+      initShare();
+      initInfinite();
+      initQty();
+      initMorph();
+      initAnchor();
       initReveal();
     },
 
@@ -988,14 +1304,8 @@
      *  marques internes. `init()` peut ensuite repartir à neuf. */
     destroy() {
       dispatchEvent(new Event('fx-destroy'));   // arrête les minuteries
-      ac.abort();
-      ac = new AbortController();
-      for (const o of observers) o.disconnect();
-      observers = [];
-      for (const el of created) el.remove();
-      created = [];
-      for (const [el, key] of claimed) delete el.dataset[key];
-      claimed = [];
+      pile.dispose();                           // défait tout, en sens inverse
+      nouveauCycle();
       document.body.style.overflow = '';
     },
   };
