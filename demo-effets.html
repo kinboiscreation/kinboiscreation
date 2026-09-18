@@ -278,9 +278,9 @@
 
 <div class="wrap">
   <header>
-    <h1>Quarante-sept effets, vos vraies photos</h1>
+    <h1>Soixante-neuf effets, vos vraies photos</h1>
     <p>Passez la souris sur les images, et faites défiler lentement : certains effets se déclenchent au scroll. Repérez ceux que vous préférez et donnez-moi leurs numéros — je les applique au site. Tout est en CSS et JavaScript natifs : aucun coût, aucune dépendance, rien à installer.</p>
-    <p style="color:var(--faint);margin:14px 0 0;font-size:.9rem;">Les effets 1 à 13 portent sur les cartes du catalogue, 14 à 30 sur les images et le texte, 31 à 47 sur l'habillage du site : curseur, navigation, fonds, panneaux.</p>
+    <p style="color:var(--faint);margin:14px 0 0;font-size:.9rem;">Les effets 1 à 13 portent sur les cartes du catalogue, 14 à 30 sur les images et le texte, 31 à 47 sur l'habillage du site (curseur, navigation, fonds, panneaux), 48 à 69 sur les formulaires, l'attente et le contenu.</p>
   </header>
 
   <!-- 1 -->
@@ -839,10 +839,244 @@
     </div>
   </section>
 
+  <!-- 48 / 49 / 52 -->
+  <section>
+    <div class="head"><span class="num">48—52</span><h2>Formulaire de devis</h2></div>
+    <p class="note">Trois effets ensemble : l'étiquette monte quand on écrit (48), la validation ne signale une erreur qu'<b>après</b> la saisie et jamais avant (49), et les cases sont dessinées sans image (52). Tapez dans le champ e-mail puis sortez-en pour voir le rouge apparaître — uniquement s'il est mal rempli.</p>
+    <form class="fx-valid" novalidate style="max-width:520px;">
+      <div class="fx-field">
+        <input type="text" id="d-nom" placeholder=" " required>
+        <label for="d-nom">Votre nom</label>
+      </div>
+      <div class="fx-field">
+        <input type="email" id="d-mail" placeholder=" " required>
+        <label for="d-mail">Adresse e-mail</label>
+        <p class="fx-erreur">Cette adresse ne semble pas valide.</p>
+      </div>
+      <div class="fx-field">
+        <textarea id="d-msg" placeholder=" "></textarea>
+        <label for="d-msg">Décrivez la pièce souhaitée</label>
+      </div>
+      <label class="fx-choice"><input type="checkbox" checked> Je souhaite aussi la pose</label><br>
+      <label class="fx-choice"><input type="radio" name="essence" checked> Acajou</label>
+      <label class="fx-choice" style="margin-left:18px;"><input type="radio" name="essence"> Chêne clair</label>
+    </form>
+  </section>
+
+  <!-- 50 -->
+  <section>
+    <div class="head"><span class="num">50</span><h2>Dépôt de photos</h2></div>
+    <p class="note">Le client dépose une photo de sa pièce ou un croquis, par glisser-déposer ou au clic. Le cadre réagit quand un fichier le survole.</p>
+    <div class="fx-drop" style="max-width:520px;">
+      <b style="color:var(--ink);">Déposez vos photos ici</b>
+      <div style="font-size:.85rem;margin-top:5px;">ou cliquez pour les choisir</div>
+      <p class="fx-drop-liste"></p>
+      <input type="file" multiple accept="image/*" aria-label="Choisir des photos">
+    </div>
+  </section>
+
+  <!-- 51 -->
+  <section>
+    <div class="head"><span class="num">51</span><h2>Curseur de valeur</h2></div>
+    <p class="note">Pour indiquer un budget ou une dimension. La partie parcourue se remplit en cuivre et le nombre se met en forme à la française.</p>
+    <div class="fx-range" data-unite=" cm" style="max-width:480px;">
+      <input type="range" min="60" max="300" value="180" aria-label="Largeur souhaitée">
+      <output></output>
+    </div>
+  </section>
+
+  <!-- 53 -->
+  <section>
+    <div class="head"><span class="num">53</span><h2>Demande en plusieurs étapes</h2></div>
+    <p class="note">Un long formulaire découpé en étapes : moins intimidant, et on voit où l'on en est. La barre de progression avance toute seule.</p>
+    <div class="fx-steps" style="max-width:560px;">
+      <ol class="fx-steps-liste">
+        <li>Le meuble</li><li>Les cotes</li><li>Vos coordonnées</li>
+      </ol>
+      <div class="fx-steps-panneau"><p class="note" style="margin:0;">Quelle pièce souhaitez-vous faire fabriquer ?</p></div>
+      <div class="fx-steps-panneau" hidden><p class="note" style="margin:0;">Quelles sont les dimensions approximatives ?</p></div>
+      <div class="fx-steps-panneau" hidden><p class="note" style="margin:0;">Comment pouvons-nous vous joindre ?</p></div>
+      <div class="fx-steps-boutons">
+        <button class="fx-steps-prec" type="button" data-copy-ignore>Précédent</button>
+        <button class="fx-steps-suiv" type="button">Suivant</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 54 -->
+  <section>
+    <div class="head"><span class="num">54</span><h2>Notification passagère</h2></div>
+    <p class="note">Un message de confirmation glisse en bas à droite puis s'efface. Pour accuser réception d'un formulaire sans changer de page.</p>
+    <p style="margin:0 0 18px;"><button class="fx-magnet" type="button" data-toast="Votre demande a bien été envoyée. Réponse sous 48 h.">Envoyer la demande</button></p>
+  </section>
+
+  <!-- 55 / 56 -->
+  <section>
+    <div class="head"><span class="num">55—56</span><h2>Attente : squelette et anneau</h2></div>
+    <p class="note">Pendant que les photos arrivent, la page montre déjà sa forme au lieu d'un vide blanc (55). L'anneau sert aux attentes courtes (56).</p>
+    <div class="fx-grid" style="margin-bottom:24px;">
+      <figure class="fx-card"><div class="fx-frame fx-skeleton"></div><figcaption class="fx-cap"><b class="fx-skeleton">Titre en attente</b><span class="fx-skeleton">Sous-titre</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame fx-skeleton"></div><figcaption class="fx-cap"><b class="fx-skeleton">Titre en attente</b><span class="fx-skeleton">Sous-titre</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-blanche-tiroir.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Chargée, elle</b><span>Pour comparer</span></figcaption></figure>
+    </div>
+    <p style="margin:0;display:flex;align-items:center;gap:14px;color:var(--faint);">
+      <span class="fx-spin"></span> Envoi en cours…
+    </p>
+  </section>
+
+  <!-- 57 -->
+  <section>
+    <div class="head"><span class="num">57</span><h2>Carrousel</h2></div>
+    <p class="note">Le carrousel classique, avec flèches et pastilles, et les flèches du clavier. Les vues masquées sont retirées du parcours au clavier.</p>
+    <div class="fx-carousel" tabindex="0" data-auto="6">
+      <div class="fx-carousel-piste">
+        <div><img src="images/cuisine-bois-moulures-dorees.webp" alt="Cuisine" style="width:100%;height:400px;object-fit:cover;display:block;"></div>
+        <div><img src="images/armoire-vernie-portes-ouvertes.webp" alt="Armoire" style="width:100%;height:400px;object-fit:cover;display:block;"></div>
+        <div><img src="images/table-a-manger-six-chaises-vernie.webp" alt="Table" style="width:100%;height:400px;object-fit:cover;display:block;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 58 -->
+  <section>
+    <div class="head"><span class="num">58</span><h2>Retour en haut</h2></div>
+    <p class="note">Un bouton rond apparaît en bas à droite dès qu'on a quitté le haut de la page — il est <b>déjà visible</b>. Il remonte en douceur.</p>
+    <button class="fx-top" type="button" aria-label="Revenir en haut de la page">↑</button>
+  </section>
+
+  <!-- 59 -->
+  <section>
+    <div class="head"><span class="num">59</span><h2>Barre d'action sur téléphone</h2></div>
+    <p class="note">Sur mobile, « Appeler » et « Devis » restent collés en bas de l'écran, toujours à portée de pouce. Réduisez la fenêtre sous 700 px pour la voir apparaître.</p>
+    <div class="fx-bar">
+      <a class="fx-magnet" href="tel:+243000000000">Appeler</a>
+      <a class="fx-magnet" href="#devis">Devis</a>
+    </div>
+  </section>
+
+  <!-- 60 -->
+  <section>
+    <div class="head"><span class="num">60</span><h2>Fil d'Ariane</h2></div>
+    <p class="note">Indique où l'on se trouve dans le site. Discret, mais les moteurs de recherche s'en servent pour afficher le chemin sous votre lien.</p>
+    <nav class="fx-breadcrumb" aria-label="Fil d'Ariane">
+      <ol>
+        <li><a href="#">Accueil</a></li>
+        <li><a href="#">Catalogue</a></li>
+        <li><a href="#">Chambre</a></li>
+        <li aria-current="page">Lit en bois massif</li>
+      </ol>
+    </nav>
+  </section>
+
+  <!-- 61 -->
+  <section>
+    <div class="head"><span class="num">61</span><h2>Filtrage du catalogue</h2></div>
+    <p class="note">Les boutons filtrent la grille, et les cartes <b>glissent</b> à leur nouvelle place au lieu de sauter. C'est le navigateur qui calcule le mouvement — personne n'écrit la moindre position.</p>
+    <div class="fx-filter">
+      <div class="fx-filter-boutons">
+        <button data-filtre="*" aria-pressed="true">Tout</button>
+        <button data-filtre="chambre" aria-pressed="false">Chambre</button>
+        <button data-filtre="salon" aria-pressed="false">Salon</button>
+        <button data-filtre="porte" aria-pressed="false">Portes</button>
+      </div>
+      <div class="fx-grid fx-filter-grille">
+        <figure class="fx-card" data-categorie="chambre"><div class="fx-frame"><img src="images/lit-tete-arrondie-deux-chevets.webp" alt="Lit"></div><figcaption class="fx-cap"><b>Lit tête arrondie</b><span>Chambre</span></figcaption></figure>
+        <figure class="fx-card" data-categorie="salon"><div class="fx-frame"><img src="images/table-basse-plateau-rouge.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse</b><span>Salon</span></figcaption></figure>
+        <figure class="fx-card" data-categorie="porte"><div class="fx-frame"><img src="images/porte-acajou-installee.webp" alt="Porte"></div><figcaption class="fx-cap"><b>Porte acajou</b><span>Portes</span></figcaption></figure>
+        <figure class="fx-card" data-categorie="chambre"><div class="fx-frame"><img src="images/armoire-deux-portes-deux-tiroirs.webp" alt="Armoire"></div><figcaption class="fx-cap"><b>Armoire</b><span>Chambre</span></figcaption></figure>
+        <figure class="fx-card" data-categorie="salon"><div class="fx-frame"><img src="images/bibliotheque-niches-bois.webp" alt="Bibliothèque"></div><figcaption class="fx-cap"><b>Bibliothèque</b><span>Salon</span></figcaption></figure>
+        <figure class="fx-card" data-categorie="porte"><div class="fx-frame"><img src="images/porte-trois-panneaux-fond-bleu.webp" alt="Porte"></div><figcaption class="fx-cap"><b>Trois panneaux</b><span>Portes</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 62 -->
+  <section>
+    <div class="head"><span class="num">62</span><h2>Les étapes du projet</h2></div>
+    <p class="note">La frise qui explique votre façon de travailler, du premier appel à la pose. Les étapes montent une à une à l'arrivée de la section.</p>
+    <ol class="fx-timeline">
+      <li><b>Le relevé</b><span>Nous venons prendre les cotes chez vous, gratuitement.</span></li>
+      <li><b>Le plan</b><span>Un dessin coté vous est envoyé, à valider avant toute découpe.</span></li>
+      <li><b>L'atelier</b><span>Le bois est choisi, débité, assemblé puis verni.</span></li>
+      <li><b>La pose</b><span>Livraison et installation ajustée sur place, comprises.</span></li>
+    </ol>
+  </section>
+
+  <!-- 63 -->
+  <section>
+    <div class="head"><span class="num">63</span><h2>Avis clients</h2></div>
+    <p class="note">Les étoiles sont dessinées en texte : elles restent nettes à tous les écrans et se lisent au lecteur d'écran. La note se règle par un simple chiffre.</p>
+    <p style="margin:0 0 10px;"><span class="fx-stars" style="--fx-note:5;" role="img" aria-label="5 étoiles sur 5"></span> &nbsp;<b>Bernadette K.</b> — « Le lit est encore plus beau que sur le plan. »</p>
+    <p style="margin:0;"><span class="fx-stars" style="--fx-note:4.5;" role="img" aria-label="4,5 étoiles sur 5"></span> &nbsp;<b>Joseph M.</b> — « Travail soigné, pose impeccable. »</p>
+  </section>
+
+  <!-- 64 -->
+  <section>
+    <div class="head"><span class="num">64</span><h2>Galerie en maçonnerie</h2></div>
+    <p class="note">Les photos s'empilent en colonnes sans être rognées, quelles que soient leurs proportions. Parfait quand vos clichés sont de formats très différents.</p>
+    <div class="fx-masonry">
+      <img src="images/lit-en-bois-clair-sculpte-avec-tete-de-lit-ouvragee.webp" alt="Lit sculpté" style="width:100%;border-radius:8px;display:block;">
+      <img src="images/etagere-angle-bois.webp" alt="Étagère" style="width:100%;border-radius:8px;display:block;">
+      <img src="images/comptoir-bois-massif.webp" alt="Comptoir" style="width:100%;border-radius:8px;display:block;">
+      <img src="images/meuble-tv-mural-claustra-led.webp" alt="Meuble TV" style="width:100%;border-radius:8px;display:block;">
+      <img src="images/cuisine-plan-granit-armoires-vitrees.webp" alt="Cuisine" style="width:100%;border-radius:8px;display:block;">
+      <img src="images/tete-de-lit-ovale-bois.webp" alt="Tête de lit" style="width:100%;border-radius:8px;display:block;">
+    </div>
+  </section>
+
+  <!-- 65 -->
+  <section>
+    <div class="head"><span class="num">65</span><h2>Photo qui se précise</h2></div>
+    <p class="note">L'image arrive floue puis se précise dès qu'elle est chargée. Évite le rectangle gris et donne l'impression que le site est plus rapide. Rechargez la page pour le revoir.</p>
+    <div class="fx-blur" style="border-radius:10px;max-width:640px;">
+      <img src="images/canape-d-angle-beige-avec-pouf-orange.webp" alt="Canapé d'angle">
+    </div>
+  </section>
+
+  <!-- 66 -->
+  <section>
+    <div class="head"><span class="num">66</span><h2>Tracé qui se dessine</h2></div>
+    <p class="note">Un trait se dessine tout seul à l'arrivée de la section, comme un crayon de menuisier. Pour souligner un titre ou dessiner un pictogramme.</p>
+    <svg class="fx-draw" viewBox="0 0 420 70" style="width:100%;max-width:420px;height:70px;" aria-hidden="true">
+      <path d="M8 52 C 90 10, 150 62, 220 34 S 350 8, 412 40" fill="none"
+            stroke="#B87333" stroke-width="2.5" stroke-linecap="round" style="--fx-long:620;"></path>
+    </svg>
+  </section>
+
+  <!-- 67 -->
+  <section>
+    <div class="head"><span class="num">67</span><h2>Sections calées au défilement</h2></div>
+    <p class="note">Chaque section se cale d'elle-même en plein cadre : on passe de l'une à l'autre d'un coup de molette, sans s'arrêter entre deux. Faites défiler dans le cadre.</p>
+    <div class="fx-snap" style="border:1px solid var(--line);border-radius:10px;">
+      <div style="background:var(--panel);"><p style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;margin:0;">Le relevé</p></div>
+      <div style="background:#F3EDE5;"><p style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;margin:0;">Le plan</p></div>
+      <div style="background:var(--ink);color:#F7F1E8;"><p style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;margin:0;">L'atelier</p></div>
+    </div>
+  </section>
+
+  <!-- 68 -->
+  <section>
+    <div class="head"><span class="num">68</span><h2>Copier au clic</h2></div>
+    <p class="note">Le client copie votre numéro sans le retenir ni le sélectionner. Le bouton confirme puis reprend son texte.</p>
+    <p style="margin:0 0 18px;"><button type="button" data-copy="+243 00 000 0000">📞 +243 00 000 0000</button></p>
+  </section>
+
+  <!-- 69 -->
+  <section>
+    <div class="head"><span class="num">69</span><h2>Bandeau de consentement</h2></div>
+    <p class="note">Le bandeau légal, qui ne revient plus une fois accepté. Le choix est retenu dans le navigateur du visiteur, et rien ne casse s'il refuse cette mémoire.</p>
+    <p style="margin:0 0 18px;"><button class="fx-magnet" id="rejouer-cookie" type="button">Revoir le bandeau</button></p>
+  </section>
+
   <footer>
     <b>Comment répondre :</b> donnez-moi simplement le numéro qui vous plaît (par exemple « le 3 »).<br>
     Vous pouvez aussi en choisir plusieurs, un par catégorie du catalogue.
   </footer>
+
+  <div class="fx-cookie" hidden>
+    <p>Ce site dépose un petit fichier sur votre appareil pour retenir vos préférences d'affichage. Rien n'est partagé.</p>
+    <button class="fx-cookie-ok" type="button">J'ai compris</button>
+  </div>
 
   <!-- L'écran de chargement (36) est rejoué à la demande : sur un vrai
        site il s'affiche au chargement, ici il gênerait la consultation.
@@ -859,6 +1093,21 @@
       const modele = document.getElementById('modele-chargement');
       document.body.append(modele.content.cloneNode(true));
       Effets.init();      // la bibliothèque prend en charge le nouvel élément
+    });
+
+    // 69 : on oublie le choix mémorisé et on remet un bandeau neuf
+    document.getElementById('rejouer-cookie').addEventListener('click', () => {
+      try { localStorage.removeItem('fx-cookie-vu'); } catch { /* mode privé */ }
+      if (document.querySelector('.fx-cookie')) return;
+      const b = document.createElement('div');
+      b.className = 'fx-cookie';
+      b.hidden = true;
+      b.innerHTML =
+        '<p>Ce site dépose un petit fichier sur votre appareil pour retenir vos '
+        + 'préférences d’affichage. Rien n’est partagé.</p>'
+        + '<button class="fx-cookie-ok" type="button">J’ai compris</button>';
+      document.body.append(b);
+      Effets.init();
     });
   </script>
 </div>

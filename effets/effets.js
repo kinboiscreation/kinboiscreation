@@ -5,24 +5,28 @@
 
      <script src="effets/effets.js" defer></script>
 
-   Tout est initialisé automatiquement au chargement. Pour
-   réinitialiser après avoir injecté du contenu dynamiquement,
-   appelez `Effets.init()` : chaque effet ne s'installe qu'une
-   fois, un rappel est donc sans danger.
+   Tout est initialisé automatiquement au chargement.
+     Effets.init()     réinstalle après un ajout de contenu
+     Effets.destroy()  retire tout : écouteurs, observateurs,
+                       éléments créés et marques internes
 
-   Écrit en JavaScript moderne (ES2022). Trois choix à connaître :
+   Écrit en JavaScript moderne (ES2022). Ce qui est délégué au
+   navigateur plutôt que réécrit à la main :
 
-   1. Quand le navigateur sait animer au défilement en CSS
-      (`animation-timeline`), on le laisse faire : la classe
-      `fx-scroll-natif` est posée sur <html> et les boucles de
-      défilement en JS s'effacent. C'est plus fluide, car
-      l'animation ne passe plus par le fil principal.
-   2. La lightbox et la modale s'appuient sur <dialog> : la
-      touche Échap, le piège à focus et le fond assombri sont
-      alors gérés par le navigateur, pas par nous.
-   3. Le script reste un script classique, pas un module ES,
-      pour qu'il fonctionne aussi en ouvrant le fichier
-      directement depuis le disque.
+   1. `animation-timeline` : la parallaxe et le dézoom sont
+      animés en CSS. La classe `fx-scroll-natif` est posée sur
+      <html> et les boucles de défilement en JS s'effacent.
+   2. <dialog> : lightbox et modale héritent d'Échap, du piège
+      à focus et du fond assombri.
+   3. View Transitions : le filtrage de grille fait glisser les
+      cartes à leur nouvelle place sans calcul de position.
+   4. `:user-valid` / `:user-invalid` : la validation des
+      formulaires se fait en CSS, sans un octet de JavaScript.
+   5. AbortController : tous les écouteurs partagent un signal,
+      ce qui rend `destroy()` fiable.
+
+   Le script reste un script classique, pas un module ES, pour
+   fonctionner aussi en ouvrant le fichier depuis le disque.
    ============================================================ */
 (() => {
   'use strict';
@@ -36,12 +40,30 @@
   /* --- Raccourcis -------------------------------------------- */
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+  const delay = (ms) => new Promise((r) => setTimeout(r, ms));
+  const nombreFr = new Intl.NumberFormat('fr-FR');
 
-  /** Marque un élément comme traité. Renvoie false s'il l'était déjà,
-   *  ce qui rend chaque initialisation rejouable sans dégât. */
+  /* --- Cycle de vie ------------------------------------------
+     Un seul contrôleur pour tous les écouteurs : `destroy()`
+     les coupe d'un coup, sans retenir chaque fonction.          */
+  let ac = new AbortController();
+  let observers = [];
+  let created = [];
+  let claimed = [];
+
+  const on = (el, ev, fn, opts = {}) =>
+    el.addEventListener(ev, fn, { ...opts, signal: ac.signal });
+
+  const observe = (obs) => { observers.push(obs); return obs; };
+  const born = (el) => { created.push(el); return el; };
+
+  /** Marque un élément comme traité. Renvoie false s'il l'était déjà.
+   *  Chaque effet a sa propre clé : un même élément peut donc en
+   *  porter plusieurs sans que l'un empêche l'autre. */
   const claim = (el, key) => {
     if (el.dataset[key]) return false;
     el.dataset[key] = '1';
+    claimed.push([el, key]);
     return true;
   };
 
@@ -55,7 +77,7 @@
   const trackPointer = (el) => {
     if (!claim(el, 'fxTrack')) return;
     let raf = null;
-    el.addEventListener('pointermove', ({ clientX, clientY }) => {
+    on(el, 'pointermove', ({ clientX, clientY }) => {
       const r = el.getBoundingClientRect();
       const px = (clientX - r.left) / r.width;
       const py = (clientY - r.top) / r.height;
@@ -67,7 +89,7 @@
         el.style.setProperty('--py', (py - 0.5).toFixed(3));
       });
     });
-    el.addEventListener('pointerleave', () => {
+    on(el, 'pointerleave', () => {
       cancelAnimationFrame(raf);
       el.style.setProperty('--px', '0');
       el.style.setProperty('--py', '0');
@@ -84,18 +106,28 @@
       targets.forEach(fire);
       return;
     }
-    const io = new IntersectionObserver((entries) => {
+    const io = observe(new IntersectionObserver((entries) => {
       for (const { isIntersecting, target } of entries) {
         if (isIntersecting) { fire(target); io.unobserve(target); }
       }
-    }, { threshold });
+    }, { threshold }));
     targets.forEach((t) => io.observe(t));
     setTimeout(() => targets.forEach(fire), safety);
   };
 
+  /** Sentinelle d'un pixel : dit si l'on a dépassé un point de la
+   *  page, sans jamais écouter le défilement. */
+  const sentinelle = (parent, cb) => {
+    const m = born(document.createElement('div'));
+    m.style.cssText = 'position:absolute;top:0;left:0;height:1px;width:1px;pointer-events:none;';
+    m.setAttribute('aria-hidden', 'true');
+    parent.prepend(m);
+    observe(new IntersectionObserver(([e]) => cb(!e.isIntersecting))).observe(m);
+  };
+
   /* Numérote les enfants (--si) pour échelonner les délais. */
   const indexChildren = () => {
-    for (const box of $$('.fx-stagger, .fx-curtain, .fx-menu-liens')) {
+    for (const box of $$('.fx-stagger, .fx-curtain, .fx-menu-liens, .fx-timeline')) {
       [...box.children].forEach((c, i) => c.style.setProperty('--si', i));
     }
   };
@@ -114,7 +146,7 @@
       const cards = $$('.fx-card', box);
       if (!cards.length) continue;
 
-      const dlg = document.createElement('dialog');
+      const dlg = born(document.createElement('dialog'));
       dlg.className = 'fx-lb';
       dlg.innerHTML =
         '<button class="fx-lb-x" aria-label="Fermer">✕</button>' +
@@ -137,22 +169,20 @@
         const titre = $('b', cards[i])?.textContent ?? '';
         const sous  = $('.fx-cap span', cards[i])?.textContent;
         cap.textContent = `${titre}${sous ? ` — ${sous}` : ''}   (${i + 1}/${cards.length})`;
-        // rejoue l'animation d'ouverture de l'image
         img.style.animation = 'none';
         void img.offsetWidth;
         img.style.animation = '';
       };
 
-      cards.forEach((c, n) => c.addEventListener('click', () => {
+      cards.forEach((c, n) => on(c, 'click', () => {
         show(n);
         dlg.showModal();          // Échap + piège à focus + fond : natifs
       }));
-      $('.fx-lb-x', dlg).addEventListener('click', () => dlg.close());
-      $('.prev', dlg).addEventListener('click', () => show(i - 1));
-      $('.next', dlg).addEventListener('click', () => show(i + 1));
-      // clic sur le fond (hors image et boutons) : on ferme
-      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
-      dlg.addEventListener('keydown', (e) => {
+      on($('.fx-lb-x', dlg), 'click', () => dlg.close());
+      on($('.prev', dlg), 'click', () => show(i - 1));
+      on($('.next', dlg), 'click', () => show(i + 1));
+      on(dlg, 'click', (e) => { if (e.target === dlg) dlg.close(); });
+      on(dlg, 'keydown', (e) => {
         if (e.key === 'ArrowLeft')  show(i - 1);
         if (e.key === 'ArrowRight') show(i + 1);
       });
@@ -162,8 +192,6 @@
   /* ── 8 & 29 · effets pilotés par la position dans la page ───
      Ne tourne que si le navigateur ne sait pas le faire en CSS. */
   const initScroll = () => {
-    // les vitesses des colonnes passent en variable CSS : utile
-    // aux deux chemins, natif comme JS
     for (const col of $$('.fx-scroll-parallax .fx-col')) {
       col.style.setProperty('--fx-speed', parseFloat(col.dataset.speed) || 0);
     }
@@ -189,7 +217,7 @@
       }
       raf = null;
     };
-    addEventListener('scroll', () => { raf ??= requestAnimationFrame(tick); }, { passive: true });
+    on(window, 'scroll', () => { raf ??= requestAnimationFrame(tick); }, { passive: true });
     tick();
   };
 
@@ -215,10 +243,11 @@
     }
   };
 
-  /* ── 10, 11, 13, 21, 25, 30, 45 · révélations au défilement ─ */
+  /* ── révélations au défilement ────────────────────────────── */
   const initReveal = () => {
     onSeen(
-      $$('.fx-words, .fx-unfurl, .fx-cut, .fx-curtain, .fx-mosaic, .fx-stagger, .fx-sweep'),
+      $$('.fx-words, .fx-unfurl, .fx-cut, .fx-curtain, .fx-mosaic,' +
+         '.fx-stagger, .fx-sweep, .fx-timeline, .fx-draw'),
       (t) => t.classList.add('seen')
     );
   };
@@ -233,7 +262,7 @@
         h.className = 'fx-handle';
         box.append(h);
       }
-      Object.assign(box, { tabIndex: 0 });
+      box.tabIndex = 0;
       box.setAttribute('role', 'slider');
       box.setAttribute('aria-label', 'Comparer avant et après');
       box.setAttribute('aria-valuemin', '0');
@@ -251,16 +280,16 @@
       };
       put(50);
 
-      box.addEventListener('pointerdown', (e) => {
+      on(box, 'pointerdown', (e) => {
         down = true;
         box.setPointerCapture(e.pointerId);
         fromX(e.clientX);
       });
-      box.addEventListener('pointermove', (e) => { if (down) fromX(e.clientX); });
+      on(box, 'pointermove', (e) => { if (down) fromX(e.clientX); });
       for (const ev of ['pointerup', 'pointercancel']) {
-        box.addEventListener(ev, () => { down = false; });
+        on(box, ev, () => { down = false; });
       }
-      box.addEventListener('keydown', (e) => {
+      on(box, 'keydown', (e) => {
         const step = e.key === 'ArrowLeft' ? -4 : e.key === 'ArrowRight' ? 4 : 0;
         if (!step) return;
         e.preventDefault();
@@ -306,7 +335,7 @@
       const img = $('img', box);
       if (!img) continue;
 
-      const lens = document.createElement('div');
+      const lens = born(document.createElement('div'));
       lens.className = 'fx-lens';
       box.append(lens);
 
@@ -317,10 +346,8 @@
         lens.style.backgroundImage = `url("${src}")`;
         lens.style.backgroundSize = `${width * zoom}px ${height * zoom}px`;
       };
-      box.addEventListener('pointerenter', size);
-      // ResizeObserver : suit aussi les changements de mise en page,
-      // pas seulement le redimensionnement de la fenêtre
-      new ResizeObserver(size).observe(box);
+      on(box, 'pointerenter', size);
+      observe(new ResizeObserver(size)).observe(box);
     }
   };
 
@@ -330,28 +357,24 @@
       if (!claim(rail, 'fxRail')) continue;
 
       let down = false, startX = 0, startLeft = 0, moved = false;
-      rail.addEventListener('pointerdown', (e) => {
+      on(rail, 'pointerdown', (e) => {
         if (e.pointerType === 'touch') return;   // le défilement natif suffit
         down = true; moved = false;
         startX = e.clientX; startLeft = rail.scrollLeft;
         rail.setPointerCapture(e.pointerId);
       });
-      rail.addEventListener('pointermove', (e) => {
+      on(rail, 'pointermove', (e) => {
         if (!down) return;
         const d = e.clientX - startX;
         if (Math.abs(d) > 4) { moved = true; rail.classList.add('fx-drag'); }
         rail.scrollLeft = startLeft - d;
       });
       for (const ev of ['pointerup', 'pointercancel']) {
-        rail.addEventListener(ev, () => {
-          down = false;
-          rail.classList.remove('fx-drag');
-        });
+        on(rail, ev, () => { down = false; rail.classList.remove('fx-drag'); });
       }
-      // un glissement ne doit pas déclencher le clic de la carte
-      rail.addEventListener('click', (e) => {
+      on(rail, 'click', (e) => {
         if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
-      }, true);
+      }, { capture: true });
     }
   };
 
@@ -360,12 +383,12 @@
     onSeen($$('[data-to]'), (el) => {
       const to = parseFloat(el.dataset.to) || 0;
       const suffix = el.dataset.suffix ?? '';
-      if (reduced()) { el.textContent = to + suffix; return; }
+      if (reduced()) { el.textContent = nombreFr.format(to) + suffix; return; }
       const dur = 1400;
       const t0 = performance.now();
       const step = (t) => {
         const p = Math.min(1, (t - t0) / dur);
-        el.textContent = Math.round(to * (1 - (1 - p) ** 3)) + suffix;
+        el.textContent = nombreFr.format(Math.round(to * (1 - (1 - p) ** 3))) + suffix;
         if (p < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
@@ -378,14 +401,14 @@
     for (const el of $$('.fx-magnet')) {
       if (!claim(el, 'fxMagnet')) continue;
       const force = parseFloat(el.dataset.strength) || 0.32;
-      el.addEventListener('pointermove', ({ clientX, clientY }) => {
+      on(el, 'pointermove', ({ clientX, clientY }) => {
         const r = el.getBoundingClientRect();
         const x = (clientX - r.left - r.width / 2) * force;
         const y = (clientY - r.top - r.height / 2) * force;
         el.classList.add('fx-pull');
         el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
       });
-      el.addEventListener('pointerleave', () => {
+      on(el, 'pointerleave', () => {
         el.classList.remove('fx-pull');
         el.style.transform = '';
       });
@@ -397,7 +420,7 @@
     const cols = 6, rows = 4;
     for (const frame of $$('.fx-mosaic .fx-frame')) {
       if ($('.fx-tiles', frame)) continue;
-      const tiles = document.createElement('div');
+      const tiles = born(document.createElement('div'));
       tiles.className = 'fx-tiles';
       tiles.setAttribute('aria-hidden', 'true');
       tiles.innerHTML = Array.from({ length: rows * cols }, (_, n) =>
@@ -421,17 +444,24 @@
 
       if (reduced()) { out.textContent = list[0]; continue; }
 
-      let i = 0, n = 0, erasing = false;
-      const tick = () => {
-        const word = list[i];
-        n += erasing ? -1 : 1;
-        out.textContent = word.slice(0, n);
-        let wait = erasing ? 45 : 85;
-        if (!erasing && n >= word.length) { erasing = true; wait = 1600; }
-        else if (erasing && n <= 0) { erasing = false; i = (i + 1) % list.length; wait = 320; }
-        setTimeout(tick, wait);
-      };
-      tick();
+      const signal = ac.signal;     // capté ici : destroy() arrête la boucle
+      (async () => {
+        let i = 0;
+        while (!signal.aborted) {
+          const mot = list[i];
+          for (let n = 1; n <= mot.length && !signal.aborted; n++) {
+            out.textContent = mot.slice(0, n);
+            await delay(85);
+          }
+          await delay(1600);
+          for (let n = mot.length; n >= 0 && !signal.aborted; n--) {
+            out.textContent = mot.slice(0, n);
+            await delay(45);
+          }
+          await delay(320);
+          i = (i + 1) % list.length;
+        }
+      })();
     }
   };
 
@@ -440,30 +470,29 @@
     const host = $('.fx-cursor');
     if (!host || !fine() || reduced() || !claim(host, 'fxCursor')) return;
 
-    const dot  = document.createElement('div');
-    const ring = document.createElement('div');
+    const dot  = born(document.createElement('div'));
+    const ring = born(document.createElement('div'));
     dot.className = 'fx-cur-dot';
     ring.className = 'fx-cur-ring';
     for (const el of [dot, ring]) el.setAttribute('aria-hidden', 'true');
     host.append(dot, ring);
 
     let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y;
-    addEventListener('pointermove', (e) => {
+    on(window, 'pointermove', (e) => {
       x = e.clientX; y = e.clientY;
       dot.style.translate = `${x}px ${y}px`;
-      // visible seulement au-dessus de sa zone : posé sur <body>,
-      // le curseur vaut pour tout le site ; posé sur une section,
-      // il ne vaut que là.
+      // posé sur <body>, le curseur vaut pour tout le site ;
+      // posé sur une section, il ne vaut que là
       const dedans = host === document.body || host.contains(e.target);
       dot.classList.toggle('fx-visible', dedans);
       ring.classList.toggle('fx-visible', dedans);
-      // l'anneau grossit au-dessus de tout ce qui est cliquable
       ring.classList.toggle('fx-on',
         !!e.target?.closest?.('a, button, .fx-card, [role="slider"]'));
     }, { passive: true });
 
-    // l'anneau suit avec du retard : c'est ce décalage qui fait l'effet
+    const signal = ac.signal;
     const follow = () => {
+      if (signal.aborted) return;
       rx += (x - rx) * 0.16;
       ry += (y - ry) * 0.16;
       ring.style.translate = `${rx}px ${ry}px`;
@@ -480,7 +509,7 @@
       if (!sources.length) continue;
 
       const pool = sources.map((src) => {
-        const img = document.createElement('img');
+        const img = born(document.createElement('img'));
         img.src = src;
         img.alt = '';
         img.setAttribute('aria-hidden', 'true');
@@ -489,7 +518,7 @@
       });
 
       let n = 0, lastX = 0, lastY = 0;
-      zone.addEventListener('pointermove', (e) => {
+      on(zone, 'pointermove', (e) => {
         const r = zone.getBoundingClientRect();
         const x = e.clientX - r.left, y = e.clientY - r.top;
         // une image tous les 90 px parcourus, sinon c'est illisible
@@ -506,18 +535,11 @@
     }
   };
 
-  /* ── 34 · en-tête qui se condense au défilement ───────────
-     Une sentinelle observée remplace l'écoute du défilement.  */
+  /* ── 34 · en-tête qui se condense ─────────────────────────── */
   const initShrink = () => {
     for (const head of $$('.fx-shrink')) {
       if (!claim(head, 'fxShrink')) continue;
-      const mark = document.createElement('div');
-      mark.style.cssText = 'position:absolute;top:0;height:1px;width:1px;';
-      mark.setAttribute('aria-hidden', 'true');
-      head.parentNode.insertBefore(mark, head);
-      new IntersectionObserver(
-        ([e]) => head.classList.toggle('fx-condense', !e.isIntersecting)
-      ).observe(mark);
+      sentinelle(head.parentNode, (passe) => head.classList.toggle('fx-condense', passe));
     }
   };
 
@@ -529,19 +551,20 @@
       const panel = $('.fx-menu-panneau', menu);
       if (!open || !panel) continue;
 
-      const setOpen = (on) => {
-        menu.classList.toggle('fx-on', on);
-        open.setAttribute('aria-expanded', String(on));
-        panel.inert = !on;                 // le contenu masqué sort du focus
-        document.body.style.overflow = on ? 'hidden' : '';
+      const setOpen = (val) => {
+        menu.classList.toggle('fx-on', val);
+        open.setAttribute('aria-expanded', String(val));
+        panel.inert = !val;                 // le contenu masqué sort du focus
+        document.body.style.overflow = val ? 'hidden' : '';
       };
       setOpen(false);
 
       open.setAttribute('aria-controls', panel.id ||= 'fx-menu-panneau');
-      open.addEventListener('click', () => setOpen(!menu.classList.contains('fx-on')));
-      $('.fx-menu-fermer', menu)?.addEventListener('click', () => setOpen(false));
-      for (const a of $$('a', panel)) a.addEventListener('click', () => setOpen(false));
-      addEventListener('keydown', (e) => {
+      on(open, 'click', () => setOpen(!menu.classList.contains('fx-on')));
+      const fermer = $('.fx-menu-fermer', menu);
+      if (fermer) on(fermer, 'click', () => setOpen(false));
+      for (const a of $$('a', panel)) on(a, 'click', () => setOpen(false));
+      on(window, 'keydown', (e) => {
         if (e.key === 'Escape' && menu.classList.contains('fx-on')) setOpen(false);
       });
     }
@@ -553,24 +576,25 @@
     if (!box || !claim(box, 'fxPreload')) return;
     const num = $('.fx-preload-num', box);
 
-    const done = () => {
+    if (reduced()) { box.remove(); return; }
+
+    const partir = () => {
       box.classList.add('fx-parti');
-      // on retire du flux une fois la transition finie
-      box.addEventListener('transitionend', () => box.remove(), { once: true });
+      on(box, 'transitionend', () => box.remove(), { once: true });
       setTimeout(() => box.remove(), 1200);   // filet de sécurité
     };
-    if (reduced()) { box.remove(); return; }
 
     let p = 0;
     const t = setInterval(() => {
       p = Math.min(100, p + Math.random() * 18);
       if (num) num.textContent = `${Math.round(p)} %`;
-      if (p >= 100) { clearInterval(t); setTimeout(done, 260); }
+      if (p >= 100) { clearInterval(t); setTimeout(partir, 260); }
     }, 130);
+    on(window, 'fx-destroy', () => clearInterval(t));
   };
 
   /* 37 · transition de page — aucun JS : c'est la règle CSS
-     `@view-transition{navigation:auto}` qui fait tout le travail. */
+     `@view-transition{navigation:auto}` qui fait tout. */
 
   /* ── 39 · onglets ─────────────────────────────────────────── */
   const initTabs = () => {
@@ -582,20 +606,19 @@
 
       const select = (n) => {
         tabs.forEach((t, i) => {
-          const on = i === n;
-          t.setAttribute('aria-selected', String(on));
-          t.tabIndex = on ? 0 : -1;
-          panels[i]?.toggleAttribute('hidden', !on);
+          const val = i === n;
+          t.setAttribute('aria-selected', String(val));
+          t.tabIndex = val ? 0 : -1;
+          panels[i]?.toggleAttribute('hidden', !val);
         });
-        // le trait glissant se cale sur l'onglet actif
         const t = tabs[n];
         box.style.setProperty('--fx-tab-x', `${t.offsetLeft}px`);
         box.style.setProperty('--fx-tab-w', `${t.offsetWidth}px`);
       };
 
       tabs.forEach((t, i) => {
-        t.addEventListener('click', () => select(i));
-        t.addEventListener('keydown', (e) => {
+        on(t, 'click', () => select(i));
+        on(t, 'keydown', (e) => {
           const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
           if (!d) return;
           e.preventDefault();
@@ -605,11 +628,10 @@
         });
       });
       select(0);
-      // les positions changent avec la largeur : on recale
-      new ResizeObserver(() => {
+      observe(new ResizeObserver(() => {
         const n = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
         if (n >= 0) select(n);
-      }).observe(box);
+      })).observe(box);
     }
   };
 
@@ -619,9 +641,10 @@
       if (!claim(btn, 'fxModal')) continue;
       const dlg = document.getElementById(btn.dataset.modal);
       if (!(dlg instanceof HTMLDialogElement)) continue;
-      btn.addEventListener('click', () => dlg.showModal());
-      $('.fx-modal-x', dlg)?.addEventListener('click', () => dlg.close());
-      dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+      on(btn, 'click', () => dlg.showModal());
+      const x = $('.fx-modal-x', dlg);
+      if (x) on(x, 'click', () => dlg.close());
+      on(dlg, 'click', (e) => { if (e.target === dlg) dlg.close(); });
     }
   };
 
@@ -631,8 +654,10 @@
     onSeen($$('[data-scramble]'), (el) => {
       const final = el.dataset.scramble;
       if (reduced()) { el.textContent = final; return; }
+      const signal = ac.signal;
       let frame = 0;
       const run = () => {
+        if (signal.aborted) { el.textContent = final; return; }
         el.textContent = [...final].map((c, i) => {
           if (c === ' ') return ' ';
           // chaque lettre se fige à son tour, de gauche à droite
@@ -660,6 +685,267 @@
     }
   };
 
+  /* ── 50 · zone de dépôt de fichier ────────────────────────── */
+  const initDrop = () => {
+    for (const zone of $$('.fx-drop')) {
+      if (!claim(zone, 'fxDrop')) continue;
+      const input = $('input[type=file]', zone);
+      if (!input) continue;
+      const liste = $('.fx-drop-liste', zone);
+
+      const montrer = (files) => {
+        if (!liste) return;
+        liste.textContent = files.length
+          ? [...files].map((f) => f.name).join(' · ')
+          : '';
+      };
+      for (const ev of ['dragenter', 'dragover']) {
+        on(zone, ev, (e) => { e.preventDefault(); zone.classList.add('fx-survol'); });
+      }
+      for (const ev of ['dragleave', 'drop']) {
+        on(zone, ev, () => zone.classList.remove('fx-survol'));
+      }
+      on(zone, 'drop', (e) => {
+        e.preventDefault();
+        input.files = e.dataTransfer.files;   // le champ reçoit vraiment les fichiers
+        montrer(input.files);
+      });
+      on(input, 'change', () => montrer(input.files));
+    }
+  };
+
+  /* ── 51 · curseur de valeur ───────────────────────────────── */
+  const initRange = () => {
+    for (const box of $$('.fx-range')) {
+      if (!claim(box, 'fxRange')) continue;
+      const input = $('input[type=range]', box);
+      if (!input) continue;
+      const sortie = $('output', box);
+
+      const maj = () => {
+        const min = +input.min || 0;
+        const max = +input.max || 100;
+        box.style.setProperty('--fx-pct', `${((input.value - min) / (max - min)) * 100}%`);
+        if (sortie) sortie.textContent = nombreFr.format(input.value) + (box.dataset.unite ?? '');
+      };
+      on(input, 'input', maj);
+      maj();
+    }
+  };
+
+  /* ── 53 · formulaire en plusieurs étapes ──────────────────── */
+  const initSteps = () => {
+    for (const box of $$('.fx-steps')) {
+      if (!claim(box, 'fxSteps')) continue;
+      const etapes   = $$('.fx-steps-liste li', box);
+      const panneaux = $$('.fx-steps-panneau', box);
+      const prec = $('.fx-steps-prec', box);
+      const suiv = $('.fx-steps-suiv', box);
+      if (etapes.length < 2) continue;
+
+      let n = 0;
+      const aller = (i) => {
+        n = Math.min(etapes.length - 1, Math.max(0, i));
+        etapes.forEach((e, k) => {
+          e.classList.toggle('fx-faite', k < n);
+          e.classList.toggle('fx-active', k === n);
+          if (k === n) e.setAttribute('aria-current', 'step');
+          else e.removeAttribute('aria-current');
+        });
+        panneaux.forEach((p, k) => p.toggleAttribute('hidden', k !== n));
+        if (prec) prec.disabled = n === 0;
+        if (suiv) suiv.disabled = n === etapes.length - 1;
+        box.style.setProperty('--fx-avance', `${(n / (etapes.length - 1)) * 100}%`);
+      };
+      if (prec) on(prec, 'click', () => aller(n - 1));
+      if (suiv) on(suiv, 'click', () => aller(n + 1));
+      aller(0);
+    }
+  };
+
+  /* ── 54 · notification passagère ──────────────────────────── */
+  const initToast = () => {
+    for (const btn of $$('[data-toast]')) {
+      if (!claim(btn, 'fxToast')) continue;
+      on(btn, 'click', () => {
+        let pile = $('.fx-toast-pile');
+        if (!pile) {
+          pile = born(document.createElement('div'));
+          pile.className = 'fx-toast-pile';
+          document.body.append(pile);
+        }
+        const t = document.createElement('div');
+        t.className = 'fx-toast';
+        t.setAttribute('role', 'status');      // annoncé sans voler le focus
+        t.textContent = btn.dataset.toast;
+        pile.append(t);
+        requestAnimationFrame(() => t.classList.add('fx-on'));
+        setTimeout(() => {
+          t.classList.remove('fx-on');
+          on(t, 'transitionend', () => t.remove(), { once: true });
+          setTimeout(() => t.remove(), 900);
+        }, 3200);
+      });
+    }
+  };
+
+  /* ── 57 · carrousel à flèches et pastilles ────────────────── */
+  const initCarousel = () => {
+    for (const box of $$('.fx-carousel')) {
+      if (!claim(box, 'fxCarousel')) continue;
+      const piste = $('.fx-carousel-piste', box);
+      if (!piste) continue;
+      const vues = [...piste.children];
+      if (vues.length < 2) continue;
+
+      const pastilles = born(document.createElement('div'));
+      pastilles.className = 'fx-carousel-pastilles';
+
+      let n = 0;
+      const aller = (i) => {
+        n = (i + vues.length) % vues.length;
+        piste.style.transform = `translateX(-${n * 100}%)`;
+        vues.forEach((v, k) => { v.inert = k !== n; });   // hors vue = hors focus
+        [...pastilles.children].forEach((b, k) =>
+          b.setAttribute('aria-current', String(k === n)));
+      };
+
+      vues.forEach((_, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', `Vue ${i + 1} sur ${vues.length}`);
+        on(b, 'click', () => aller(i));
+        pastilles.append(b);
+      });
+
+      for (const [sens, texte, etiquette] of
+           [['prev', '‹', 'Vue précédente'], ['next', '›', 'Vue suivante']]) {
+        const b = born(document.createElement('button'));
+        b.type = 'button';
+        b.className = `fx-carousel-fleche ${sens}`;
+        b.textContent = texte;
+        b.setAttribute('aria-label', etiquette);
+        on(b, 'click', () => aller(n + (sens === 'next' ? 1 : -1)));
+        box.append(b);
+      }
+      box.append(pastilles);
+
+      on(box, 'keydown', (e) => {
+        if (e.key === 'ArrowLeft')  aller(n - 1);
+        if (e.key === 'ArrowRight') aller(n + 1);
+      });
+      aller(0);
+
+      const auto = parseFloat(box.dataset.auto);
+      if (auto && !reduced()) {
+        const t = setInterval(() => aller(n + 1), auto * 1000);
+        on(box, 'pointerenter', () => clearInterval(t));
+        on(window, 'fx-destroy', () => clearInterval(t));
+      }
+    }
+  };
+
+  /* ── 58 · retour en haut ──────────────────────────────────── */
+  const initTop = () => {
+    const btn = $('.fx-top');
+    if (!btn || !claim(btn, 'fxTop')) return;
+    sentinelle(document.body, (passe) => btn.classList.toggle('fx-on', passe));
+    on(btn, 'click', () =>
+      scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' }));
+  };
+
+  /* ── 61 · filtrage de la grille ───────────────────────────
+     Les cartes glissent à leur nouvelle place grâce aux View
+     Transitions : aucune position n'est calculée à la main.  */
+  let filtreNo = 0;
+  const initFilter = () => {
+    for (const box of $$('.fx-filter')) {
+      if (!claim(box, 'fxFilter')) continue;
+      const boutons = $$('[data-filtre]', box);
+      const grille  = $('.fx-filter-grille', box);
+      if (!boutons.length || !grille) continue;
+
+      const prefixe = `fx-f${filtreNo++}`;
+      [...grille.children].forEach((c, i) => {
+        c.style.viewTransitionName = `${prefixe}-${i}`;   // un nom unique par carte
+      });
+
+      const appliquer = (cle) => {
+        for (const c of grille.children) {
+          c.hidden = cle !== '*' && c.dataset.categorie !== cle;
+        }
+        for (const b of boutons) {
+          b.setAttribute('aria-pressed', String(b.dataset.filtre === cle));
+        }
+      };
+
+      for (const b of boutons) {
+        on(b, 'click', () => {
+          const cle = b.dataset.filtre;
+          if (document.startViewTransition && !reduced()) {
+            document.startViewTransition(() => appliquer(cle));
+          } else {
+            appliquer(cle);
+          }
+        });
+      }
+      appliquer('*');
+    }
+  };
+
+  /* ── 65 · photo qui se précise au chargement ──────────────── */
+  const initBlur = () => {
+    for (const img of $$('.fx-blur img')) {
+      if (!claim(img, 'fxBlur')) continue;
+      const net = () => img.closest('.fx-blur')?.classList.add('fx-net');
+      if (img.complete) net();
+      else on(img, 'load', net, { once: true });
+    }
+  };
+
+  /* ── 68 · copier au clic ──────────────────────────────────── */
+  const initCopy = () => {
+    for (const btn of $$('[data-copy]')) {
+      if (!claim(btn, 'fxCopy')) continue;
+      on(btn, 'click', async () => {
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copy);
+        } catch {
+          return;                       // refusé par le navigateur : on se tait
+        }
+        const avant = btn.textContent;
+        btn.textContent = 'Copié ✓';
+        btn.classList.add('fx-ok');
+        setTimeout(() => {
+          btn.textContent = avant;
+          btn.classList.remove('fx-ok');
+        }, 1800);
+      });
+    }
+  };
+
+  /* ── 69 · bandeau de consentement ─────────────────────────── */
+  const initCookie = () => {
+    const box = $('.fx-cookie');
+    if (!box || !claim(box, 'fxCookie')) return;
+    const cle = 'fx-cookie-vu';
+
+    let vu = false;
+    try { vu = localStorage.getItem(cle) === '1'; } catch { /* mode privé */ }
+    if (vu) { box.remove(); return; }
+
+    box.hidden = false;
+    requestAnimationFrame(() => box.classList.add('fx-on'));
+    const ok = $('.fx-cookie-ok', box);
+    if (!ok) return;
+    on(ok, 'click', () => {
+      try { localStorage.setItem(cle, '1'); } catch { /* mode privé */ }
+      box.classList.remove('fx-on');
+      on(box, 'transitionend', () => box.remove(), { once: true });
+      setTimeout(() => box.remove(), 700);
+    });
+  };
+
   const Effets = {
     init() {
       buildWords();
@@ -685,7 +971,32 @@
       initTabs();
       initModal();
       initScramble();
+      initDrop();
+      initRange();
+      initSteps();
+      initToast();
+      initCarousel();
+      initTop();
+      initFilter();
+      initBlur();
+      initCopy();
+      initCookie();
       initReveal();
+    },
+
+    /** Retire tout : écouteurs, observateurs, éléments créés et
+     *  marques internes. `init()` peut ensuite repartir à neuf. */
+    destroy() {
+      dispatchEvent(new Event('fx-destroy'));   // arrête les minuteries
+      ac.abort();
+      ac = new AbortController();
+      for (const o of observers) o.disconnect();
+      observers = [];
+      for (const el of created) el.remove();
+      created = [];
+      for (const [el, key] of claimed) delete el.dataset[key];
+      claimed = [];
+      document.body.style.overflow = '';
     },
   };
 

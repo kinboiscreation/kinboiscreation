@@ -1,6 +1,6 @@
 /* ============================================================
    BIBLIOTHÈQUE D'EFFETS — Kin Bois Création
-   47 effets réutilisables, CSS natif, sans dépendance.
+   69 effets réutilisables, CSS natif, sans dépendance.
 
    Utilisation :
      <link rel="stylesheet" href="effets/effets.css">
@@ -793,6 +793,371 @@ dialog.fx-modal[open]{animation:fx-modal-in .35s cubic-bezier(.22,.9,.28,1);}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* ═══ 48 · CHAMP À ÉTIQUETTE FLOTTANTE ═══════════════════════
+   CSS seul. Structure : .fx-field > input + label             */
+.fx-field{position:relative;margin-bottom:20px;}
+.fx-field input,.fx-field textarea{
+  width:100%;padding:20px 14px 9px;font:inherit;color:var(--fx-ink);
+  background:var(--fx-panel);border:1px solid var(--fx-faint);
+  border-radius:8px;transition:border-color .25s,box-shadow .25s;
+}
+.fx-field textarea{min-height:104px;resize:vertical;field-sizing:content;}
+.fx-field label{
+  position:absolute;left:15px;top:15px;pointer-events:none;
+  color:var(--fx-faint);font-size:.95rem;
+  transition:top .2s ease,font-size .2s ease,color .2s ease;
+}
+/* l'étiquette monte dès que le champ est rempli ou actif */
+.fx-field :is(input,textarea):focus + label,
+.fx-field :is(input,textarea):not(:placeholder-shown) + label{
+  top:6px;font-size:.68rem;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--fx-accent);
+}
+.fx-field :is(input,textarea):focus{
+  outline:none;border-color:var(--fx-accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--fx-accent) 18%,transparent);
+}
+
+/* ═══ 49 · VALIDATION DE FORMULAIRE ══════════════════════════
+   CSS seul. `:user-valid` ne réagit qu'après la saisie : rien
+   n'est signalé en rouge avant que le visiteur ait tapé.      */
+.fx-valid :is(input,textarea,select):user-invalid{
+  border-color:#B4462F;
+  box-shadow:0 0 0 3px color-mix(in srgb,#B4462F 16%,transparent);
+}
+.fx-valid :is(input,textarea,select):user-valid{border-color:#4E7A4A;}
+.fx-valid :is(input,textarea):user-invalid + label{color:#B4462F;}
+.fx-valid .fx-erreur{
+  display:none;margin:6px 0 0;font-size:.76rem;color:#B4462F;
+}
+.fx-valid :is(input,textarea,select):user-invalid ~ .fx-erreur{display:block;}
+
+/* ═══ 50 · ZONE DE DÉPÔT DE FICHIER ══════════════════════════
+   JS requis. Classe : .fx-drop, contient un input[type=file]   */
+.fx-drop{
+  position:relative;border:2px dashed var(--fx-faint);border-radius:12px;
+  padding:34px 22px;text-align:center;color:var(--fx-faint);
+  transition:border-color .25s,background .25s,color .25s;
+}
+.fx-drop.fx-survol{
+  border-color:var(--fx-accent);color:var(--fx-accent);
+  background:color-mix(in srgb,var(--fx-accent) 7%,transparent);
+}
+.fx-drop input[type=file]{
+  position:absolute;inset:0;width:100%;height:100%;
+  opacity:0;cursor:pointer;
+}
+.fx-drop-liste{margin:10px 0 0;font-size:.8rem;color:var(--fx-ink);}
+
+/* ═══ 51 · CURSEUR DE VALEUR ═════════════════════════════════
+   JS requis (--fx-pct). Classe : .fx-range > input + output    */
+.fx-range{--fx-pct:50%;display:flex;align-items:center;gap:16px;}
+.fx-range input[type=range]{
+  flex:1;appearance:none;height:5px;border-radius:99px;
+  background:linear-gradient(90deg,
+    var(--fx-accent) 0 var(--fx-pct),var(--fx-faint) var(--fx-pct));
+}
+.fx-range input[type=range]::-webkit-slider-thumb{
+  appearance:none;width:22px;height:22px;border-radius:50%;
+  background:var(--fx-accent);border:3px solid var(--fx-panel);
+  box-shadow:0 2px 8px var(--fx-shadow);cursor:grab;
+}
+.fx-range input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--fx-accent);border:3px solid var(--fx-panel);
+  box-shadow:0 2px 8px var(--fx-shadow);cursor:grab;
+}
+.fx-range output{
+  min-width:74px;text-align:right;font-weight:600;color:var(--fx-accent);
+  font-variant-numeric:tabular-nums;
+}
+
+/* ═══ 52 · CASES ET BOUTONS RADIO ════════════════════════════
+   CSS seul. Classe : .fx-choice sur le <label>                 */
+.fx-choice{
+  display:inline-flex;align-items:center;gap:11px;cursor:pointer;
+  padding:9px 0;color:var(--fx-ink);
+}
+.fx-choice input{
+  appearance:none;width:21px;height:21px;flex:none;margin:0;
+  border:1.5px solid var(--fx-faint);background:var(--fx-panel);
+  transition:border-color .2s,background .2s;
+}
+.fx-choice input[type=checkbox]{border-radius:6px;}
+.fx-choice input[type=radio]{border-radius:50%;}
+.fx-choice input:checked{background:var(--fx-accent);border-color:var(--fx-accent);}
+.fx-choice input[type=checkbox]:checked{
+  /* la coche est dessinée par un dégradé : aucune image à charger */
+  background-image:
+    linear-gradient(45deg,transparent 46%,#fff 46% 56%,transparent 56%),
+    linear-gradient(-45deg,transparent 56%,#fff 56% 66%,transparent 66%);
+  background-size:100% 100%;
+}
+.fx-choice input[type=radio]:checked{
+  box-shadow:inset 0 0 0 4px var(--fx-panel);
+}
+.fx-choice input:focus-visible{outline:2px solid var(--fx-accent);outline-offset:2px;}
+
+/* ═══ 53 · FORMULAIRE EN PLUSIEURS ÉTAPES ════════════════════
+   JS requis. Classe : .fx-steps                                */
+.fx-steps{--fx-avance:0%;}
+.fx-steps-liste{
+  position:relative;display:flex;justify-content:space-between;
+  list-style:none;margin:0 0 26px;padding:0;
+}
+.fx-steps-liste::before,.fx-steps-liste::after{
+  content:"";position:absolute;top:15px;left:0;height:2px;z-index:0;
+}
+.fx-steps-liste::before{right:0;background:var(--fx-faint);opacity:.5;}
+.fx-steps-liste::after{
+  width:var(--fx-avance);background:var(--fx-accent);
+  transition:width .45s cubic-bezier(.22,.9,.28,1);
+}
+.fx-steps-liste li{
+  position:relative;z-index:1;display:flex;flex-direction:column;
+  align-items:center;gap:8px;font-size:.72rem;color:var(--fx-faint);
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.fx-steps-liste li::before{
+  content:"";width:32px;height:32px;border-radius:50%;
+  background:var(--fx-panel);border:2px solid var(--fx-faint);
+  transition:border-color .3s,background .3s;
+}
+.fx-steps-liste li.fx-active{color:var(--fx-accent);}
+.fx-steps-liste li.fx-active::before{border-color:var(--fx-accent);}
+.fx-steps-liste li.fx-faite::before{
+  background:var(--fx-accent);border-color:var(--fx-accent);
+}
+.fx-steps-boutons{display:flex;gap:12px;margin-top:22px;}
+.fx-steps-boutons button:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ═══ 54 · NOTIFICATION PASSAGÈRE ════════════════════════════
+   JS requis (bouton data-toast="Message").                     */
+.fx-toast-pile{
+  position:fixed;bottom:22px;right:22px;z-index:95;
+  display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+}
+.fx-toast{
+  padding:13px 20px;border-radius:10px;max-width:min(360px,88vw);
+  background:var(--fx-ink);color:#F7F1E8;font-size:.9rem;
+  box-shadow:0 12px 32px rgba(0,0,0,.28);
+  opacity:0;translate:0 14px;
+  transition:opacity .35s,translate .35s cubic-bezier(.22,.9,.28,1);
+}
+.fx-toast.fx-on{opacity:1;translate:0 0;}
+
+/* ═══ 55 · SQUELETTE DE CHARGEMENT ═══════════════════════════
+   CSS seul. Classe : .fx-skeleton sur les blocs en attente     */
+.fx-skeleton{
+  border-radius:8px;color:transparent !important;
+  background:linear-gradient(100deg,
+    color-mix(in srgb,var(--fx-faint) 22%,transparent) 30%,
+    color-mix(in srgb,var(--fx-faint) 10%,transparent) 50%,
+    color-mix(in srgb,var(--fx-faint) 22%,transparent) 70%);
+  background-size:220% 100%;
+  animation:fx-squelette 1.3s ease-in-out infinite;
+}
+.fx-skeleton *{visibility:hidden;}
+@keyframes fx-squelette{from{background-position:120% 0;}to{background-position:-120% 0;}}
+
+/* ═══ 56 · ANNEAU DE CHARGEMENT ══════════════════════════════
+   CSS seul. Classe : .fx-spin                                  */
+.fx-spin{
+  display:inline-block;width:26px;height:26px;border-radius:50%;
+  border:3px solid color-mix(in srgb,var(--fx-accent) 25%,transparent);
+  border-top-color:var(--fx-accent);
+  animation:fx-tourne .8s linear infinite;
+}
+@keyframes fx-tourne{to{rotate:360deg;}}
+
+/* ═══ 57 · CARROUSEL ═════════════════════════════════════════
+   JS requis. Classe : .fx-carousel > .fx-carousel-piste > vues */
+.fx-carousel{position:relative;overflow:hidden;border-radius:var(--fx-radius);}
+.fx-carousel-piste{
+  display:flex;
+  transition:transform .6s cubic-bezier(.22,.9,.28,1);
+}
+.fx-carousel-piste > *{flex:0 0 100%;min-width:0;}
+.fx-carousel-fleche{
+  position:absolute;top:50%;translate:0 -50%;z-index:3;
+  width:44px;height:44px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(255,255,255,.3);background:rgba(24,14,8,.45);
+  color:#fff;font-size:1.3rem;backdrop-filter:blur(5px);
+  transition:background .25s;
+}
+.fx-carousel-fleche:hover{background:rgba(24,14,8,.72);}
+.fx-carousel-fleche.prev{left:14px;}
+.fx-carousel-fleche.next{right:14px;}
+.fx-carousel-pastilles{
+  position:absolute;bottom:14px;left:0;right:0;z-index:3;
+  display:flex;justify-content:center;gap:9px;
+}
+.fx-carousel-pastilles button{
+  width:9px;height:9px;padding:0;border-radius:50%;cursor:pointer;
+  border:0;background:rgba(255,255,255,.45);transition:background .25s,width .25s;
+}
+.fx-carousel-pastilles button[aria-current="true"]{background:#fff;width:24px;border-radius:99px;}
+
+/* ═══ 58 · RETOUR EN HAUT ════════════════════════════════════
+   JS requis. Classe : .fx-top                                  */
+.fx-top{
+  position:fixed;right:24px;bottom:24px;z-index:55;
+  width:46px;height:46px;border-radius:50%;cursor:pointer;border:0;
+  background:var(--fx-accent);color:#fff;font-size:1.1rem;
+  box-shadow:0 8px 22px var(--fx-shadow);
+  opacity:0;translate:0 14px;pointer-events:none;
+  transition:opacity .35s,translate .35s;
+}
+.fx-top.fx-on{opacity:1;translate:0 0;pointer-events:auto;}
+
+/* ═══ 59 · BARRE D'ACTION COLLÉE EN BAS ══════════════════════
+   CSS seul, visible sur téléphone. Classe : .fx-bar            */
+.fx-bar{display:none;}
+@media(max-width:700px){
+  .fx-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:58;
+    display:flex;gap:10px;padding:11px 14px;
+    padding-bottom:calc(11px + env(safe-area-inset-bottom));
+    background:color-mix(in srgb,var(--fx-panel) 92%,transparent);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--fx-faint);
+  }
+  .fx-bar > *{flex:1;text-align:center;}
+}
+
+/* ═══ 60 · FIL D'ARIANE ══════════════════════════════════════
+   CSS seul. Classe : .fx-breadcrumb sur un <nav><ol>           */
+.fx-breadcrumb ol{
+  display:flex;flex-wrap:wrap;gap:7px;list-style:none;margin:0;padding:0;
+  font-size:.78rem;color:var(--fx-faint);
+}
+.fx-breadcrumb li + li::before{content:"›";margin-right:7px;opacity:.6;}
+.fx-breadcrumb a{color:var(--fx-faint);text-decoration:none;transition:color .25s;}
+.fx-breadcrumb a:hover{color:var(--fx-accent);}
+.fx-breadcrumb [aria-current="page"]{color:var(--fx-ink);font-weight:500;}
+
+/* ═══ 61 · FILTRAGE DE LA GRILLE ═════════════════════════════
+   JS requis. Les cartes glissent grâce aux View Transitions.   */
+.fx-filter-boutons{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:24px;}
+.fx-filter-boutons button{
+  padding:9px 18px;border-radius:99px;cursor:pointer;font:inherit;
+  border:1px solid var(--fx-faint);background:transparent;color:var(--fx-faint);
+  transition:background .25s,color .25s,border-color .25s;
+}
+.fx-filter-boutons button[aria-pressed="true"]{
+  background:var(--fx-accent);border-color:var(--fx-accent);color:#fff;
+}
+@media(prefers-reduced-motion:no-preference){
+  ::view-transition-group(*){animation-duration:.42s;}
+}
+
+/* ═══ 62 · ÉTAPES DU PROJET (FRISE) ══════════════════════════
+   JS requis (.seen). Classe : .fx-timeline sur un <ol>         */
+.fx-timeline{
+  position:relative;list-style:none;margin:0;padding:0 0 0 34px;
+}
+.fx-timeline::before{
+  content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;
+  background:var(--fx-faint);opacity:.45;
+}
+.fx-timeline li{
+  position:relative;padding:0 0 28px;
+  opacity:0;translate:0 16px;
+  transition:opacity .6s,translate .6s cubic-bezier(.22,.9,.28,1);
+  transition-delay:calc(var(--si,0)*130ms);
+}
+.fx-timeline.seen li{opacity:1;translate:0 0;}
+.fx-timeline li::before{
+  content:"";position:absolute;left:-30px;top:5px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--fx-panel);border:2px solid var(--fx-accent);
+}
+.fx-timeline b{display:block;color:var(--fx-ink);margin-bottom:4px;}
+.fx-timeline span{color:var(--fx-faint);font-size:.9rem;line-height:1.6;}
+
+/* ═══ 63 · NOTATION EN ÉTOILES ═══════════════════════════════
+   CSS seul. Classe : .fx-stars, note dans --fx-note (0 à 5)    */
+.fx-stars{
+  --fx-note:5;
+  display:inline-block;position:relative;
+  font-size:1.1rem;letter-spacing:.14em;color:var(--fx-faint);
+}
+.fx-stars::before{content:"★★★★★";}
+.fx-stars::after{
+  content:"★★★★★";position:absolute;left:0;top:0;overflow:hidden;
+  width:calc(var(--fx-note) / 5 * 100%);color:var(--fx-accent-2);
+}
+
+/* ═══ 64 · GALERIE EN MAÇONNERIE ═════════════════════════════
+   CSS seul. Classe : .fx-masonry                               */
+.fx-masonry{columns:3 230px;column-gap:20px;}
+.fx-masonry > *{
+  break-inside:avoid;margin:0 0 20px;
+  /* le navigateur saute le rendu des blocs hors écran */
+  content-visibility:auto;contain-intrinsic-size:auto 320px;
+}
+
+/* ═══ 65 · PHOTO QUI SE PRÉCISE ══════════════════════════════
+   JS requis. Classe : .fx-blur autour de l'image               */
+.fx-blur{overflow:hidden;background:var(--fx-faint);}
+.fx-blur img{
+  display:block;width:100%;
+  filter:blur(18px);scale:1.06;
+  transition:filter .8s ease,scale .8s ease;
+}
+.fx-blur.fx-net img{filter:none;scale:1;}
+
+/* ═══ 66 · TRACÉ QUI SE DESSINE ══════════════════════════════
+   JS requis (.seen). Classe : .fx-draw sur un <svg>            */
+.fx-draw path,.fx-draw line,.fx-draw circle,.fx-draw rect{
+  stroke-dasharray:var(--fx-long,1200);
+  stroke-dashoffset:var(--fx-long,1200);
+  transition:stroke-dashoffset 2.2s cubic-bezier(.22,.9,.28,1);
+}
+.fx-draw.seen :is(path,line,circle,rect){stroke-dashoffset:0;}
+
+/* ═══ 67 · SECTIONS CALÉES AU DÉFILEMENT ═════════════════════
+   CSS seul. Classe : .fx-snap sur le conteneur                 */
+.fx-snap{
+  scroll-snap-type:y mandatory;overflow-y:auto;
+  height:clamp(300px,60vh,560px);
+}
+.fx-snap > *{
+  scroll-snap-align:start;min-height:100%;
+  display:grid;place-content:center;text-align:center;padding:30px;
+}
+
+/* ═══ 68 · COPIER AU CLIC ════════════════════════════════════
+   JS requis. Bouton avec data-copy="texte à copier"            */
+[data-copy]{
+  cursor:pointer;font:inherit;
+  border:1px solid var(--fx-faint);background:transparent;color:var(--fx-ink);
+  padding:10px 18px;border-radius:8px;
+  transition:background .25s,color .25s,border-color .25s;
+}
+[data-copy]:hover{border-color:var(--fx-accent);color:var(--fx-accent);}
+[data-copy].fx-ok{
+  background:var(--fx-accent);border-color:var(--fx-accent);color:#fff;
+}
+
+/* ═══ 69 · BANDEAU DE CONSENTEMENT ═══════════════════════════
+   JS requis (mémorise le choix). Classe : .fx-cookie           */
+.fx-cookie{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:96;
+  display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+  max-width:640px;margin:0 auto;padding:17px 20px;border-radius:12px;
+  background:var(--fx-ink);color:#F7F1E8;font-size:.86rem;line-height:1.55;
+  box-shadow:0 16px 40px rgba(0,0,0,.3);
+  opacity:0;translate:0 18px;
+  transition:opacity .45s,translate .45s cubic-bezier(.22,.9,.28,1);
+}
+.fx-cookie.fx-on{opacity:1;translate:0 0;}
+.fx-cookie p{margin:0;flex:1 1 260px;}
+.fx-cookie-ok{
+  padding:10px 20px;border:0;border-radius:99px;cursor:pointer;font:inherit;
+  background:var(--fx-accent);color:#fff;
+}
+
 /* --- Accessibilité : respecte le réglage système -------------- */
 @media(prefers-reduced-motion:reduce){
   .fx-card,.fx-frame,.fx-frame img,.fx-cap,.fx-col,.fx-unfurl,.fx-flip-inner,
@@ -821,4 +1186,16 @@ dialog.fx-modal[open]{animation:fx-modal-in .35s cubic-bezier(.22,.9,.28,1);}
   }
   [data-letters] span{transition:none !important;}
   ::view-transition-old(root),::view-transition-new(root){animation:none !important;}
+  /* formulaires, retours et contenus */
+  .fx-skeleton,.fx-spin{animation:none !important;}
+  .fx-carousel-piste,.fx-toast,.fx-cookie,.fx-top,.fx-steps-liste::after{
+    transition:none !important;
+  }
+  .fx-timeline li{opacity:1 !important;translate:none !important;}
+  .fx-draw :is(path,line,circle,rect){
+    stroke-dashoffset:0 !important;transition:none !important;
+  }
+  .fx-blur img{filter:none !important;scale:1 !important;transition:none !important;}
+  .fx-snap{scroll-snap-type:none !important;}
+  .fx-toast,.fx-cookie{opacity:1 !important;translate:none !important;}
 }

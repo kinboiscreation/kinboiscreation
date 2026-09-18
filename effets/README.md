@@ -1,6 +1,6 @@
 # Bibliothèque d'effets — Kin Bois Création
 
-47 effets visuels réutilisables, en CSS et JavaScript natifs.
+69 effets visuels réutilisables, en CSS et JavaScript natifs.
 **Aucune dépendance** : pas de React, pas de bibliothèque externe, rien à installer.
 
 À réutiliser tel quel sur les prochains sites.
@@ -8,7 +8,7 @@
 ## Ce que fait le navigateur à notre place
 
 La bibliothèque s'appuie sur ce que les navigateurs savent faire aujourd'hui,
-plutôt que de le réécrire en JavaScript. Trois choix à connaître :
+plutôt que de le réécrire en JavaScript. Cinq choix à connaître :
 
 - **Animations au défilement en CSS.** Là où `animation-timeline` existe, la
   parallaxe et le dézoom sont faits par le navigateur : c'est plus fluide, et
@@ -18,6 +18,10 @@ plutôt que de le réécrire en JavaScript. Trois choix à connaître :
   et l'accessibilité est correcte par construction.
 - **Transitions de page en CSS.** Une seule règle suffit, sans rien poser sur
   le HTML.
+- **View Transitions pour le filtrage.** Quand on filtre le catalogue, les
+  cartes glissent à leur nouvelle place : aucune position n'est calculée.
+- **`:user-valid` / `:user-invalid`.** La validation des formulaires est faite
+  en CSS, et ne signale jamais une erreur avant que le visiteur ait saisi.
 
 Quand un navigateur ne connaît pas l'une de ces nouveautés, l'effet concerné
 ne se joue simplement pas : rien ne casse, rien ne disparaît.
@@ -69,7 +73,7 @@ Et une grille de cartes :
 </div>
 ```
 
-## Les 47 effets
+## Les 69 effets
 
 ### Au survol de la souris
 
@@ -147,6 +151,48 @@ Et une grille de cartes :
 | `fx-bg-grid` | Quadrillage léger façon plan de menuisier | non |
 | `fx-bg-aurora` | Deux halos cuivre et or qui dérivent | non |
 | `fx-bg-grain` | Grain fin, comme une photo argentique | non |
+
+### Formulaires
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-field` | L'étiquette monte quand le champ se remplit | non |
+| `fx-valid` | Erreur signalée après la saisie, jamais avant | non |
+| `fx-drop` | Zone de dépôt de photos, par glisser ou au clic | oui |
+| `fx-range` | Curseur de valeur (budget, dimension) | oui |
+| `fx-choice` | Cases et boutons radio dessinés sans image | non |
+| `fx-steps` | Demande découpée en étapes, avec progression | oui |
+
+### Attente et retours
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-toast` | Message de confirmation passager | oui |
+| `fx-skeleton` | Squelette montrant la forme avant le contenu | non |
+| `fx-spin` | Anneau de chargement | non |
+
+### Parcours
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-carousel` | Carrousel à flèches, pastilles et clavier | oui |
+| `fx-top` | Bouton de retour en haut | oui |
+| `fx-bar` | Barre d'action collée en bas, sur téléphone | non |
+| `fx-breadcrumb` | Fil d'Ariane | non |
+| `fx-filter` | Filtrage du catalogue, les cartes glissent | oui |
+| `fx-snap` | Sections qui se calent d'elles-mêmes | non |
+
+### Contenu
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-timeline` | Frise des étapes du projet | oui |
+| `fx-stars` | Note en étoiles, dessinées en texte | non |
+| `fx-masonry` | Galerie en colonnes, sans rogner les photos | non |
+| `fx-blur` | La photo arrive floue puis se précise | oui |
+| `fx-draw` | Un tracé SVG se dessine au défilement | oui |
+| `fx-copy` | Copier le numéro au clic | oui |
+| `fx-cookie` | Bandeau de consentement, choix mémorisé | oui |
 
 ## Structures particulières
 
@@ -378,6 +424,120 @@ script le découpe :
 **`fx-bg-grid`**, **`fx-bg-aurora`**, **`fx-bg-grain`** — la classe se pose sur
 le bloc à habiller ; `fx-bg-grain` va aussi directement sur une carte.
 
+**`fx-field`** — l'`<input>` vient **avant** le `<label>`, et garde
+`placeholder=" "` : c'est ce qui permet à l'étiquette de monter en CSS seul.
+
+```html
+<div class="fx-field">
+  <input type="email" id="mail" placeholder=" " required>
+  <label for="mail">Adresse e-mail</label>
+  <p class="fx-erreur">Cette adresse ne semble pas valide.</p>
+</div>
+```
+
+**`fx-valid`** — à poser sur le `<form>`. Les messages `.fx-erreur` placés
+après le champ apparaissent seuls, sans JavaScript.
+
+**`fx-drop`** — l'`<input type="file">` est recouvert par la zone :
+
+```html
+<div class="fx-drop">
+  <b>Déposez vos photos ici</b>
+  <p class="fx-drop-liste"></p>
+  <input type="file" multiple accept="image/*" aria-label="Choisir des photos">
+</div>
+```
+
+**`fx-range`** — `data-unite` complète le nombre affiché :
+
+```html
+<div class="fx-range" data-unite=" cm">
+  <input type="range" min="60" max="300" value="180" aria-label="Largeur">
+  <output></output>
+</div>
+```
+
+**`fx-steps`** — autant de `<li>` que de panneaux :
+
+```html
+<div class="fx-steps">
+  <ol class="fx-steps-liste"><li>Le meuble</li><li>Les cotes</li></ol>
+  <div class="fx-steps-panneau">…</div>
+  <div class="fx-steps-panneau" hidden>…</div>
+  <div class="fx-steps-boutons">
+    <button class="fx-steps-prec" type="button">Précédent</button>
+    <button class="fx-steps-suiv" type="button">Suivant</button>
+  </div>
+</div>
+```
+
+**`fx-toast`**, **`fx-copy`** — le texte est dans l'attribut :
+
+```html
+<button data-toast="Votre demande a bien été envoyée.">Envoyer</button>
+<button data-copy="+243 00 000 0000">📞 +243 00 000 0000</button>
+```
+
+**`fx-carousel`** — flèches et pastilles sont ajoutées par le script.
+`data-auto="6"` fait défiler seul toutes les 6 secondes, et s'arrête au survol :
+
+```html
+<div class="fx-carousel" tabindex="0" data-auto="6">
+  <div class="fx-carousel-piste">
+    <div><img src="a.webp" alt=""></div>
+    <div><img src="b.webp" alt=""></div>
+  </div>
+</div>
+```
+
+**`fx-filter`** — chaque carte porte sa catégorie, chaque bouton son filtre
+(`*` pour tout montrer) :
+
+```html
+<div class="fx-filter">
+  <div class="fx-filter-boutons">
+    <button data-filtre="*" aria-pressed="true">Tout</button>
+    <button data-filtre="chambre" aria-pressed="false">Chambre</button>
+  </div>
+  <div class="fx-grid fx-filter-grille">
+    <figure class="fx-card" data-categorie="chambre">…</figure>
+  </div>
+</div>
+```
+
+**`fx-stars`** — la note est un simple nombre de 0 à 5 :
+
+```html
+<span class="fx-stars" style="--fx-note:4.5" role="img"
+      aria-label="4,5 étoiles sur 5"></span>
+```
+
+**`fx-draw`** — donnez à chaque tracé une longueur un peu supérieure à la
+sienne (`--fx-long`), sinon le dessin part déjà commencé :
+
+```html
+<svg class="fx-draw" viewBox="0 0 420 70" aria-hidden="true">
+  <path d="M8 52 C 90 10, 150 62, 220 34" fill="none"
+        stroke="#B87333" stroke-width="2.5" style="--fx-long:620"></path>
+</svg>
+```
+
+**`fx-top`**, **`fx-bar`**, **`fx-cookie`** — un seul par page :
+
+```html
+<button class="fx-top" type="button" aria-label="Revenir en haut">↑</button>
+
+<div class="fx-cookie" hidden>
+  <p>Ce site retient vos préférences d'affichage.</p>
+  <button class="fx-cookie-ok" type="button">J'ai compris</button>
+</div>
+```
+
+**`fx-skeleton`** — posez la classe sur les blocs en attente et retirez-la
+quand le contenu arrive. **`fx-blur`** entoure l'image ; **`fx-masonry`**,
+**`fx-snap`**, **`fx-breadcrumb`**, **`fx-timeline`** et **`fx-choice`** se
+posent simplement sur le conteneur ou le `<label>` concerné.
+
 **`fx-curtain`**, **`fx-mosaic`**, **`fx-stagger`**, **`fx-kenburns`**,
 **`fx-duotone`**, **`fx-blinds`**, **`fx-tilt`** — la classe se pose sur la
 grille, les cartes gardent la structure de base :
@@ -400,6 +560,9 @@ grille, les cartes gardent la structure de base :
 - **Sécurité d'affichage** : les effets déclenchés au scroll ont un filet de
   sécurité de 2,5 secondes — si la détection échoue, le contenu s'affiche
   quand même. Aucune image ne peut rester invisible.
+- **Tout retirer** : `Effets.destroy()` coupe les écouteurs, les observateurs
+  et les minuteries, supprime les éléments créés et efface les marques
+  internes. `Effets.init()` peut ensuite repartir à neuf.
 - **Contenu injecté après coup** : appelez `Effets.init()` pour réinitialiser.
   Chaque effet ne s'installe qu'une fois, un rappel est donc sans danger —
   et un même élément peut porter deux effets (un bouton à la fois magnétique
@@ -407,5 +570,5 @@ grille, les cartes gardent la structure de base :
 
 ## Démonstration
 
-Les 47 effets appliqués à de vraies photos :
+Les 69 effets appliqués à de vraies photos :
 [demo-effets.html](../demo-effets.html)
