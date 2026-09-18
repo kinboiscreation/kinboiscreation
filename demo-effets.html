@@ -278,8 +278,9 @@
 
 <div class="wrap">
   <header>
-    <h1>Trente effets, vos vraies photos</h1>
+    <h1>Quarante-sept effets, vos vraies photos</h1>
     <p>Passez la souris sur les images, et faites défiler lentement : certains effets se déclenchent au scroll. Repérez ceux que vous préférez et donnez-moi leurs numéros — je les applique au site. Tout est en CSS et JavaScript natifs : aucun coût, aucune dépendance, rien à installer.</p>
+    <p style="color:var(--faint);margin:14px 0 0;font-size:.9rem;">Les effets 1 à 13 portent sur les cartes du catalogue, 14 à 30 sur les images et le texte, 31 à 47 sur l'habillage du site : curseur, navigation, fonds, panneaux.</p>
   </header>
 
   <!-- 1 -->
@@ -635,10 +636,231 @@
     </div>
   </section>
 
+  <!-- 31 -->
+  <section>
+    <div class="head"><span class="num">31</span><h2>Curseur personnalisé</h2></div>
+    <p class="note">Un point cuivré remplace la flèche, suivi d'un anneau en retard qui grossit au-dessus de ce qui est cliquable. Promenez la souris dans le cadre ci-dessous. Posé sur tout le site, il vaut partout.</p>
+    <div class="fx-cursor" style="border:1px solid var(--line);border-radius:10px;padding:46px 26px;text-align:center;">
+      <p style="margin:0 0 16px;color:var(--faint);">Zone de démonstration — le curseur reprend sa forme normale en dehors.</p>
+      <a class="fx-magnet" href="#" style="pointer-events:auto;">Un bouton à survoler</a>
+    </div>
+  </section>
+
+  <!-- 32 -->
+  <section>
+    <div class="head"><span class="num">32</span><h2>Traînée de photos</h2></div>
+    <p class="note">Vos réalisations apparaissent dans le sillage du curseur, puis s'effacent. Spectaculaire en haut de page d'accueil. Balayez le cadre.</p>
+    <div class="fx-trail" style="height:340px;border:1px solid var(--line);border-radius:10px;display:grid;place-content:center;"
+         data-images="images/table-basse-plateau-rouge.webp|images/armoire-vernie-porte-miroir.webp|images/porte-acajou-installee.webp|images/meuble-tv-noir-laque.webp|images/tete-de-lit-ovale-bois.webp">
+      <p style="margin:0;color:var(--faint);font-family:'Cormorant Garamond',serif;font-size:1.6rem;">Balayez ici</p>
+    </div>
+  </section>
+
+  <!-- 33 -->
+  <section>
+    <div class="head"><span class="num">33</span><h2>Barre de progression de lecture</h2></div>
+    <p class="note">Un trait cuivré en haut de l'écran indique où l'on en est dans la page. Il est <b>déjà actif</b> : regardez tout en haut de votre fenêtre en faisant défiler. Entièrement en CSS, sans une ligne de JavaScript.</p>
+    <div class="fx-progress"></div>
+  </section>
+
+  <!-- 34 -->
+  <section>
+    <div class="head"><span class="num">34</span><h2>En-tête qui se condense</h2></div>
+    <p class="note">Le bandeau du haut se resserre dès qu'on descend, et se dépose sur un fond translucide. Gagne de la place sans faire disparaître la navigation.</p>
+    <div style="height:210px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:0 20px;">
+      <div class="fx-shrink"><span class="fx-marque">Kin Bois Création</span></div>
+      <p style="color:var(--faint);line-height:1.8;">Faites défiler à l'intérieur de ce cadre pour voir l'en-tête se condenser.</p>
+      <p style="color:var(--faint);line-height:1.8;">Lits, tables, portes, cuisines, armoires, meubles TV, bibliothèques.</p>
+      <p style="color:var(--faint);line-height:1.8;">Chaque pièce est dessinée puis fabriquée à la demande, dans l'atelier.</p>
+      <p style="color:var(--faint);line-height:1.8;">Le bois est choisi pièce par pièce, séché, puis travaillé à la main.</p>
+    </div>
+  </section>
+
+  <!-- 35 -->
+  <section>
+    <div class="head"><span class="num">35</span><h2>Menu plein écran</h2></div>
+    <p class="note">Le menu s'ouvre en cercle depuis le bouton et les liens montent un à un. Échap le referme. C'est le menu de téléphone le plus courant sur les beaux sites.</p>
+    <div class="fx-menu">
+      <button class="fx-menu-ouvrir" aria-expanded="false">☰ &nbsp;Ouvrir le menu</button>
+      <div class="fx-menu-panneau">
+        <button class="fx-menu-fermer" aria-label="Fermer le menu">✕</button>
+        <nav class="fx-menu-liens">
+          <a href="#">Accueil</a>
+          <a href="#">Catalogue</a>
+          <a href="#">L'atelier</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- 36 -->
+  <section>
+    <div class="head"><span class="num">36</span><h2>Écran de chargement</h2></div>
+    <p class="note">Un voile sombre avec un compteur couvre la page le temps que les photos arrivent, puis s'efface. Évite que le visiteur voie le site se construire. Cliquez pour le rejouer.</p>
+    <p style="margin:0 0 18px;"><button class="fx-magnet" id="rejouer-chargement" type="button">Rejouer l'écran de chargement</button></p>
+  </section>
+
+  <!-- 37 -->
+  <section>
+    <div class="head"><span class="num">37</span><h2>Transition entre les pages</h2></div>
+    <p class="note">En passant d'une page à l'autre, l'ancienne s'efface vers le haut et la nouvelle monte à sa place, au lieu du clignotement blanc habituel. Rien à poser sur le HTML : c'est une règle CSS qui vaut pour tout le site. Sans prise en charge du navigateur, la navigation reste simplement normale.</p>
+    <p class="note" style="margin-bottom:0;">Impossible à montrer ici — la démonstration tient sur une seule page.</p>
+  </section>
+
+  <!-- 38 -->
+  <section>
+    <div class="head"><span class="num">38</span><h2>Accordéon</h2></div>
+    <p class="note">Les questions fréquentes se déplient sans à-coup. Bâti sur la balise native du navigateur : le contenu reste lisible par les moteurs de recherche et au clavier.</p>
+    <div class="fx-accordion">
+      <details>
+        <summary>Combien de temps pour une pièce sur mesure ?</summary>
+        <p class="fx-acc-corps">Comptez trois semaines en moyenne, du relevé des cotes à la livraison. Les pièces les plus travaillées, comme une cuisine complète, demandent un peu plus.</p>
+      </details>
+      <details>
+        <summary>Travaillez-vous d'après une photo ?</summary>
+        <p class="fx-acc-corps">Oui. Une photo, un croquis ou même une description suffisent à démarrer. Nous vous proposons ensuite un dessin avant toute fabrication.</p>
+      </details>
+      <details>
+        <summary>Livrez-vous et installez-vous sur place ?</summary>
+        <p class="fx-acc-corps">La livraison et la pose sont comprises. Les portes et les cuisines sont posées et ajustées par nos soins.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- 39 -->
+  <section>
+    <div class="head"><span class="num">39</span><h2>Onglets</h2></div>
+    <p class="note">Un trait cuivré glisse d'un onglet à l'autre. Les flèches du clavier fonctionnent. Pratique pour ranger le catalogue par pièce de la maison sans allonger la page.</p>
+    <div class="fx-tabs">
+      <div class="fx-tab-liste" role="tablist">
+        <button role="tab" aria-selected="true">Chambre</button>
+        <button role="tab" aria-selected="false">Salon</button>
+        <button role="tab" aria-selected="false">Cuisine</button>
+      </div>
+      <div role="tabpanel">
+        <div class="fx-grid">
+          <figure class="fx-card"><div class="fx-frame"><img src="images/lit-tete-arrondie-deux-chevets.webp" alt="Lit"></div><figcaption class="fx-cap"><b>Lit tête arrondie</b><span>Deux chevets</span></figcaption></figure>
+          <figure class="fx-card"><div class="fx-frame"><img src="images/armoire-deux-portes-deux-tiroirs.webp" alt="Armoire"></div><figcaption class="fx-cap"><b>Armoire</b><span>Deux portes</span></figcaption></figure>
+          <figure class="fx-card"><div class="fx-frame"><img src="images/table-de-chevet-en-bois-clair-avec-tiroir.webp" alt="Chevet"></div><figcaption class="fx-cap"><b>Table de chevet</b><span>Bois clair</span></figcaption></figure>
+        </div>
+      </div>
+      <div role="tabpanel" hidden>
+        <div class="fx-grid">
+          <figure class="fx-card"><div class="fx-frame"><img src="images/table-basse-massive-double-plateau.webp" alt="Table basse"></div><figcaption class="fx-cap"><b>Table basse</b><span>Double plateau</span></figcaption></figure>
+          <figure class="fx-card"><div class="fx-frame"><img src="images/bibliotheque-niches-bois.webp" alt="Bibliothèque"></div><figcaption class="fx-cap"><b>Bibliothèque</b><span>Niches</span></figcaption></figure>
+          <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-tv-mural-claustra-led.webp" alt="Meuble TV"></div><figcaption class="fx-cap"><b>Meuble TV</b><span>Claustra LED</span></figcaption></figure>
+        </div>
+      </div>
+      <div role="tabpanel" hidden>
+        <div class="fx-grid">
+          <figure class="fx-card"><div class="fx-frame"><img src="images/cuisine-plan-granit-armoires-vitrees.webp" alt="Cuisine"></div><figcaption class="fx-cap"><b>Cuisine</b><span>Plan granit</span></figcaption></figure>
+          <figure class="fx-card"><div class="fx-frame"><img src="images/meuble-sous-evier-en-bois-avec-evier-inox.webp" alt="Sous-évier"></div><figcaption class="fx-cap"><b>Meuble sous évier</b><span>Inox</span></figcaption></figure>
+          <figure class="fx-card"><div class="fx-frame"><img src="images/comptoir-bois-massif.webp" alt="Comptoir"></div><figcaption class="fx-cap"><b>Comptoir</b><span>Bois massif</span></figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 40 -->
+  <section>
+    <div class="head"><span class="num">40</span><h2>Infobulle</h2></div>
+    <p class="note">Une précision apparaît au survol, sans encombrer la page. Utile pour expliquer une essence de bois ou un type de finition. Fonctionne aussi au clavier.</p>
+    <p style="font-size:1.05rem;line-height:2.2;">
+      Finition <b class="fx-tip" data-tip="Vernis à base d'eau, deux couches" style="border-bottom:1px dotted var(--brass);cursor:help;" tabindex="0">vernie</b>,
+      bois <b class="fx-tip" data-tip="Essence dense, rouge sombre, très durable" style="border-bottom:1px dotted var(--brass);cursor:help;" tabindex="0">acajou</b>,
+      assemblage <b class="fx-tip" data-tip="Sans vis apparente, collé et chevillé" style="border-bottom:1px dotted var(--brass);cursor:help;" tabindex="0">traditionnel</b>.
+    </p>
+  </section>
+
+  <!-- 41 -->
+  <section>
+    <div class="head"><span class="num">41</span><h2>Fenêtre modale</h2></div>
+    <p class="note">Une fenêtre se pose par-dessus la page pour un formulaire ou un détail. Échap la ferme, le focus reste piégé dedans : tout cela est géré par le navigateur, pas par du code fragile.</p>
+    <p style="margin:0 0 18px;"><button class="fx-magnet" type="button" data-modal="modale-devis">Ouvrir la fenêtre</button></p>
+    <dialog class="fx-modal" id="modale-devis">
+      <div class="fx-modal-corps">
+        <button class="fx-modal-x" aria-label="Fermer">✕</button>
+        <h3>Demander un devis</h3>
+        <p>Décrivez la pièce souhaitée, ses dimensions approximatives et l'essence de bois envisagée. Nous revenons vers vous sous 48 heures avec une proposition chiffrée.</p>
+      </div>
+    </dialog>
+  </section>
+
+  <!-- 42 -->
+  <section>
+    <div class="head"><span class="num">42</span><h2>Fond quadrillé façon plan</h2></div>
+    <p class="note">Un quadrillage léger, comme un plan de menuisier, qui s'efface sur les bords. Habille une section de texte sans photo, et parle directement de votre métier.</p>
+    <div class="fx-bg-grid" style="padding:54px 30px;border-radius:10px;text-align:center;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;margin:0 0 8px;">Chaque pièce commence par un dessin</p>
+      <p style="color:var(--faint);margin:0;">Cotes relevées sur place, plan validé avec vous, puis l'atelier.</p>
+    </div>
+  </section>
+
+  <!-- 43 -->
+  <section>
+    <div class="head"><span class="num">43</span><h2>Texte qui se décode</h2></div>
+    <p class="note">Les lettres défilent au hasard puis se figent une à une, de gauche à droite. Attire l'œil sur un nom ou une accroche. Il vient de se jouer à l'arrivée de la section.</p>
+    <p data-scramble="KIN BOIS CRÉATION" style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;letter-spacing:.06em;margin:0;"></p>
+  </section>
+
+  <!-- 44 -->
+  <section>
+    <div class="head"><span class="num">44</span><h2>Lettres qui se soulèvent</h2></div>
+    <p class="note">Au survol, les lettres se lèvent en vague et passent au cuivre. Idéal sur le nom de l'atelier, en haut de page. Survolez le titre.</p>
+    <p data-letters="Kin Bois Création" style="font-family:'Cormorant Garamond',serif;font-size:2.4rem;margin:0;cursor:default;"></p>
+  </section>
+
+  <!-- 45 -->
+  <section>
+    <div class="head"><span class="num">45</span><h2>Balayage doré sur un titre</h2></div>
+    <p class="note">Un reflet or traverse le titre une fois, quand la section arrive à l'écran, comme la lumière sur un vernis frais. Très sobre, très efficace.</p>
+    <p class="fx-sweep" style="font-family:'Cormorant Garamond',serif;font-size:2.3rem;margin:0;">D'une bûche à une pièce qui reste</p>
+  </section>
+
+  <!-- 46 -->
+  <section>
+    <div class="head"><span class="num">46</span><h2>Fond aurore</h2></div>
+    <p class="note">Deux halos cuivre et or dérivent lentement derrière le texte. Donne de la profondeur à une section sombre sans utiliser de photo.</p>
+    <div class="fx-bg-aurora" style="padding:64px 30px;border-radius:10px;text-align:center;color:#F7F1E8;">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:2rem;margin:0 0 8px;">L'atelier Kin Bois</p>
+      <p style="margin:0;opacity:.75;">Le bois choisi pièce par pièce, travaillé à la main.</p>
+    </div>
+  </section>
+
+  <!-- 47 -->
+  <section>
+    <div class="head"><span class="num">47</span><h2>Grain d'atelier</h2></div>
+    <p class="note">Un grain très fin posé sur l'image, comme une photo argentique. Réchauffe les clichés un peu lisses et donne une tenue d'ensemble au catalogue.</p>
+    <div class="fx-grid">
+      <figure class="fx-card fx-bg-grain"><div class="fx-frame"><img src="images/artisan-jeantim.webp" alt="L'artisan"></div><figcaption class="fx-cap"><b>À l'atelier</b><span>Avec grain</span></figcaption></figure>
+      <figure class="fx-card"><div class="fx-frame"><img src="images/artisan-jeantim.webp" alt="L'artisan"></div><figcaption class="fx-cap"><b>La même photo</b><span>Sans grain, pour comparer</span></figcaption></figure>
+      <figure class="fx-card fx-bg-grain"><div class="fx-frame"><img src="images/lit-sommier-lattes-atelier.webp" alt="Lit en atelier"></div><figcaption class="fx-cap"><b>Lit en cours</b><span>Avec grain</span></figcaption></figure>
+    </div>
+  </section>
+
   <footer>
     <b>Comment répondre :</b> donnez-moi simplement le numéro qui vous plaît (par exemple « le 3 »).<br>
     Vous pouvez aussi en choisir plusieurs, un par catégorie du catalogue.
   </footer>
+
+  <!-- L'écran de chargement (36) est rejoué à la demande : sur un vrai
+       site il s'affiche au chargement, ici il gênerait la consultation.
+       Le bouton insère le modèle ci-dessous puis relance la bibliothèque. -->
+  <template id="modele-chargement">
+    <div class="fx-preload">
+      <div class="fx-preload-num">0 %</div>
+      <div class="fx-preload-mot">Kin Bois Création</div>
+    </div>
+  </template>
+  <script>
+    document.getElementById('rejouer-chargement').addEventListener('click', () => {
+      if (document.querySelector('.fx-preload')) return;   // déjà en cours
+      const modele = document.getElementById('modele-chargement');
+      document.body.append(modele.content.cloneNode(true));
+      Effets.init();      // la bibliothèque prend en charge le nouvel élément
+    });
+  </script>
 </div>
 
 <script>

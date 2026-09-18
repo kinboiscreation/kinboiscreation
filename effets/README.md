@@ -1,9 +1,26 @@
 # Bibliothèque d'effets — Kin Bois Création
 
-30 effets visuels réutilisables, en CSS et JavaScript natifs.
+47 effets visuels réutilisables, en CSS et JavaScript natifs.
 **Aucune dépendance** : pas de React, pas de bibliothèque externe, rien à installer.
 
 À réutiliser tel quel sur les prochains sites.
+
+## Ce que fait le navigateur à notre place
+
+La bibliothèque s'appuie sur ce que les navigateurs savent faire aujourd'hui,
+plutôt que de le réécrire en JavaScript. Trois choix à connaître :
+
+- **Animations au défilement en CSS.** Là où `animation-timeline` existe, la
+  parallaxe et le dézoom sont faits par le navigateur : c'est plus fluide, et
+  le JavaScript se retire tout seul. Ailleurs, il reprend la main.
+- **`<dialog>` pour la lightbox et la modale.** La touche Échap, le piège à
+  focus et le fond assombri viennent du navigateur — donc rien à maintenir,
+  et l'accessibilité est correcte par construction.
+- **Transitions de page en CSS.** Une seule règle suffit, sans rien poser sur
+  le HTML.
+
+Quand un navigateur ne connaît pas l'une de ces nouveautés, l'effet concerné
+ne se joue simplement pas : rien ne casse, rien ne disparaît.
 
 ## Installation
 
@@ -52,7 +69,7 @@ Et une grille de cartes :
 </div>
 ```
 
-## Les 30 effets
+## Les 47 effets
 
 ### Au survol de la souris
 
@@ -98,6 +115,38 @@ Et une grille de cartes :
 | `fx-kenburns` | Zoom lent et continu sur la photo | non |
 | `fx-typed` | Phrases qui s'écrivent et s'effacent en boucle | oui |
 | `fx-magnet` | Le bouton vient à la rencontre du curseur | oui |
+
+### Habillage du site
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-cursor` | Point cuivré et anneau à la place de la flèche | oui |
+| `fx-trail` | Les photos apparaissent dans le sillage du curseur | oui |
+| `fx-progress` | Barre de progression de lecture en haut | non |
+| `fx-shrink` | L'en-tête se condense dès qu'on descend | oui |
+| `fx-menu` | Menu plein écran qui s'ouvre en cercle | oui |
+| `fx-preload` | Écran de chargement avec compteur | oui |
+| *(aucune)* | Transition douce entre les pages du site | non |
+
+### Panneaux et texte
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-accordion` | Questions fréquentes qui se déplient | non |
+| `fx-tabs` | Onglets avec un trait qui glisse | oui |
+| `fx-tip` | Infobulle au survol et au clavier | non |
+| `fx-modal` | Fenêtre par-dessus la page | oui |
+| `fx-scramble` | Les lettres défilent puis se figent une à une | oui |
+| `fx-letters` | Les lettres se soulèvent en vague au survol | oui |
+| `fx-sweep` | Un reflet or traverse le titre une fois | oui |
+
+### Fonds
+
+| Classe | Effet | JS |
+|---|---|:--:|
+| `fx-bg-grid` | Quadrillage léger façon plan de menuisier | non |
+| `fx-bg-aurora` | Deux halos cuivre et or qui dérivent | non |
+| `fx-bg-grain` | Grain fin, comme une photo argentique | non |
 
 ## Structures particulières
 
@@ -231,6 +280,104 @@ durée d'un tour en secondes, `data-direction="reverse"` inverse le sens.
 <div class="fx-zoomout"><img src="grande-photo.webp" alt=""></div>
 ```
 
+**`fx-cursor`** — posez la classe sur `<body>` pour tout le site, ou sur une
+section pour n'y remplacer le curseur que là.
+
+**`fx-trail`** — les photos sont listées dans un attribut :
+
+```html
+<div class="fx-trail" data-images="a.webp|b.webp|c.webp">
+  <h2>Balayez cette zone</h2>
+</div>
+```
+
+**`fx-shrink`**, **`fx-progress`** — rien à régler :
+
+```html
+<div class="fx-progress"></div>
+<header class="fx-shrink"><span class="fx-marque">Kin Bois Création</span></header>
+```
+
+**`fx-menu`** — le script gère l'ouverture, Échap et le focus :
+
+```html
+<div class="fx-menu">
+  <button class="fx-menu-ouvrir" aria-expanded="false">Menu</button>
+  <div class="fx-menu-panneau">
+    <button class="fx-menu-fermer" aria-label="Fermer le menu">✕</button>
+    <nav class="fx-menu-liens">
+      <a href="/">Accueil</a><a href="/catalogue">Catalogue</a>
+    </nav>
+  </div>
+</div>
+```
+
+**`fx-preload`** — à placer juste après l'ouverture de `<body>` :
+
+```html
+<div class="fx-preload">
+  <div class="fx-preload-num">0 %</div>
+  <div class="fx-preload-mot">Kin Bois Création</div>
+</div>
+```
+
+**`fx-accordion`** — de vraies balises `<details>`, donc lisibles par les
+moteurs de recherche même repliées :
+
+```html
+<div class="fx-accordion">
+  <details>
+    <summary>Combien de temps pour une pièce sur mesure ?</summary>
+    <p class="fx-acc-corps">Comptez trois semaines en moyenne.</p>
+  </details>
+</div>
+```
+
+**`fx-tabs`** — autant d'onglets que de panneaux, dans le même ordre :
+
+```html
+<div class="fx-tabs">
+  <div class="fx-tab-liste" role="tablist">
+    <button role="tab" aria-selected="true">Chambre</button>
+    <button role="tab" aria-selected="false">Salon</button>
+  </div>
+  <div role="tabpanel">…</div>
+  <div role="tabpanel" hidden>…</div>
+</div>
+```
+
+**`fx-tip`** — le texte est dans l'attribut ; `tabindex="0"` le rend
+consultable au clavier :
+
+```html
+<b class="fx-tip" data-tip="Vernis à base d'eau, deux couches" tabindex="0">vernie</b>
+```
+
+**`fx-modal`** — le bouton désigne la fenêtre par son identifiant :
+
+```html
+<button data-modal="devis">Demander un devis</button>
+
+<dialog class="fx-modal" id="devis">
+  <div class="fx-modal-corps">
+    <button class="fx-modal-x" aria-label="Fermer">✕</button>
+    <h3>Demander un devis</h3>
+    <p>Décrivez la pièce souhaitée…</p>
+  </div>
+</dialog>
+```
+
+**`fx-scramble`** et **`fx-letters`** — le texte est passé en attribut, le
+script le découpe :
+
+```html
+<span data-scramble="KIN BOIS CRÉATION"></span>
+<span data-letters="Kin Bois Création"></span>
+```
+
+**`fx-bg-grid`**, **`fx-bg-aurora`**, **`fx-bg-grain`** — la classe se pose sur
+le bloc à habiller ; `fx-bg-grain` va aussi directement sur une carte.
+
 **`fx-curtain`**, **`fx-mosaic`**, **`fx-stagger`**, **`fx-kenburns`**,
 **`fx-duotone`**, **`fx-blinds`**, **`fx-tilt`** — la classe se pose sur la
 grille, les cartes gardent la structure de base :
@@ -254,9 +401,11 @@ grille, les cartes gardent la structure de base :
   sécurité de 2,5 secondes — si la détection échoue, le contenu s'affiche
   quand même. Aucune image ne peut rester invisible.
 - **Contenu injecté après coup** : appelez `Effets.init()` pour réinitialiser.
-  Chaque effet ne s'installe qu'une fois, un rappel est donc sans danger.
+  Chaque effet ne s'installe qu'une fois, un rappel est donc sans danger —
+  et un même élément peut porter deux effets (un bouton à la fois magnétique
+  et ouvrant une fenêtre, par exemple) sans que l'un empêche l'autre.
 
 ## Démonstration
 
-Les 30 effets appliqués à de vraies photos :
+Les 47 effets appliqués à de vraies photos :
 [demo-effets.html](../demo-effets.html)

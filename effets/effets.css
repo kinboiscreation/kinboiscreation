@@ -1,6 +1,6 @@
 /* ============================================================
    BIBLIOTHÈQUE D'EFFETS — Kin Bois Création
-   30 effets réutilisables, CSS natif, sans dépendance.
+   47 effets réutilisables, CSS natif, sans dépendance.
 
    Utilisation :
      <link rel="stylesheet" href="effets/effets.css">
@@ -149,12 +149,17 @@
 .fx-lightbox .fx-card:hover{transform:translateY(-7px);box-shadow:0 20px 42px var(--fx-shadow);}
 .fx-lightbox .fx-frame img{transition:transform 1s cubic-bezier(.16,.8,.24,1);}
 .fx-lightbox .fx-card:hover .fx-frame img{transform:scale(1.07);}
-.fx-lb{
+/* Bâtie sur <dialog> : la touche Échap, le piège à focus et le
+   fond assombri sont gérés par le navigateur, pas par nous. */
+dialog.fx-lb{
   position:fixed;inset:0;z-index:99;display:none;
+  width:100%;max-width:100%;height:100%;max-height:100%;
+  margin:0;border:0;padding:32px;
   background:rgba(24,14,8,.93);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:32px;
+  align-items:center;justify-content:center;overflow:hidden;
 }
-.fx-lb.on{display:flex;animation:fx-lb-in .3s ease;}
+dialog.fx-lb[open]{display:flex;animation:fx-lb-in .3s ease;}
+dialog.fx-lb::backdrop{background:rgba(24,14,8,.6);}
 @keyframes fx-lb-in{from{opacity:0;}to{opacity:1;}}
 .fx-lb img{
   max-width:min(1100px,92vw);max-height:82vh;object-fit:contain;
@@ -162,7 +167,7 @@
   animation:fx-lb-zoom .45s cubic-bezier(.16,.8,.24,1);
 }
 @keyframes fx-lb-zoom{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
-.fx-lb-cap{position:absolute;bottom:28px;left:0;right:0;text-align:center;color:#F3E9DC;font-size:.95rem;}
+.fx-lb-cap{position:absolute;bottom:28px;left:0;right:0;margin:0;text-align:center;color:#F3E9DC;font-size:.95rem;}
 .fx-lb-x,.fx-lb-nav{
   position:absolute;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);
   color:#fff;width:46px;height:46px;border-radius:50%;cursor:pointer;
@@ -495,6 +500,299 @@
 }
 .fx-stagger.seen .fx-card{opacity:1;transform:none;}
 
+/* ═══ DÉFILEMENT ANIMÉ PAR LE NAVIGATEUR ═════════════════════
+   Quand `animation-timeline` existe, la parallaxe (8) et le
+   dézoom (29) se font entièrement en CSS : c'est plus fluide,
+   car l'animation ne passe plus par le fil principal, et le JS
+   se retire de lui-même (classe posée par le script).          */
+@supports (animation-timeline: view()){
+  .fx-scroll-natif .fx-scroll-parallax .fx-col{
+    animation:fx-derive linear both;
+    animation-timeline:view();animation-range:cover;
+  }
+  @keyframes fx-derive{
+    from{transform:translateY(calc(var(--fx-speed,0) * -.5px));}
+    to  {transform:translateY(calc(var(--fx-speed,0) * .5px));}
+  }
+  .fx-scroll-natif .fx-zoomout img{
+    animation:fx-dezoom linear both;
+    animation-timeline:view();animation-range:cover;
+  }
+  @keyframes fx-dezoom{from{transform:scale(1.28);}to{transform:scale(1);}}
+}
+
+/* ═══ 31 · CURSEUR PERSONNALISÉ ══════════════════════════════
+   JS requis. Classe : .fx-cursor sur <body> (ou un conteneur)  */
+@media(hover:hover) and (pointer:fine){
+  .fx-cursor,.fx-cursor a,.fx-cursor button,.fx-cursor .fx-card{cursor:none;}
+}
+.fx-cur-dot,.fx-cur-ring{
+  position:fixed;top:0;left:0;z-index:90;pointer-events:none;
+  opacity:0;transition:opacity .2s;
+  /* le centrage passe par la marge : `translate` sert à la position */
+}
+.fx-cur-dot.fx-visible,.fx-cur-ring.fx-visible{opacity:1;}
+.fx-cur-dot{
+  width:8px;height:8px;margin:-4px 0 0 -4px;
+  border-radius:50%;background:var(--fx-accent);
+}
+.fx-cur-ring{
+  width:38px;height:38px;margin:-19px 0 0 -19px;
+  border-radius:50%;border:1px solid var(--fx-accent);
+  transition:width .3s,height .3s,margin .3s,opacity .3s;
+}
+/* pas d'opacité ici : elle est réservée à .fx-visible, sinon
+   l'anneau reparaîtrait hors de sa zone au survol d'un lien */
+.fx-cur-ring.fx-on{width:62px;height:62px;margin:-31px 0 0 -31px;border-width:2px;}
+
+/* ═══ 32 · TRAÎNÉE DE PHOTOS AU CURSEUR ══════════════════════
+   JS requis. Classe : .fx-trail + data-images="a.webp|b.webp"  */
+.fx-trail{position:relative;overflow:hidden;}
+.fx-trail > img{
+  position:absolute;top:0;left:0;z-index:2;
+  width:190px;aspect-ratio:3/4;object-fit:cover;
+  margin:-126px 0 0 -95px;border-radius:8px;
+  opacity:0;pointer-events:none;
+  box-shadow:0 14px 34px rgba(0,0,0,.32);
+}
+.fx-trail > img.fx-on{animation:fx-trail-pop .9s cubic-bezier(.22,.9,.28,1) forwards;}
+@keyframes fx-trail-pop{
+  0%{opacity:0;scale:.82;} 18%{opacity:1;scale:1;} 100%{opacity:0;scale:1.05;}
+}
+
+/* ═══ 33 · BARRE DE PROGRESSION DE LECTURE ═══════════════════
+   CSS seul (défilement natif). Classe : .fx-progress           */
+.fx-progress{display:none;}
+@supports (animation-timeline: scroll()){
+  .fx-progress{
+    display:block;position:fixed;top:0;left:0;right:0;height:3px;z-index:60;
+    background:var(--fx-accent);transform-origin:left;
+    animation:fx-avance linear both;
+    animation-timeline:scroll(root block);
+  }
+  @keyframes fx-avance{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+}
+
+/* ═══ 34 · EN-TÊTE QUI SE CONDENSE ═══════════════════════════
+   JS requis (sentinelle observée). Classe : .fx-shrink         */
+.fx-shrink{
+  position:sticky;top:0;z-index:50;padding:26px 0;background:var(--fx-panel);
+  transition:padding .35s cubic-bezier(.22,.9,.28,1),box-shadow .35s,background .35s;
+}
+.fx-shrink.fx-condense{
+  padding:12px 0;box-shadow:0 6px 24px rgba(0,0,0,.09);
+  background:color-mix(in srgb,var(--fx-panel) 86%,transparent);
+  backdrop-filter:blur(10px);
+}
+.fx-shrink .fx-marque{
+  display:block;font-size:1.5rem;font-weight:600;color:var(--fx-ink);
+  transition:font-size .35s cubic-bezier(.22,.9,.28,1);
+}
+.fx-shrink.fx-condense .fx-marque{font-size:1.1rem;}
+
+/* ═══ 35 · MENU PLEIN ÉCRAN ══════════════════════════════════
+   JS requis. Classe : .fx-menu
+   Structure : .fx-menu-ouvrir + .fx-menu-panneau > .fx-menu-liens */
+.fx-menu-ouvrir,.fx-menu-fermer{
+  appearance:none;border:0;background:none;font:inherit;cursor:pointer;
+  color:var(--fx-ink);padding:10px 4px;
+}
+.fx-menu-panneau{
+  position:fixed;inset:0;z-index:70;
+  background:var(--fx-ink);color:#F7F1E8;
+  display:grid;place-content:center;gap:6px;text-align:center;
+  clip-path:circle(0% at calc(100% - 42px) 42px);
+  transition:clip-path .7s cubic-bezier(.76,0,.24,1);
+}
+.fx-menu.fx-on .fx-menu-panneau{clip-path:circle(150% at calc(100% - 42px) 42px);}
+.fx-menu-liens a{
+  display:block;padding:8px 0;text-decoration:none;color:#F7F1E8;
+  font-size:clamp(1.6rem,5vw,2.6rem);
+  opacity:0;translate:0 18px;
+  transition:opacity .5s,translate .5s,color .3s;
+  transition-delay:calc(var(--si,0)*70ms);
+}
+.fx-menu.fx-on .fx-menu-liens a{opacity:1;translate:0 0;}
+.fx-menu-liens a:hover{color:var(--fx-accent-2);}
+.fx-menu-fermer{position:fixed;top:24px;right:28px;color:#F7F1E8;font-size:1.4rem;}
+
+/* ═══ 36 · ÉCRAN DE CHARGEMENT ═══════════════════════════════
+   JS requis. Classe : .fx-preload                              */
+.fx-preload{
+  position:fixed;inset:0;z-index:100;
+  background:var(--fx-ink);color:#F7F1E8;
+  display:grid;place-content:center;gap:14px;text-align:center;
+  transition:opacity .55s ease,visibility .55s;
+}
+.fx-preload.fx-parti{opacity:0;visibility:hidden;}
+.fx-preload-num{
+  font-size:2.6rem;color:var(--fx-accent-2);font-variant-numeric:tabular-nums;
+}
+.fx-preload-mot{font-size:.72rem;text-transform:uppercase;letter-spacing:.22em;opacity:.7;}
+
+/* ═══ 37 · TRANSITION ENTRE LES PAGES ════════════════════════
+   CSS seul. S'applique aux liens internes du site, sans rien à
+   poser sur le HTML. Sans prise en charge, il ne se passe rien. */
+@view-transition{ navigation:auto; }
+::view-transition-old(root){animation:fx-page-sort .32s ease both;}
+::view-transition-new(root){animation:fx-page-entre .42s ease both;}
+@keyframes fx-page-sort {to{opacity:0;translate:0 -12px;}}
+@keyframes fx-page-entre{from{opacity:0;translate:0 14px;}}
+
+/* ═══ 38 · ACCORDÉON ═════════════════════════════════════════
+   CSS seul, sur les <details> natifs. Classe : .fx-accordion    */
+.fx-accordion details{border-bottom:1px solid var(--fx-faint);}
+.fx-accordion summary{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:18px 2px;cursor:pointer;list-style:none;
+  font-weight:500;color:var(--fx-ink);
+}
+.fx-accordion summary::-webkit-details-marker{display:none;}
+.fx-accordion summary::after{
+  content:"+";font-size:1.4rem;line-height:1;color:var(--fx-accent);
+  transition:rotate .35s cubic-bezier(.22,.9,.28,1);
+}
+.fx-accordion details[open] summary::after{rotate:135deg;}
+.fx-accordion .fx-acc-corps{
+  margin:0;padding:0 2px 20px;color:var(--fx-faint);line-height:1.65;
+}
+/* Ouverture fluide là où le navigateur sait animer vers `auto`. */
+@supports selector(details::details-content){
+  .fx-accordion details{interpolate-size:allow-keywords;}
+  .fx-accordion details::details-content{
+    block-size:0;overflow:hidden;
+    transition:block-size .4s cubic-bezier(.22,.9,.28,1),
+               content-visibility .4s allow-discrete;
+  }
+  .fx-accordion details[open]::details-content{block-size:auto;}
+}
+
+/* ═══ 39 · ONGLETS ═══════════════════════════════════════════
+   JS requis (trait glissant + clavier). Classe : .fx-tabs       */
+.fx-tabs{--fx-tab-x:0px;--fx-tab-w:0px;}
+.fx-tabs .fx-tab-liste{
+  position:relative;display:flex;gap:4px;flex-wrap:wrap;
+  border-bottom:1px solid var(--fx-faint);margin-bottom:22px;
+}
+.fx-tabs [role="tab"]{
+  appearance:none;background:none;border:0;cursor:pointer;font:inherit;
+  padding:12px 18px;color:var(--fx-faint);transition:color .3s;
+}
+.fx-tabs [role="tab"][aria-selected="true"]{color:var(--fx-accent);font-weight:600;}
+.fx-tabs .fx-tab-liste::after{
+  content:"";position:absolute;bottom:-1px;height:2px;background:var(--fx-accent);
+  left:var(--fx-tab-x);width:var(--fx-tab-w);
+  transition:left .4s cubic-bezier(.22,.9,.28,1),width .4s cubic-bezier(.22,.9,.28,1);
+}
+
+/* ═══ 40 · INFOBULLE ═════════════════════════════════════════
+   CSS seul. Classe : .fx-tip + data-tip="Texte"                */
+.fx-tip{position:relative;}
+.fx-tip::after,.fx-tip::before{
+  opacity:0;pointer-events:none;position:absolute;left:50%;
+  translate:-50% 4px;transition:opacity .25s,translate .25s;z-index:20;
+}
+.fx-tip::after{
+  content:attr(data-tip);bottom:calc(100% + 9px);white-space:nowrap;
+  background:var(--fx-ink);color:#F7F1E8;padding:7px 12px;border-radius:7px;
+  font-size:.74rem;
+}
+.fx-tip::before{
+  content:"";bottom:calc(100% + 3px);
+  border:6px solid transparent;border-top-color:var(--fx-ink);
+}
+.fx-tip:hover::after,.fx-tip:hover::before,
+.fx-tip:focus-visible::after,.fx-tip:focus-visible::before{opacity:1;translate:-50% 0;}
+
+/* ═══ 41 · MODALE ════════════════════════════════════════════
+   JS requis (bouton data-modal="id"). Bâtie sur <dialog>.       */
+dialog.fx-modal{
+  border:0;padding:0;border-radius:14px;max-width:min(560px,92vw);
+  background:var(--fx-panel);color:var(--fx-ink);
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
+}
+dialog.fx-modal::backdrop{background:rgba(24,14,8,.62);backdrop-filter:blur(4px);}
+dialog.fx-modal[open]{animation:fx-modal-in .35s cubic-bezier(.22,.9,.28,1);}
+@keyframes fx-modal-in{from{opacity:0;transform:translateY(14px) scale(.97);}}
+.fx-modal-corps{position:relative;padding:30px 32px 32px;}
+.fx-modal-corps h3{margin:0 0 10px;font-size:1.25rem;}
+.fx-modal-corps p{margin:0;color:var(--fx-faint);line-height:1.65;}
+.fx-modal-x{
+  position:absolute;top:10px;right:12px;width:34px;height:34px;
+  border:0;border-radius:50%;background:transparent;color:var(--fx-faint);
+  cursor:pointer;font-size:1.05rem;transition:background .25s;
+}
+.fx-modal-x:hover{background:rgba(0,0,0,.07);}
+
+/* ═══ 42 · FOND QUADRILLÉ (PLAN DE MENUISIER) ════════════════
+   CSS seul. Classe : .fx-bg-grid                               */
+.fx-bg-grid{position:relative;background-color:var(--fx-panel);}
+.fx-bg-grid::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(184,115,51,.15) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(184,115,51,.15) 1px,transparent 1px);
+  background-size:26px 26px;
+  -webkit-mask:radial-gradient(ellipse at center,#000 30%,transparent 78%);
+  mask:radial-gradient(ellipse at center,#000 30%,transparent 78%);
+}
+.fx-bg-grid > *{position:relative;z-index:1;}
+
+/* ═══ 43 · TEXTE QUI SE DÉCODE ═══════════════════════════════
+   JS requis. <span data-scramble="Kin Bois Création">          */
+[data-scramble]{font-variant-ligatures:none;}
+
+/* ═══ 44 · LETTRES QUI SE SOULÈVENT ══════════════════════════
+   JS requis (découpe). <span data-letters="Kin Bois">          */
+[data-letters]{display:inline-block;}
+[data-letters] span{
+  display:inline-block;
+  transition:translate .35s cubic-bezier(.22,.9,.28,1),color .35s;
+  transition-delay:calc(var(--li,0)*22ms);
+}
+[data-letters]:hover span{translate:0 -9px;color:var(--fx-accent);}
+
+/* ═══ 45 · BALAYAGE DORÉ SUR UN TITRE ════════════════════════
+   JS requis (.seen). Classe : .fx-sweep                        */
+.fx-sweep{
+  background:linear-gradient(100deg,
+    var(--fx-ink) 0 40%,var(--fx-accent-2) 50%,var(--fx-ink) 60%);
+  background-size:280% 100%;background-position:100% 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  transition:background-position 1.5s cubic-bezier(.22,.9,.28,1);
+}
+.fx-sweep.seen{background-position:0 0;}
+
+/* ═══ 46 · FOND AURORE ═══════════════════════════════════════
+   CSS seul. Classe : .fx-bg-aurora                             */
+.fx-bg-aurora{position:relative;overflow:hidden;background:var(--fx-ink);}
+.fx-bg-aurora::before,.fx-bg-aurora::after{
+  content:"";position:absolute;width:60vmax;height:60vmax;
+  border-radius:50%;filter:blur(70px);opacity:.45;pointer-events:none;
+}
+.fx-bg-aurora::before{
+  top:-26vmax;left:-16vmax;
+  background:radial-gradient(circle,var(--fx-accent),transparent 70%);
+  animation:fx-aurore-a 18s ease-in-out infinite alternate;
+}
+.fx-bg-aurora::after{
+  bottom:-28vmax;right:-18vmax;
+  background:radial-gradient(circle,var(--fx-accent-2),transparent 70%);
+  animation:fx-aurore-b 22s ease-in-out infinite alternate;
+}
+@keyframes fx-aurore-a{to{transform:translate(18vmax,10vmax) scale(1.18);}}
+@keyframes fx-aurore-b{to{transform:translate(-16vmax,-12vmax) scale(1.12);}}
+.fx-bg-aurora > *{position:relative;z-index:1;}
+
+/* ═══ 47 · GRAIN D'ATELIER ═══════════════════════════════════
+   CSS seul. Classe : .fx-bg-grain                              */
+.fx-bg-grain{position:relative;}
+.fx-bg-grain::after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  opacity:.42;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 /* --- Accessibilité : respecte le réglage système -------------- */
 @media(prefers-reduced-motion:reduce){
   .fx-card,.fx-frame,.fx-frame img,.fx-cap,.fx-col,.fx-unfurl,.fx-flip-inner,
@@ -510,4 +808,17 @@
   .fx-blinds .fx-frame::after{--fx-blind:0% !important;transition:none !important;}
   .fx-typed .fx-caret{animation:none !important;}
   .fx-marquee .fx-track,.fx-ticker .fx-track{width:auto !important;}
+  /* nouvelles familles */
+  .fx-cur-dot,.fx-cur-ring,.fx-trail > img,.fx-progress{display:none !important;}
+  .fx-cursor,.fx-cursor a,.fx-cursor button,.fx-cursor .fx-card{cursor:auto !important;}
+  .fx-bg-aurora::before,.fx-bg-aurora::after{animation:none !important;}
+  .fx-menu-panneau{transition:none !important;}
+  .fx-menu-liens a{opacity:1 !important;translate:none !important;}
+  .fx-accordion details::details-content{transition:none !important;}
+  .fx-sweep{
+    background:none !important;color:var(--fx-ink) !important;
+    -webkit-text-fill-color:currentColor;
+  }
+  [data-letters] span{transition:none !important;}
+  ::view-transition-old(root),::view-transition-new(root){animation:none !important;}
 }
