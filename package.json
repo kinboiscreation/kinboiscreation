@@ -1,0 +1,30 @@
+{
+  "name": "kinboiscreation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion build",
+    "render": "remotion render src/index.tsx MyrtilleAbricot output.mp4",
+    "render-cinematic": "remotion render src/index-cinematic.tsx MyrtilleAbricotCinematic output-cinematic.mp4",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kinboiscreation/kinboiscreation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kinboiscreation/kinboiscreation/issues"
+  },
+  "homepage": "https://github.com/kinboiscreation/kinboiscreation#readme",
+  "devDependencies": {
+    "@remotion/cli": "^4.0.520",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.520"
+  }
+}
